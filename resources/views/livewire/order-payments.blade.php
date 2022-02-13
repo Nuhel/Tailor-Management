@@ -4,9 +4,9 @@
     <div class="col-md-4">
         <div class="form-group">
             <small>Transaction Type</small>
-            <select wire:model="transactionType" name="transactionType" id="" class="form-control form-control-sm">
-                @foreach ($transactionTypes as $transactionType)
-                    <option value="{{$transactionType}}">{{$transactionType}}</option>
+            <select wire:model="bankType" name="bank_type" id="" class="form-control form-control-sm">
+                @foreach ($bankTypes as $bankType)
+                    <option value="{{$bankType}}">{{$bankType}}</option>
                 @endforeach
             </select>
         </div>
@@ -15,7 +15,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <small>Select Bank</small>
-            <select wire:model="bank" name="bank" id="" class="form-control form-control-sm">
+            <select wire:model="bankId" name="bank_id" id="" class="form-control form-control-sm">
                 <option value="">Select Bank</option>
                 @foreach ($banks as $bank)
                     <option value="{{$bank->id}}">{{$bank->name}}</option>
@@ -27,9 +27,9 @@
     <div class="col-md-4">
         <div class="form-group">
             <small>Select Account</small>
-            <select name="" id="" class="form-control form-control-sm">
+            <select name="account_id" id="" class="form-control form-control-sm" >
                 @foreach ($accounts as $account)
-                    <option value="">{{$account->number}} {{strlen($account->card)?"(Card: ".$account->card.")":""}}</option>
+                    <option value="{{$account->id}}" {{$accountId == $account->id?"selected":""}}>{{$account->number}} {{strlen($account->card)?"(Card: ".$account->card.")":""}}</option>
                 @endforeach
             </select>
         </div>

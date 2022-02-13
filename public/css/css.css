@@ -1,9 +1,4 @@
-body{
-    font-size: 15px;
-}
-[class*="sidebar-dark-"] {
-    background-color: #181824 !important;
-}
+
 .clock-in {
 	padding: 5px 94px;
 }
@@ -41,10 +36,6 @@ body{
 	font-weight: bold;
 }
 
-input[type="text" i] {
-    padding: 1px 2px;
-}
-
 
 .only-bottom-border{
     border-top: 0;
@@ -55,4 +46,8 @@ input[type="text" i] {
 
 .w-10{
     width: 10% !important
+}
+
+.select2-selection__arrow{
+    margin-top: 5px;
 }

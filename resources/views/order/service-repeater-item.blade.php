@@ -9,12 +9,15 @@
         <div class="col-md-4">
             <div class="form-group">
                 <small >Select Service</small>
-                <select name="id" class="form-control form-control-sm service_id" data-index='0'>
+                <select name="service_id" class="form-control form-control-sm service_id" data-index='0'>
                     <option value="" selected>Select Service</option>
                     @foreach ($services as $service)
                         <option value="{{ $service->id }}" {{Arr::get($oldService,'id',0)==$service->id?"selected":""}}>{{ $service->name }}</option>
                     @endforeach
                 </select>
+                @error('services.'.$serviceIndex.'.service_id')
+                    <span class="text-danger">{{$message}}</span>
+                @enderror
             </div>
         </div>
 
@@ -22,6 +25,9 @@
             <div class="form-group">
                 <small >Quantity</small>
                 <input name="quantity" class="form-control form-control-sm" type="number" value="{{Arr::get($oldService,'quantity','')}}"/>
+                @error('services.'.$serviceIndex.'.quantity')
+                    <span class="text-danger">{{$message}}</span>
+                @enderror
             </div>
         </div>
 
@@ -29,7 +35,11 @@
             <div class="form-group">
                 <small >Price</small>
                 <input name="price" class="form-control form-control-sm" type="number" value="{{Arr::get($oldService,'price','')}}"/>
+                @error('services.'.$serviceIndex.'.price')
+                    <span class="text-danger">{{$message}}</span>
+                @enderror
             </div>
+
         </div>
     </div>
 

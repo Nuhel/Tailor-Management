@@ -19,15 +19,15 @@
                             <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Enter Customer Mobile">
                         </div>
 
-                       
+
 
                         <div class="form-group">
                             <label class="form-inline">Customer Address</label>
                             <textarea name="address" id="address" class="form-control" placeholder="Enter Employee Address"></textarea>
                         </div>
-                        
 
-                     
+
+
 
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>

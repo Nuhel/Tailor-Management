@@ -1,6 +1,6 @@
 
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar  elevation-4">
 
  <!-- Brand Logo -->
  <!-- <a href="index.php" class="brand-link">
@@ -12,14 +12,16 @@
 <!-- Sidebar -->
 <div class="sidebar">
   <!-- Sidebar user panel (optional) -->
-  <div class="mt-3 pb-3 ">
-    <div class="logo b-block text-center">
-        <img src="{{asset('asset/img/logo.jpeg')}}" width="70px" height="70px" class="img-circle rounded " alt="User Image">
-    </div>
-    <div class="info text-center">
-      <a href="{{URL::to('')}}" class="d-block"><strong>Top Man</strong></a>
-    </div>
+  <div class="">
+    <a href="{{URL::to('')}}" class="  d-block nav-btn py-3 px-4">
+        <div class="logo b-block text-center">
+            <img src="{{asset('asset/img/logo.jpeg')}}"  class="img-circle rounded w-75 img-fluid" alt="User Image">
+        </div>
+
+    </a>
   </div>
+
+  <hr class="mt-0">
 
 
 
@@ -28,7 +30,7 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
-           
+
 
            <!--------   Order --------->
 
@@ -113,7 +115,7 @@
                   <p>Add Employee</p>
                 </a>
               </li>
-              
+
               <li class="nav-item">
                 <a href="{{route('masters.index')}}"  class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -157,7 +159,7 @@
           <!-- End Customer  -->
 
           <!-- Start Bank -->
-          
+
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-alt"></i>

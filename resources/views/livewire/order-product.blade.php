@@ -6,7 +6,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <small>Products</small>
-            <select name="transactionType" id="" class="form-control form-control-sm js-example-basic-single" wire:model="product">
+            <select id="" class="form-control form-control-sm js-example-basic-single" wire:model="product">
                 <option value="">Select Product</option>
                 @foreach ($products as $product)
                     <option value="{{$product->id}}" {{$selectedProducts->has($product->id)?"disabled":""}}>{{$product->name}} </option>
@@ -30,10 +30,12 @@
             <tbody>
                 @foreach ($selectedProducts as $selectedProduct)
                 <tr>
-                    <td>{{$selectedProduct['name']}}</td>
+                    <td>{{$selectedProduct['name']}}
+                        <input type="hidden" name="products[{{$loop->index}}][id]" value="{{$selectedProduct['id']}}">
+                    </td>
                     <td >{{$selectedProduct['price']}}</td>
                     <td >
-                        <input type="number" class="form-control form-control-sm">
+                        <input type="number" class="form-control form-control-sm" name="products[{{$loop->index}}][quantity]" value="{{Arr::get($oldProductQuantities,$loop->index,1)}}">
                     </td>
                     <td class="text-center"> <button type="button" class="btn btn-danger btn-sm" wire:click="removeProduct({{ $selectedProduct['id'] }})"><i class="fa fa-trash"></i></button> </td>
                 </tr>

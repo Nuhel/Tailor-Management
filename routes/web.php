@@ -11,9 +11,7 @@ use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\OrderController;
 
-Route::get('/', function () {
-    return view('layout.layout');
-});
+Route::get('/', [OrderController::class,'create']);
 Route::resource('/employees',EmployeeController::class);
 Route::resource('/masters',MasterController::class);
 Route::resource('/customers',CustomerController::class);

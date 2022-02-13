@@ -5,33 +5,42 @@ namespace App\Http\Livewire;
 use App\Models\Bank;
 use App\Models\BankAccount;
 use Livewire\Component;
+use Illuminate\Support\Arr;
 
 class OrderPayments extends Component
 {
 
-    public $transactionTypes;
-    public $transactionType;
+    public $bankTypes;
+    public $bankType;
 
     public $banks;
-    public $accounts;
-    public $bank;
+    public $bankId;
 
-    public function mount(){
-        $this->transactionTypes = ["Cash Payment","General Bank","Mobile Bank"];
-        $this->banks = collect();
-        $this->accounts = collect();
+    public $accounts;
+    public $accountId;
+
+    public function mount($bankType, $bankId, $accountId){
+
+        $this->bankType = $bankType;
+        $this->bankTypes = collect(["Cash Payment","General Bank","Mobile Bank"]);
+
+        $this->bankId = $bankId;
+        $this->banks = ($bankType!= null && $this->bankTypes->contains($bankType) )? Bank::where('type',$bankType)->get(): collect();
+
+        $this->accounts = ($bankId!=null)? BankAccount::where('bank_id',$bankId)->get():collect();
+        $this->accountId = $accountId;
     }
     public function render()
     {
         return view('livewire.order-payments');
     }
 
-    public function updatedTransactionType($bank){
+    public function updatedBankType($bank){
         $this->banks = Bank::where('type',$bank)->get();
         $this->accounts = collect();
     }
 
-    public function updatedBank($bank){
-        $this->accounts = BankAccount::where('bank_id',$bank)->get();
+    public function updatedBankId($bankId){
+        $this->accounts = BankAccount::where('bank_id',$bankId)->get();
     }
 }
