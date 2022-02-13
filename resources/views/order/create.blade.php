@@ -231,7 +231,9 @@
                     $.each(designs, function(index,value){
 
                         var styles = value['styles'];
-                        var options = "";
+                        var options = `
+                            <option>Select `+value['name']+`</option>
+                        `;
                         $.each(styles, function(index,value){
                             options+='<option value="'+value['id']+'">'+value['name']+'</option>'
                         });
