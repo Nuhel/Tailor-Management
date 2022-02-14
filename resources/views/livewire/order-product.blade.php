@@ -36,6 +36,9 @@
                     <td >{{$selectedProduct['price']}}</td>
                     <td >
                         <input type="number" class="form-control form-control-sm" name="products[{{$loop->index}}][quantity]" value="{{Arr::get($oldProductQuantities,$loop->index,1)}}">
+                        @error('products.'.$loop->index.'.quantity')
+                            <span class="text-danger error">{{$message}}</span>
+                        @enderror
                     </td>
                     <td class="text-center"> <button type="button" class="btn btn-danger btn-sm" wire:click="removeProduct({{ $selectedProduct['id'] }})"><i class="fa fa-trash"></i></button> </td>
                 </tr>

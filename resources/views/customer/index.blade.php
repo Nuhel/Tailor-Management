@@ -15,7 +15,6 @@
                                     <th>Name</th>
                                     <th>Mobile</th>
                                     <th>Address</th>
-                                    <th>ID Card</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -26,7 +25,6 @@
                                         <td>{{ $value->name}}</td>
                                         <td>{{ $value->mobile}}</td>
                                         <td>{{ $value->address}}</td>
-                                        <td>Id Card</td>
                                         <td>
                                             <a href="{{route('customers.show', ['customer'=> $value->id] )}}"
                                                 class="btn btn-outline-primary btn-sm mr-2">

@@ -11,19 +11,27 @@
                         <form method="POST" action="{{route('employees.update',  ['employee'=> $employee->id])}}">
                             @csrf
                             @method('put')
-                            <div class="form-group ">
-                            <label class="form-inline">Employee Name</label>
-                            <input type="text" name="name" id="empName" class="form-control" placeholder="Enter Employee Name" value="{{$employee->name}}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-inline">Employee Mobile</label>
-                            <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Enter Employee Mobile" value="{{$employee->mobile}}">
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-inline">Employee Address</label>
-                            <textarea name="address" id="address" class="form-control" placeholder="Enter Employee Address">{{$employee->address}}</textarea>
-                        </div>
+                            @include('layout.inputs.input',[
+                                'attributes' => [
+                                    'name' =>"name",
+                                    'value' => $employee->name
+                                ]
+                            ])
+
+                            @include('layout.inputs.input',[
+                                'attributes' => [
+                                    'name' =>"mobile",
+                                    'value' => $employee->mobile
+                                ]
+                            ])
+
+                            @include('layout.inputs.textarea',[
+                                'attributes' => [
+                                    'name' =>"address",
+                                    'value' => $employee->address
+                                ]
+                            ])
 
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>

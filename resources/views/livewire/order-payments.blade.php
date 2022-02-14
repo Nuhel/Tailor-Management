@@ -28,10 +28,14 @@
         <div class="form-group">
             <small>Select Account</small>
             <select name="account_id" id="" class="form-control form-control-sm" >
+                <option value="">Select Account</option>
                 @foreach ($accounts as $account)
                     <option value="{{$account->id}}" {{$accountId == $account->id?"selected":""}}>{{$account->number}} {{strlen($account->card)?"(Card: ".$account->card.")":""}}</option>
                 @endforeach
             </select>
+            @error('account_id')
+                <span class="text-danger">{{$message}}</span>
+            @enderror
         </div>
     </div>
 </div>

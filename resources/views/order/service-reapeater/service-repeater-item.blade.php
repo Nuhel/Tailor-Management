@@ -15,7 +15,7 @@
                     @endforeach
                 </select>
                 @error('services.'.$serviceIndex.'.service_id')
-                    <span class="text-danger">{{$message}}</span>
+                    <span class="text-danger error">{{$message}}</span>
                 @enderror
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <small >Quantity</small>
                 <input name="quantity" class="form-control form-control-sm" type="number" value="{{Arr::get($oldService,'quantity','')}}"/>
                 @error('services.'.$serviceIndex.'.quantity')
-                    <span class="text-danger">{{$message}}</span>
+                    <span class="text-danger error">{{$message}}</span>
                 @enderror
             </div>
         </div>
@@ -35,7 +35,7 @@
                 <small >Price</small>
                 <input name="price" class="form-control form-control-sm" type="number" value="{{Arr::get($oldService,'price','')}}"/>
                 @error('services.'.$serviceIndex.'.price')
-                <span class="text-danger">{{$message}}</span>
+                <span class="text-danger error">{{$message}}</span>
                 @enderror
             </div>
 

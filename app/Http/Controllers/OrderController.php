@@ -37,7 +37,7 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-
+        //return redirect()->back()->withInput();
         $request->dd();
     }
 
