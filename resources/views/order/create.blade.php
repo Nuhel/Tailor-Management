@@ -21,7 +21,7 @@
                                     <div class="d-flex align-items-end">
                                         <div class="form-group d-flex w-auto flex-grow-1 flex-column mb-0">
                                             <label class="form-inline">Customer</label>
-                                           <select name="customer_id" class="js-example-basic-single form-control form-control-sm" id="customer_id">
+                                           <select name="customer_id" class="customer-select form-control form-control-sm" id="customer_id">
                                                 <option value="">Select Customer</option>
                                                 @foreach ($customers as $customer)
                                                     <option value="{{$customer->id}}" {{$customer->id == old('customer_id')?"selected":""}}>{{$customer->name}} ({{$customer->mobile}})</option>
@@ -123,5 +123,11 @@
 @section('script')
     @livewireScripts
     @stack('inner-script')
+    <script>
+
+        $(document).ready(function() {
+            $('.customer-select').select2();
+        });
+    </script>
 @endsection
 

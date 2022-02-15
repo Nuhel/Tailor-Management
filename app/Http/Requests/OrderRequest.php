@@ -31,6 +31,7 @@ class OrderRequest extends BaseRequest
             'products'                          =>  'nullable|array',
             'products.*.id'                     =>  'required|numeric|exists:products,id',
             'products.*.quantity'               =>  'required|numeric|max:99999|min:1',
+            'products.*.price'                  =>  'required|numeric|max:99999|min:1',
             'account_id'                        =>  [Rule::requiredIf(function(){
                 return $this->bank_type!="Cash Payment";
             }),'exists:bank_accounts,id']

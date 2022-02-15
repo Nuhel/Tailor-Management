@@ -36,8 +36,6 @@ class SelectInput extends BaseInput
         ->with('options',$this->getOptions())
         ->with('optionBuilder',$this->getOptionBuilder())
         ->with('selected', $this->getValue());
-
-
     }
 
     function validateRender(){

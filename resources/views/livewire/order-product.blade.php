@@ -6,7 +6,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <small>Products</small>
-            <select id="" class="form-control form-control-sm js-example-basic-single" wire:model="product">
+            <select id="" class="form-control form-control-sm product-select" wire:model="product">
                 <option value="">Select Product</option>
                 @foreach ($products as $product)
                     <option value="{{$product->id}}" {{$selectedProducts->has($product->id)?"disabled":""}}>{{$product->name}} </option>
@@ -30,15 +30,17 @@
             <tbody>
                 @foreach ($selectedProducts as $selectedProduct)
                 <tr>
-                    <td>{{$selectedProduct['name']}}
+                    <td>
+                        {{$selectedProduct['name']}}
                         <input type="hidden" name="products[{{$loop->index}}][id]" value="{{$selectedProduct['id']}}">
                     </td>
-                    <td >{{$selectedProduct['price']}}</td>
                     <td >
-                        <input type="number" class="form-control form-control-sm" name="products[{{$loop->index}}][quantity]" value="{{Arr::get($oldProductQuantities,$loop->index,1)}}">
-                        @error('products.'.$loop->index.'.quantity')
-                            <span class="text-danger error">{{$message}}</span>
-                        @enderror
+                        {!!Form::input()->setName('products['.$loop->index.'][price]' )->setEnableLabel(false)->setPlaceHolder('price')->setValue(old('products.'.$loop->index.'.price',$selectedProduct['price']))->setType('number')->setError('products.'.$loop->index.'.price')!!}
+
+                    </td>
+                    <td >
+                        {!!Form::input()->setName('products['.$loop->index.'][quantity]' )->setEnableLabel(false)->setPlaceHolder('quantity')->setValue(old('products.'.$loop->index.'.quantity',1))->setType('number')->setError('products.'.$loop->index.'.quantity')!!}
+
                     </td>
                     <td class="text-center"> <button type="button" class="btn btn-danger btn-sm" wire:click="removeProduct({{ $selectedProduct['id'] }})"><i class="fa fa-trash"></i></button> </td>
                 </tr>
@@ -53,16 +55,16 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-        $('.js-example-basic-single').on('select2:select', function (e) {
+        $('.product-select').select2();
+        $('.product-select').on('select2:select', function (e) {
             var data = e.params.data;
             Livewire.emit('updatedProduct',data.id);
         });
 
 
         window.addEventListener('updatedProduct', event => {
-            $('.js-example-basic-single').select2();
-            $('.js-example-basic-single').on('select2:select', function (e) {
+            $('.product-select').select2();
+            $('.product-select').on('select2:select', function (e) {
                 var data = e.params.data;
                 Livewire.emit('updatedProduct',data.id);
             });
