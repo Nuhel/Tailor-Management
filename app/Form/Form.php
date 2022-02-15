@@ -9,7 +9,6 @@ class Form
 {
     public function input(){
         return new TextInput();
-
     }
 
     public function textarea(){
@@ -20,5 +19,4 @@ class Form
         return new SelectInput();
 
     }
-
 }

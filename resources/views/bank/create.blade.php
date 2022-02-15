@@ -13,7 +13,6 @@
 
                             {!!Form::input()->setName('name')->render()!!}
 
-
                             {!!
                                 Form::select()
                                 ->setLabel('Bank Type')

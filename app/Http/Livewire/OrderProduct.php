@@ -33,7 +33,7 @@ class OrderProduct extends Component
         return view('livewire.order-product');
     }
 
-    public function removeProduct($id,){
+    public function removeProduct($id){
         $this->selectedProducts->forget($id);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmployeeRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
@@ -36,10 +37,8 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EmployeeRequest $request)
     {
-
-        
         $employee = new Employee();
         $employee->name = $request->name;
         $employee->mobile = $request->mobile;
@@ -70,7 +69,7 @@ class EmployeeController extends Controller
         return view('employee.edit')->with('employee',$employee);
     }
 
- 
+
     public function update(Request $request, Employee $employee)
     {
         $employee->name = $request->name;
