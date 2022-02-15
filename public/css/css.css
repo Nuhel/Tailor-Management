@@ -1,42 +1,3 @@
-
-.clock-in {
-	padding: 5px 94px;
-}
-
-.clock-out {
-	padding: 5px 88px;
-}
-.form-width {
-	width: 300px;
-	margin: 0 auto;
-}
-.form-width-size {
-	width: 69%;
-	margin: auto;
-}
-.text-Justify {
-	font-size: 13px;
-}
-.dataTables_wrapper{
-	float: left;
-}
-.dataTable_filter {
-	float: right;
-}
-.tablecolor {
-	border: 1px solid #ddd;
-}
-.card-header h3 {
-	display: block;
-	font-size: 1.17em;
-	margin-block-start: 1em;
-	margin-block-end: 1em;
-	margin-inline-start: 0px;
-	margin-inline-end: 0px;
-	font-weight: bold;
-}
-
-
 .only-bottom-border{
     border-top: 0;
     border-right: 0;
@@ -50,4 +11,18 @@
 
 .select2-selection__arrow{
     margin-top: 5px;
+}
+
+
+.nav-sidebar .nav-item .nav-link.active{
+    color: #007bff;
+    background-color: unset;
+}
+
+.nav-sidebar .nav-item .nav-treeview .nav-link .nav-icon{
+    font-size: .8rem;
+}
+
+.validation-error.validation-error-space{
+    font-size: .5rem;
 }

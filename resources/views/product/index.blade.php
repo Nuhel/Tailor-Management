@@ -33,21 +33,20 @@
                                         <td>{{ $value->name }}</td>
                                         <td>{{ $value->category->name }}</td>
                                         <td>{{ $value->price }}</td>
-                                        <td>Id Card</td>
                                         <td>
-                                            <a href="{{ route('products.show', ['product' => $value->id]) }}"
+                                            <a href="{{ route('products.show', ['product' => $value]) }}"
                                                 class="btn btn-outline-primary btn-sm mr-2">
                                                 <i class="fa fa-eye" aria-hidden="true">
                                                     View
                                                 </i>
                                             </a>
-                                            <a href="{{ route('products.edit', ['product' => $value->id]) }}"
+                                            <a href="{{ route('products.edit', ['product' => $value]) }}"
                                                 class="btn btn-outline-primary btn-sm mr-2">
                                                 <i class="fa fa-edit" aria-hidden="true">
                                                     Edit
                                                 </i>
                                             </a>
-                                            <form action="{{ route('products.destroy', ['product' => $value->id]) }}"
+                                            <form action="{{ route('products.destroy', ['product' => $value]) }}"
                                                 method="post" class="d-inline-block">
                                                 @method('delete')
                                                 @csrf

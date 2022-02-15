@@ -12,36 +12,14 @@
                             @csrf
                             @method('put')
 
+                            {!!Form::input()->setName('name')->setValue($customer->name)->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::input()->setName('mobile')->setValue($customer->mobile)->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::textarea()->setName('address')->setValue($customer->address)->setLabel()->setPlaceholder()->render()!!}
 
-                            @include('layout.inputs.input',[
-                                'attributes' => [
-                                    'name' =>"name",
-                                    'value' => $customer->name
-                                ]
-                            ])
-
-                            @include('layout.inputs.input',[
-                                'attributes' => [
-                                    'name' =>"mobile",
-                                    'value' => $customer->mobile
-                                ]
-                            ])
-
-                            @include('layout.inputs.textarea',[
-                                'attributes' => [
-                                    'name' =>"address",
-                                    'value' => $customer->address
-                                ]
-                            ])
-
-
-
-
-
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
-                        </div>
-                    </form>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

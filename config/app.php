@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Mavinoo\Batch\BatchServiceProvider::class,
+        App\Providers\FormServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -231,6 +232,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Batch' => Mavinoo\Batch\BatchFacade::class,
+        'Form'   =>  App\Form\Facade\FormFacade::class
     ],
 
 ];

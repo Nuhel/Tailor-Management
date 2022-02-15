@@ -14,23 +14,23 @@ use Mavinoo\Batch\BatchFacade as Batch;
 
 class ServiceController extends Controller
 {
-    
+
     public function index()
     {
         $services = Service::with('measurements')->with('designs.styles')->get();
         return view('service.index')->with('services',$services);
-        
+
     }
 
-    
+
     public function create()
     {
         return view('service.create');
     }
 
-    
+
     public function store(Request $request)
-    {   
+    {
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
             "measurement" => "required|array",
@@ -44,7 +44,7 @@ class ServiceController extends Controller
             "design.*.name.required"=>"Design name is required",
             "design.*.style.*.name.required"=>"Style name is required",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
@@ -83,11 +83,12 @@ class ServiceController extends Controller
                 $serviceDesign->styles()->saveMany($serviceDesignStyle);
             }
             DB::commit();
-            
+            return redirect(route('services.index'));
         } catch (\Exception $e) {
             DB::rollBack();
+            return redirect()->back()->withInput();
         }
-        return redirect(route('services.index'));
+        //return redirect(route('services.index'));
 
     }
 
@@ -118,7 +119,7 @@ class ServiceController extends Controller
             "design.*.name.required"=>"Design name is required",
             "design.*.style.*.name.required"=>"Style name is required",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
@@ -132,12 +133,13 @@ class ServiceController extends Controller
             $this->handelMeasurementUpdate($request,$service);
             $this->handelDesignUpdate($request,$service);
             DB::commit();
+            return redirect(route('services.index'));
 
-            return redirect()->back();
-            
+
         } catch (\Exception $e) {
-            dd($e);
+
             DB::rollBack();
+            return redirect()->back()->withInput();
         }
     }
 
@@ -189,7 +191,7 @@ class ServiceController extends Controller
         Batch::update(new ServiceMeasurement(), $updateableMeasurement, 'id');
         //End Handel Measurements that should be updated
 
-        
+
     }
 
     public function handelDesignUpdate(Request $request,Service $service){
@@ -213,7 +215,7 @@ class ServiceController extends Controller
         $insertableIndex= Arr::where($designIds, function ($value, $key) {
             return $value == null;
         });
-        
+
 
         foreach($insertableIndex as $index => $value){
             $serviceDesign = new ServiceDesign();
@@ -229,18 +231,18 @@ class ServiceController extends Controller
             $serviceDesign->styles()->saveMany($serviceDesignStyle);
         }
 
-        
+
         //End Handeling New Design
-        
+
         //Start Handeling Updateable Design
         $updateableDesign = ServiceDesign::where('service_id', $service->id)->whereIn('id',Arr::divide($updateableIndex)[1])->get();
-        
+
         foreach($updateableIndex as $index => $id){
             $serviceDesign =  ($updateableDesign->find($id));
             $serviceDesign->name = $designNames[$index];
             $serviceDesign->update();
             $this->handelStyleUpdate($styles[$index], $serviceDesign);
-            
+
         }
         //End Handeling Updateable Design
 
@@ -278,16 +280,16 @@ class ServiceController extends Controller
             $serviceDesign->styles()->saveMany($insertableStyles);
         }
 
-        
+
         //End Handle new Styles and add to db
 
         //Start Handel Measurements that should be updated
         $updateableIds = Arr::where($styleIds, function ($value, $key) {
             return $value != null;
         });
-        
 
-        
+
+
         $updateableStyle = [];
         foreach($updateableIds as $index => $id){
             $updateableStyle[] = [
@@ -299,7 +301,7 @@ class ServiceController extends Controller
         Batch::update(new ServiceDesignStyle(), $updateableStyle, 'id');
         //End Handel Measurements that should be updated
 
-        
+
     }
 
     public function destroy(Service $service)

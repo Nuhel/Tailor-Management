@@ -10,32 +10,13 @@
                     <div class="card-body">
                         <form method="POST" action="{{route('customers.store')}}">
                             @csrf
-
-
-                            @include('layout.inputs.input',[
-                                'attributes' => [
-                                    'name' =>"name",
-                                    'value' => ""
-                                ]
-                            ])
-
-                            @include('layout.inputs.input',[
-                                'attributes' => [
-                                    'name' =>"mobile",
-                                ]
-                            ])
-
-                            @include('layout.inputs.textarea',[
-                                'attributes' => [
-                                    'name' =>"address",
-                                    'placeholder' => "Enter Employee Address"
-                                ]
-                            ])
-
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
-                        </div>
-                    </form>
+                            {!!Form::input()->setName('name')->setValue()->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::input()->setName('mobile')->setValue()->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::textarea()->setName('address')->setValue()->setLabel()->setPlaceholder()->render()!!}
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

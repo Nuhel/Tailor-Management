@@ -8,19 +8,19 @@ use App\Models\Bank;
 use Illuminate\Support\Facades\Validator;
 class BankAccountController extends Controller
 {
-   
+
     public function index()
     {
         return view('bank_account.index')->with('bankAccounts',BankAccount::with('bank')->get());
     }
 
-    
+
     public function create()
     {
         return view('bank_account.create')->with('banks',Bank::all());
     }
 
-  
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -28,7 +28,7 @@ class BankAccountController extends Controller
             "bank_id" => "required|numeric|exists:App\Models\Bank,id",
             "card" => "nullable|string|max:100",
         ]);
-        
+
         if ($validator->fails()) {
 
             return redirect()
@@ -50,15 +50,15 @@ class BankAccountController extends Controller
             $response['status']= 400;
             $response['message']= "Failed To Add Bank Account";
         }
-        
+
         return redirect(route('bank_accounts.index'))->with('response',$response);
-        
+
     }
-    
+
     public function show(BankAccount $bankAccount)
     {
         return view('bank_account.show')->with('bankAccount',$bankAccount);
-        
+
     }
 
     public function edit(BankAccount $bankAccount)
@@ -74,7 +74,7 @@ class BankAccountController extends Controller
             "bank_id" => "required|numeric|exists:App\Models\Bank,id",
             "card" => "nullable|string|max:100",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
@@ -84,7 +84,7 @@ class BankAccountController extends Controller
         }
         $bankAccount->number = $request->number;
         $bankAccount->bank_id = $request->bank_id;
-        $bankAccount->card = $request->number;
+        $bankAccount->card = $request->card;
 
         $response = [];
         if($bankAccount->update()){
@@ -94,7 +94,7 @@ class BankAccountController extends Controller
             $response['status']= 400;
             $response['message']= "Failed To Updated Bank Account";
         }
-        
+
         return redirect(route('bank_accounts.index'))->with('response',$response);
     }
 

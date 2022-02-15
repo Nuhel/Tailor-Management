@@ -12,35 +12,25 @@
                             @csrf
                             @method('put')
 
+                            {!!Form::input()->setName('name')->setValue($product->name)->setLabel('Product Name')->setPlaceholder('Product Name')->render()!!}
 
-                            <div class="form-group ">
-                                <label class="form-inline">Product Name</label>
-                                <input type="text" name="name" id="empName" class="form-control"
-                                    placeholder="Enter Product Name" value="{{ $product->name }}">
-                                @error('name')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            {!!
+                                Form::select()
+                                ->setLabel('Product Category')
+                                ->setName('category_id')
+                                ->setPlaceHolder('Select Product Category')
+                                ->setValue($product->category->id)
+                                ->setOptions($categories)
+                                ->setOptionBuilder(
+                                    function($value) {
+                                        return [ $value->id,$value->name];
+                                    }
+                                )
+                                ->render()
+                            !!}
+                            {!!Form::input()->setName('price')->setValue($product->price)->setLabel('Product Price')->setPlaceholder('Product Price')->setType('number')->render()!!}
 
-                            <div class="form-group">
-                                <select name="category_id" id="" class="form-control">
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" {{($product->category->id== $category->id?"selected":"" )}}>{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('category_id')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
 
-                            <div class="form-group ">
-                                <label class="form-inline">Product Price</label>
-                                <input type="text" name="price" class="form-control" placeholder="Enter Product Price"
-                                    value="{{ $product->price }}">
-                                @error('price')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
                             </div>

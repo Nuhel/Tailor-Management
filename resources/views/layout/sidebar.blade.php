@@ -1,4 +1,21 @@
+@php
+    $resourceMenus = [
+        'employees',
+        'masters',
+        'customers',
+        'categories',
+        'products',
+        'banks',
+        'bank_accounts',
+        'services',
+        'orders',
+    ];
 
+    $resourceRoutes = [
+        'index',
+        'create',
+    ];
+@endphp
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar  elevation-4">
 
@@ -32,200 +49,41 @@
            with font-awesome or any other icon font library -->
 
 
-           <!--------   Order --------->
 
-
-           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-file-alt"></i>
-              <p>
-                Order
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{route('orders.create')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p> New Order</p>
-                </a>
-              </li>
-              <li class="nav-item">
+           @foreach ($resourceMenus as $menu)
+            <li class="nav-item   {{ (
+                Route::current()->getName() == $menu.'.index' ||
+                Route::current()->getName() == $menu.'.create'
+                )? "menu-is-opening menu-open":"" }}">
                 <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Order Report</p>
+                    <i class="nav-icon fas fa-bars"></i>
+                    <p>{{Str::of($menu)->headline()}} <i class="fas fa-angle-left right"></i></p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="employee_position.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Order Report Details</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="employee_shift.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Order Return</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="employee_shift.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Order Return Report</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p> Order Return Deliver Report</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Deliver Report</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+                <ul class="nav nav-treeview ml-3"
+                    {!!
+                        (Route::current()->getName() == $menu.'.index' ||
+                        Route::current()->getName() == $menu.'.create'
+                        )? 'style="display: block;"':""
+                    !!}
+                >
+                    <li class="nav-item">
+                        <a href="{{route($menu.'.index')}}" class="nav-link {{Route::current()->getName() == $menu.'.index'?"active":""}}">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p> {{Str::of($menu)->headline()}} List</p>
+                        </a>
 
-          <!-- End Order  -->
-
-          <!-- Start Employee -->
-
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-alt"></i>
-              <p>
-                Employee
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{route('employees.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p> Employee List</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{route('employees.create')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Employee</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{route('masters.index')}}"  class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Master</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-
-          <!-- End Employee  -->
+                        <a href="{{route($menu.'.create')}}" class="nav-link {{Route::current()->getName() == $menu.'.create'?"active":""}}">
+                            <i class="fas fa-plus nav-icon"></i>
+                            <p> Add {{Str::of($menu)->headline()}}</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+           @endforeach
 
 
-          <!-- Start Customer -->
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-alt"></i>
-              <p>
-                Customer
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{route('customers.create')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Customer</p>
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a href="{{route('customers.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Customer List</p>
-                </a>
-              </li>
-
-            </ul>
-          </li>
-
-          <!-- End Customer  -->
-
-          <!-- Start Bank -->
-
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-alt"></i>
-              <p>
-                Bank
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{route('banks.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Banks</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{route('banks.create')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Bank</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{route('bank_accounts.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Bank Account List</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{route('bank_accounts.create')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Bank Account</p>
-                </a>
-              </li>
-
-            </ul>
-          </li>
-          <!-- End Bank  -->
-
-          <!-- Start Customer -->
-
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-shopping-bag"></i>
-              <p>
-                Product
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{route('products.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Products</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{route('categories.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Category</p>
-                </a>
-              </li>
-            </ul>
-          </li>
 
           <!-- End Customer  -->
 

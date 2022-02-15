@@ -2,22 +2,16 @@
 @section('content')
     <div class="content-wrapper">
         <div class="content">
-            <div class="container">
-                <div class="card mt-5">
+            <div class="container pt-5">
+                <div class="card ">
                     <div class="card-header">
-                        <h2><strong>Insert Bank</strong></h2>
+                        <h2><strong>Add Service</strong></h2>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('services.store') }}" class="">
                             @csrf
-                            <div class="form-group ">
-                                <label class="form-inline">Service Name</label>
-                                <input type="text" name="name" id="empName" class="form-control"
-                                    placeholder="Enter Service Name" value="{{ old('name') }}">
-                                @error('name')
-                                <p class="text-danger mb-0 alert-message">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            {!!Form::input()->setName('name')->setValue()->setLabel('Service Name')->setPlaceholder('Service Name')->render()!!}
+
 
                             <div class="repeater form-group border p-2 rounded">
                                 <label class="form-inline">Measurement's</label>
@@ -26,28 +20,31 @@
 
                                     @forelse (old('measurement',[]) as $measurement)
                                         <div data-repeater-item class="col-md-4">
-                                            <div class="form-group d-flex flex-row border p-2 rounded mb-0">
-                                                <input type="text" name="name"
-                                                    class="form-control d-flex w-auto flex-grow-1  only-bottom-border "
-                                                    placeholder="Measurement Name" value="{{ $measurement['name'] }}" />
-                                                <a data-repeater-delete class="btn  ml-2">
+                                            {!!Form::input()->setName('name')->setValue($measurement['name']??'')->setLabel('Measurement Name')->setPlaceholder('Measurement Name')
+                                            ->setEnableLabel(false)
+                                            ->appendWrapperClass('d-flex flex-row border p-2 rounded mb-0')
+                                            ->appendInputClass('d-flex w-auto flex-grow-1  only-bottom-border')
+                                            ->setError('measurement.' . $loop->index . '.name')
+                                            ->setAppend(
+                                                '<a data-repeater-delete class="btn btn-sm ml-2">
                                                     <i class="fa fa-trash text-red"></i>
-                                                </a>
-                                            </div>
-                                            @error('measurement.' . $loop->index . '.name')
-                                                <p class="text-danger mb-0 alert-message">{{ $message }}</p>
-                                            @enderror
+                                                </a>'
+                                            )
+                                                ->render()!!}
                                         </div>
                                     @empty
                                         <div data-repeater-item class="col-md-4">
-                                            <div class="form-group d-flex flex-row border p-2 rounded">
-                                                <input type="text" name="name"
-                                                    class="form-control d-flex w-auto flex-grow-1  only-bottom-border "
-                                                    placeholder="Measurement Name" />
-                                                <a data-repeater-delete class="btn  ml-2">
+                                            {!!Form::input()->setName('name')->setValue('')->setLabel('Measurement Name')->setPlaceholder('Measurement Name')
+                                            ->setEnableLabel(false)
+                                            ->appendWrapperClass('d-flex flex-row border p-2 rounded mb-0')
+                                            ->appendInputClass('d-flex w-auto flex-grow-1  only-bottom-border')
+                                            ->setError('')
+                                            ->setAppend(
+                                                '<a data-repeater-delete class="btn btn-sm ml-2">
                                                     <i class="fa fa-trash text-red"></i>
-                                                </a>
-                                            </div>
+                                                </a>'
+                                            )
+                                                ->render()!!}
                                         </div>
                                     @endforelse
 
@@ -63,46 +60,50 @@
                                     @forelse (old('design',[]) as $design)
                                         <div data-repeater-item class="col-md-12 ">
                                             <div class="p-2 border  rounded mb-2">
-                                                <div class="form-group d-flex flex-row mb-0">
-                                                    <input type="text" name="name"
-                                                        class="form-control d-flex w-auto flex-grow-1  only-bottom-border "
-                                                        placeholder="Design Name" value="{{ $design['name'] }}" />
-                                                    <a data-repeater-delete class="btn  ml-2">
-                                                        <i class="fa fa-trash text-red"></i>
-                                                    </a>
 
-                                                </div>
-                                                @error('design.' . $loop->index . '.name')
-                                                    <p class="text-danger mb-0 alert-message">{{ $message }}</p>
-                                                @enderror
+
+
+                                                {!!Form::input()->setName('name')->setValue( $design['name']??'')->setPlaceholder('Design Name')
+                                                    ->setEnableLabel(false)
+                                                    ->appendWrapperClass('form-group d-flex flex-row mb-0')
+                                                    ->appendInputClass('d-flex w-auto flex-grow-1  only-bottom-border')
+                                                    ->setError('design.' . $loop->index . '.name')
+                                                    ->setAppend(
+                                                        '<a data-repeater-delete class="btn btn-sm">
+                                                            <i class="fa fa-trash text-red"></i>
+                                                        </a>'
+                                                    )
+                                                ->render()!!}
+
                                                 <div class="inner-repeater mb-2 mt-2">
                                                     <div data-repeater-list="style" class="row">
                                                         @forelse ( $design['style']??[] as $style)
                                                             <div data-repeater-item class="col-md-4">
-                                                                <div class="form-group d-flex flex-row border rounded mb-0">
-                                                                    <input type="text" name="name"
-                                                                        class="form-control d-flex w-auto flex-grow-1  only-bottom-border "
-                                                                        placeholder="Style Name"
-                                                                        value="{{ $style['name'] }}" />
-                                                                    <a data-repeater-delete class="btn  ml-2">
-                                                                        <i class="fa fa-trash text-red"></i>
-                                                                    </a>
-                                                                </div>
-                                                                @error('design.' . $loop->parent->index . '.style.'.($loop->index).'.name')
-                                                                    <p class="text-danger mb-0 alert-message">{{ $message }}</p>
-                                                                @enderror
-                                                            
+                                                                {!!Form::input()->setName('name')->setValue($style['name']??'')->setPlaceholder('Style Name')
+                                                                    ->setEnableLabel(false)
+                                                                    ->appendWrapperClass('d-flex flex-row border p-2 rounded')
+                                                                    ->appendInputClass('d-flex w-auto flex-grow-1  only-bottom-border')
+                                                                    ->setError('design.' . $loop->parent->index . '.style.'.($loop->index).'.name')
+                                                                    ->setAppend(
+                                                                        '<a data-repeater-delete class="btn btn-sm ">
+                                                                            <i class="fa fa-trash text-red"></i>
+                                                                        </a>'
+                                                                    )
+                                                                ->render()!!}
                                                             </div>
                                                         @empty
                                                             <div data-repeater-item class="col-md-4">
-                                                                <div class="form-group d-flex flex-row border rounded mb-0">
-                                                                    <input type="text" name="name"
-                                                                        class="form-control d-flex w-auto flex-grow-1  only-bottom-border "
-                                                                        placeholder="Style Name" />
-                                                                    <a data-repeater-delete class="btn  ml-2">
-                                                                        <i class="fa fa-trash text-red"></i>
-                                                                    </a>
-                                                                </div>
+                                                                {!!Form::input()->setName('name')->setValue('')->setPlaceholder('Style Name')
+                                                                    ->setEnableLabel(false)
+                                                                    ->appendWrapperClass('d-flex flex-row border p-2 rounded')
+                                                                    ->appendInputClass('d-flex w-auto flex-grow-1  only-bottom-border')
+                                                                    ->setError('')
+                                                                    ->setAppend(
+                                                                        '<a data-repeater-delete class="btn btn-sm ">
+                                                                            <i class="fa fa-trash text-red"></i>
+                                                                        </a>'
+                                                                    )
+                                                                ->render()!!}
                                                             </div>
                                                         @endforelse
                                                     </div>
@@ -115,26 +116,33 @@
                                     @empty
                                         <div data-repeater-item class="col-md-12 ">
                                             <div class="p-2 border  rounded mb-2">
-                                                <div class="form-group d-flex flex-row ">
-                                                    <input type="text" name="name"
-                                                        class="form-control d-flex w-auto flex-grow-1  only-bottom-border "
-                                                        placeholder="Design Name" />
-                                                    <a data-repeater-delete class="btn  ml-2">
-                                                        <i class="fa fa-trash text-red"></i>
-                                                    </a>
-                                                </div>
+
+                                                {!!Form::input()->setName('name')->setValue('')->setPlaceholder('Design Name')
+                                                    ->setEnableLabel(false)
+                                                    ->appendWrapperClass('d-flex flex-row')
+                                                    ->appendInputClass('d-flex w-auto flex-grow-1  only-bottom-border')
+                                                    ->setError('')
+                                                    ->setAppend(
+                                                        '<a data-repeater-delete class="btn btn-sm">
+                                                            <i class="fa fa-trash text-red"></i>
+                                                        </a>'
+                                                    )
+                                                ->render()!!}
 
                                                 <div class="inner-repeater mb-2 mt-2">
                                                     <div data-repeater-list="style" class="row">
                                                         <div data-repeater-item class="col-md-4">
-                                                            <div class="form-group d-flex flex-row border p-2 rounded">
-                                                                <input type="text" name="name"
-                                                                    class="form-control d-flex w-auto flex-grow-1  only-bottom-border "
-                                                                    placeholder="Style Name" />
-                                                                <a data-repeater-delete class="btn  ml-2">
-                                                                    <i class="fa fa-trash text-red"></i>
-                                                                </a>
-                                                            </div>
+                                                            {!!Form::input()->setName('name')->setValue('')->setPlaceholder('Style Name')
+                                                                    ->setEnableLabel(false)
+                                                                    ->appendWrapperClass('d-flex flex-row border p-2 rounded')
+                                                                    ->appendInputClass('d-flex w-auto flex-grow-1  only-bottom-border')
+                                                                    ->setError('')
+                                                                    ->setAppend(
+                                                                        '<a data-repeater-delete class="btn btn-sm">
+                                                                            <i class="fa fa-trash text-red"></i>
+                                                                        </a>'
+                                                                    )
+                                                                ->render()!!}
                                                         </div>
                                                     </div>
                                                     <a data-repeater-create class="btn btn-outline-success btn-sm">
@@ -171,18 +179,14 @@
             $('.repeater-nested').repeater({
                 initEmpty: false,
                 show: function() {
-                    if ($(this).find('> div .alert-message').length) {
-                        $(this).find('> div .alert-message').remove();
-                    }
+                    $(this).find('.validation-error:not(.validation-error-space)').remove();
                     $(this).slideDown();
                 },
                 repeaters: [{
                     selector: '.inner-repeater',
                     isFirstItemUndeletable: true,
                     show: function() {
-                        if ($(this).find('>  .alert-message').length) {
-                            $(this).find('> .alert-message').remove();
-                        }
+                        $(this).find('.validation-error:not(.validation-error-space)').remove();
                         $(this).slideDown();
                     },
                 }],
@@ -193,9 +197,7 @@
             $('.repeater').repeater({
                 initEmpty: false,
                 show: function() {
-                    if ($(this).find('> .alert-message').length) {
-                        $(this).find('> .alert-message').remove();
-                    }
+                    $(this).find('div > .validation-error:not(.validation-error-space)').remove();
                     $(this).slideDown();
                 },
 

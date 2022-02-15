@@ -10,39 +10,24 @@
                     <div class="card-body">
                         <form method="POST" action="{{ route('bank_accounts.store') }}">
                             @csrf
-                            <div class="form-group">
-                                <label class="form-inline">Bank</label>
-                                <select name="bank_id" id="" class="form-control">
-                                    @foreach ($banks as $bank)
-                                        <option value="{{ $bank->id }}" {{(old('bank_id') == $bank->id?"selected":"" )}}>{{ $bank->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('bank_id')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
-                           
-                            <div class="form-group ">
-                                <label class="form-inline">Account Number</label>
-                                <input type="text" name="number" id="empName" class="form-control"
-                                    placeholder="Enter Account Number" value="{{old('number')}}">
-                                @error('number')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
 
-                            <div class="form-group ">
-                                <label class="form-inline">Card Number</label>
-                                <input type="text" name="card" class="form-control"
-                                    placeholder="Enter Card Number" value="{{old('card')}}">
-                                @error('card')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            {!!
+                                Form::select()
+                                ->setLabel('Bank')
+                                ->setName('bank_id')
+                                ->setPlaceHolder('Select Bank')
+                                ->setValue()
+                                ->setOptions($banks)
+                                ->setOptionBuilder(
+                                    function($value) {
+                                        return [$value->id,$value->name];
+                                    }
+                                )
+                                ->render()
+                            !!}
 
-
-
-
+                            {!!Form::input()->setName('number')->setValue('')->setLabel('Account Number')->setPlaceholder('Account Number')->render()!!}
+                            {!!Form::input()->setName('card')->setValue('')->setLabel('Card Number')->setPlaceholder('Card Number')->render()!!}
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
                             </div>

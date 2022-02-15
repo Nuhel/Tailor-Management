@@ -11,15 +11,7 @@
                         <form method="POST" action="{{ route('categories.update', ['category' => $category->id]) }}">
                             @csrf
                             @method('put')
-                            <div class="form-group ">
-                                <label class="form-inline">Employee Name</label>
-                                <input type="text" name="name" id="empName" class="form-control"
-                                    placeholder="Enter category Name" value="{{ $category->name }}">
-                                @error('name')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
-
+                            {!!Form::input()->setName('name')->setValue($category->name)->setLabel()->setPlaceholder()->render()!!}
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
                             </div>

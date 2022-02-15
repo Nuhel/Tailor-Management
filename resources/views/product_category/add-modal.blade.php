@@ -10,26 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card">
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('categories.store') }}">
-                            @csrf
-                            <div class="form-group ">
-                                <label class="form-inline">Category Name</label>
-                                <input type="text" name="name" class="form-control"
-                                    placeholder="Enter Category Name"  value="{{old('name')}}">
-                                    @error('name')
-                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                    @enderror
-                            </div>
-
-                            <div class="form-group text-right">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success " name="submit">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                @include('product_category.add-form')
             </div>
         </div>
     </div>

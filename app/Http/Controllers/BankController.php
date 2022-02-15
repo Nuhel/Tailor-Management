@@ -9,19 +9,19 @@ use Illuminate\Validation\Rule;
 
 class BankController extends Controller
 {
-    
+
     public function index()
     {
         return view('bank.index')->with('banks',Bank::all());
     }
 
- 
+
     public function create()
     {
         return view('bank.create');
     }
 
-    
+
     public function store(Request $request)
     {
 
@@ -33,7 +33,7 @@ class BankController extends Controller
             ],
             "address" => "nullable|string|max:100",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
@@ -50,13 +50,13 @@ class BankController extends Controller
         return redirect(route('banks.index'));
     }
 
-    
+
     public function show(Bank $bank)
     {
         return view('bank.show')->with('bank',$bank);
     }
 
- 
+
     public function edit(Bank $bank)
     {
         return view('bank.edit')->with('bank',$bank);
@@ -72,7 +72,7 @@ class BankController extends Controller
             ],
             "address" => "nullable|string|max:100",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
@@ -80,6 +80,8 @@ class BankController extends Controller
             ->withErrors($validator->errors())
             ->with('action','modal-open');
         }
+
+
 
         $bank->name = $request->name;
         $bank->type = $request->type;

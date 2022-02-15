@@ -10,42 +10,10 @@
                     <div class="card-body">
                         <form method="POST" action="{{ route('masters.store') }}">
                             @csrf
-                            <div class="form-group ">
-                                <label class="form-inline">Master Name</label>
-                                <input type="text" name="name" id="empName" class="form-control"
-                                    placeholder="Enter Master Name">
-                                @error('name')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label class="form-inline">Master Mobile</label>
-                                <input type="text" name="mobile" id="mobile" class="form-control"
-                                    placeholder="Enter Master Mobile">
-                                @error('mobile')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-inline">Master Salary</label>
-                                <input type="number" name="salary" class="form-control" placeholder="Enter Master Salary">
-                                @error('salary')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-inline">Master Address</label>
-                                <textarea name="address" id="address" class="form-control"
-                                    placeholder="Enter Master Address"></textarea>
-                                @error('address')
-                                    <div class="alert alert-danger mt-3">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-
-
+                            {!!Form::input()->setName('name')->setValue()->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::input()->setName('mobile')->setValue()->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::input()->setName('salary')->setType('number')->setValue()->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::textarea()->setName('address')->setValue()->setLabel()->setPlaceholder()->render()!!}
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
                             </div>
