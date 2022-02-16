@@ -96,7 +96,7 @@
                                             <tr>
                                                 <td ><small>Discount</small></td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm rounded only-bottom-border" id="discount-value">
+                                                    <input name="discount" value="{{old('discount')}}" type="number" class="form-control form-control-sm rounded only-bottom-border" id="discount-value">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -109,7 +109,7 @@
                                             <tr>
                                                 <td ><small>Paid</small></td>
                                                 <td>
-                                                    <input type="number" id="paid-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                    <input name="paid" type="number" value="{{old('paid')}}" id="paid-value" class="form-control form-control-sm rounded only-bottom-border">
                                                 </td>
                                             </tr>
 
@@ -179,32 +179,33 @@
 
         function calculatePayments(){
             var services = $('.service-repeater .repeater-item');
-                var totalProductPrice = 0;
+                var totalServicePrice = 0;
                 $.each(services, function(index,service){
                     //var price = $(this).find('.price').val();
                     var price = parseFloat($(this).find('.price').val())||0;
                     var quantity = parseFloat($(this).find('.quantity').val())||0;
-                    totalProductPrice += price*quantity;
+                    totalServicePrice += price*quantity;
 
                 });
 
                 var cartProducts = $('.cart-product');
-
+                var cartProductPrice = 0;
                 $.each(cartProducts, function(index,service){
                     //var price = $(this).find('.price').val();
                     var price = parseFloat($(this).find('.price').val())||0;
                     var quantity = parseFloat($(this).find('.quantity').val())||0;
-                    totalProductPrice += price*quantity;
+                    cartProductPrice += price*quantity;
 
                 });
 
+                var totalPrice = totalServicePrice + totalProductPrice
                 var discount = parseFloat($('#discount-value').val())||0;
 
 
-                $('#total-show').text(totalProductPrice);
-                $('#total-value').val(totalProductPrice);
+                $('#total-show').text(totalPrice);
+                $('#total-value').val(totalPrice);
 
-                var netPayable = totalProductPrice-discount;
+                var netPayable = totalPrice-discount;
 
                 $('#netpayable-show').text(netPayable);
                 $('#netpayable-value').val(netPayable);

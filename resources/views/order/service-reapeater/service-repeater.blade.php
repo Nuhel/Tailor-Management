@@ -64,91 +64,91 @@
         }
     </script>
 
-<script>
-    const json = '{!! html_entity_decode($json) !!} ';
-    const obj = JSON.parse(json);
+    <script>
+        const json = '{!! html_entity_decode($json) !!} ';
+        const obj = JSON.parse(json);
 
-    $(document).on('change', '.service_id', function($event) {
-        var id = $(this).val();
-        var row = $($(this).parents('.row')[0]);
-        var repeaterItem = $(row.parents('.repeater-item')[0]);
-        var measurementInput = $(repeaterItem.find('.measurement-inputs')[0]);
-        var designInput = $(repeaterItem.find('.design-inputs')[0]);
+        $(document).on('change', '.service_id', function($event) {
+            var id = $(this).val();
+            var row = $($(this).parents('.row')[0]);
+            var repeaterItem = $(row.parents('.repeater-item')[0]);
+            var measurementInput = $(repeaterItem.find('.measurement-inputs')[0]);
+            var designInput = $(repeaterItem.find('.design-inputs')[0]);
 
-        if (id != null && id!="") {
-            var serviceIndex = $(this).data('index');
-            var service = obj[id];
-            if (service != undefined && service != null) {
-                var measurements = service['measurements'];
-                var measurementinputs = "<table class='table table-sm table-borderless'>";
-                $.each(measurements, function(index,value){
-                    measurementinputs+=`
-                        <tr class="">
-                            <td><small>`+value['name']+`</small></td>
-                            <td>
-                                <input type="text" name="services[`+serviceIndex+`][measurements][`+index+`][size]"
-                                class="form-control form-control-sm "
-                                placeholder="Size" value="" />
+            if (id != null && id!="") {
+                var serviceIndex = $(this).data('index');
+                var service = obj[id];
+                if (service != undefined && service != null) {
+                    var measurements = service['measurements'];
+                    var measurementinputs = "<table class='table table-sm table-borderless'>";
+                    $.each(measurements, function(index,value){
+                        measurementinputs+=`
+                            <tr class="">
+                                <td><small>`+value['name']+`</small></td>
+                                <td>
+                                    <input type="text" name="services[`+serviceIndex+`][measurements][`+index+`][size]"
+                                    class="form-control form-control-sm "
+                                    placeholder="Size" value="" />
 
-                                <input type="hidden" name="services[`+serviceIndex+`][measurements][`+index+`][id]" value="`+value['id']+`" />
-                                <input type="hidden" name="services[`+serviceIndex+`][measurements][`+index+`][name]" value="`+value['name']+`" />
-                            </td>
-
-                        </tr>
-                    `
-                });
-                measurementinputs+='</table>'
-                measurementInput.html(measurementinputs);
-
-                var designs = service['designs'];
-                var designInputs = "";
-
-                $.each(designs, function(index,value){
-
-                    var styles = value['styles'];
-                    var options = `
-                        <option>Select `+value['name']+`</option>
-                    `;
-                    $.each(styles, function(index,value){
-                        options+='<option value="'+value['id']+'">'+value['name']+'</option>'
+                                    <input type="hidden" name="services[`+serviceIndex+`][measurements][`+index+`][id]" value="`+value['id']+`" />
+                                    <input type="hidden" name="services[`+serviceIndex+`][measurements][`+index+`][name]" value="`+value['name']+`" />
+                                </td>
+                            </tr>
+                        `
                     });
+                    measurementinputs+='</table>'
+                    measurementInput.html(measurementinputs);
 
-                    designInputs+=`
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <small >`+value['name']+`</small>
-                                <select class="form-control form-control-sm" name="services[`+serviceIndex+`][designs][`+index+`][id]">`
-                                    +options+
-                                `</select>
-                            </div>
-                        </div>
-                    `
-                });
-                designInput.html(designInputs);
+                    var designs = service['designs'];
+                    var designInputs = "<table class='table table-sm table-borderless'>";
+
+                    $.each(designs, function(index,value){
+
+                        var styles = value['styles'];
+                        var options = `
+                            <option>Select `+value['name']+`</option>
+                        `;
+                        $.each(styles, function(index,value){
+                            options+='<option value="'+value['id']+'">'+value['name']+'</option>'
+                        });
+
+                        designInputs+=`
+                            <tr class="">
+                                <td class='w-5'><small >`+value['name']+`</small></td>
+                                <td>
+                                    <select class="form-control form-control-sm" name="services[`+serviceIndex+`][designs][`+index+`][id]">`
+                                        +options+
+                                    `</select>
+                                </td>
+                            </tr>
+                        `
+                    });
+                    designInputs+='</table>'
+                    designInput.html(designInputs);
+                }
+
+            }else{
+                measurementInput.empty();
+                designInput.empty();
             }
 
-        }else{
-            measurementInput.empty();
-            designInput.empty();
-        }
+        });
 
-    });
-
-    //$('.service_id').trigger('change');
+        //$('.service_id').trigger('change');
 
 
-    $(document).on('click', '.measurement-show-btn', function(){
-        var collapseableButton = $(this);
-        var collapseable = $(collapseableButton.parent('.repeater-item').find('.collapse')[0]);
+        $(document).on('click', '.measurement-show-btn', function(){
+            var collapseableButton = $(this);
+            var collapseable = $(collapseableButton.parent('.repeater-item').find('.collapse')[0]);
 
-        if(collapseable.hasClass('show')){
-            collapseableButton.find('i').attr('class','fa fa-caret-down');
-            collapseable.collapse('hide');
-        }else{
-            collapseableButton.find('i').attr('class','fa fa-caret-up');
-            collapseable.collapse('show');
-        }
-    });
+            if(collapseable.hasClass('show')){
+                collapseableButton.find('i').attr('class','fa fa-caret-down');
+                collapseable.collapse('hide');
+            }else{
+                collapseableButton.find('i').attr('class','fa fa-caret-up');
+                collapseable.collapse('show');
+            }
+        });
 
-</script>
+    </script>
 @endpush

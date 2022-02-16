@@ -78,7 +78,7 @@
                     <span>Measurements</span>
                 </div>
                 <div class="">
-                    <div id="measurement-inputs" class="measurement-inputs">
+                    <div class="measurement-inputs">
                         @if (Arr::get($oldService,'measurements',null))
                             <table class='table table-sm table-borderless'>
                                 @foreach ( Arr::get($oldService,'measurements',[]) as $measurement )
@@ -109,28 +109,32 @@
                     <span>Design</span>
                 </div>
                 <div class="">
-                    <div id="design-inputs" class="row design-inputs">
+                    <div class="row ">
 
-                        @if (Arr::get($oldService,'designs',null))
-                            <table class='table table-sm table-borderless'>
-                                @foreach ( $designs as $design )
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <small >{{$design->name}}</small>
-                                            <select class="form-control form-control-sm" name="services[{{$serviceIndex}}][designs][{{$loop->index}}][id]">
-                                                <option value="">Select {{$design->name}}</option>
-                                                @foreach ($design->styles as $style)
-                                                    <option value="{{$style->id}}" {{$selectedDesignIds->contains($style->id)?"selected":""}}>{{$style->name}}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('services.'.$serviceIndex.'.designs.'.$loop->index.'.id')
-                                                <span class="text-danger">{{$message}}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </table>
-                        @endif
+                        <div class="col-12">
+                            <div class="design-inputs">
+                                @if (Arr::get($oldService,'designs',null))
+                                    <table class='table table-sm table-borderless'>
+                                        @foreach ( $designs as $design )
+                                            <tr>
+                                                <td class='w-5'><small>{{$design->name}}</small></td>
+                                                <td>
+                                                    <select class="form-control form-control-sm" name="services[{{$serviceIndex}}][designs][{{$loop->index}}][id]">
+                                                        <option value="">Select {{$design->name}}</option>
+                                                        @foreach ($design->styles as $style)
+                                                            <option value="{{$style->id}}" {{$selectedDesignIds->contains($style->id)?"selected":""}}>{{$style->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('services.'.$serviceIndex.'.designs.'.$loop->index.'.id')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -10,6 +10,13 @@ class OrderRequest extends BaseRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'services.*.designs.*.id.numeric' => "Design Must Be Selected"
+        ];
+    }
+
     public function rules()
     {
         $accountIdRule = [

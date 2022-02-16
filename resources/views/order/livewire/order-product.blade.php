@@ -24,6 +24,7 @@
                     <th>Name</th>
                     <th class="w-25">Price</th>
                     <th class="w-25">Qty</th>
+                    <th class="text-center">Total</th>
                     <th class="text-center w-10">Action</th>
                 </tr>
             </thead>
@@ -31,7 +32,7 @@
                 @foreach ($cart as $item)
                     <tr class="cart-product">
                         <td>
-                            {{$item['product']['name']}}
+                            <small>{{$item['product']['name']}}</small>
                             <input type="hidden" name="products[{{$loop->index}}][id]" value="{{$item['product']['id']}}">
                         </td>
                         <td >
@@ -49,6 +50,14 @@
                             ->setName('products['.$loop->index.'][quantity]')
                             ->setEnableLabel(false)->setPlaceHolder('quantity')->setValue(old('products.'.$loop->index.'.quantity',1))->setType('number')->setError('products.'.$loop->index.'.quantity')!!}
 
+                        </td>
+                        <td>
+                            <small class="d-block text-center mt-2">
+                                {{
+                                    old('products.'.$loop->index.'.price',$item['price'])??0 *
+                                    old('products.'.$loop->index.'.quantity',$item['quantity'])??0
+                                }}
+                            </small>
                         </td>
                         <td class="text-center"> <button type="button" class="btn btn-danger btn-sm" wire:click="removeProduct({{ $item['product']['id'] }})"><i class="fa fa-trash"></i></button> </td>
                     </tr>
