@@ -83,7 +83,7 @@
                             <table class='table table-sm table-borderless'>
                                 @foreach ( Arr::get($oldService,'measurements',[]) as $measurement )
                                 <tr class="">
-                                    <td><small>{{$measurement['name']}}</small></td>
+                                    <td class='w-5'><small>{{$measurement['name']}}</small></td>
                                     <td>
                                         <input type="text" name="services[{{$serviceIndex}}][measurements][{{$loop->index}}][size]"
                                         class="form-control form-control-sm "

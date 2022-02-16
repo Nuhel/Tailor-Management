@@ -84,7 +84,7 @@
                     $.each(measurements, function(index,value){
                         measurementinputs+=`
                             <tr class="">
-                                <td><small>`+value['name']+`</small></td>
+                                <td class='w-5'><small>`+value['name']+`</small></td>
                                 <td>
                                     <input type="text" name="services[`+serviceIndex+`][measurements][`+index+`][size]"
                                     class="form-control form-control-sm "

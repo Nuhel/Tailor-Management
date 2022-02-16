@@ -50,7 +50,13 @@ class OrderRequest extends BaseRequest
             'products.*.id'                     =>  'required|numeric|exists:products,id',
             'products.*.quantity'               =>  'required|numeric|max:99999|min:1',
             'products.*.price'                  =>  'required|numeric|max:99999|min:1',
-            'account_id'                        =>  $accountIdRule
+            'account_id'                        =>  $accountIdRule,
+            'total'                             =>  'required|numeric',
+            'discount'                          =>  'required|numeric',
+            'netpayable'                        =>  'required|numeric',
+            'paid'                              =>  'required|numeric',
+            'due'                               =>  'required|numeric',
+            'delivery_date'                     =>  'required|date'
         ];
     }
 

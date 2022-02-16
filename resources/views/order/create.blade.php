@@ -2,11 +2,12 @@
 
 @section('content')
     <div class="content-wrapper">
-        <div class="content  pt-3">
+        <div class="content pt-3">
             <div class="container-fluid">
                 <form method="POST" action="{{ route('orders.store') }}">
                     @csrf
                     <div class="card">
+
                         @if($errors->any())
                             @php
                                 dump( $errors->all())
@@ -87,37 +88,53 @@
                                     <table class="table table-sm ">
                                         <tbody>
                                             <tr>
-                                                <td class="w-15"><small>Total</small></td>
+                                                <td class="w-20"><small>Total</small></td>
                                                 <td>
-                                                    <p class="mb-0" id="total-show">0</p>
-                                                    <input type="hidden" id="total-value">
+                                                    <small class="mb-0 pl-2" id="total-show">0</small>
+                                                    <input value="{{old('total',0)}}" name="total" type="hidden"  id="total-value" >
+                                                    @error('total')
+                                                        <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
+                                                    @enderror
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td ><small>Discount</small></td>
                                                 <td>
-                                                    <input name="discount" value="{{old('discount')}}" type="number" class="form-control form-control-sm rounded only-bottom-border" id="discount-value">
+                                                    <input name="discount" value="{{old('discount',0)}}" type="number" class="form-control form-control-sm rounded only-bottom-border" id="discount-value">
+                                                    @error('discount')
+                                                        <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
+                                                    @enderror
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td ><small>Net Payabel</small></td>
                                                 <td>
-                                                    <p class="mb-0" id="netpayable-show">0</p>
-                                                    <input type="hidden" id="netpayable-value">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td ><small>Paid</small></td>
-                                                <td>
-                                                    <input name="paid" type="number" value="{{old('paid')}}" id="paid-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                    <small class="mb-0 pl-2" id="netpayable-show">0</small>
+                                                    <input value="{{old('netpayable',0)}}" name="netpayable" type="hidden" id="netpayable-value">
+                                                    @error('netpayable')
+                                                        <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
+                                                    @enderror
                                                 </td>
                                             </tr>
 
                                             <tr>
-                                                <td ><small>Due</small></td>
+                                                <td ><small>Paid</small></td>
                                                 <td>
-                                                    <p class="mb-0" id="due-show">0</p>
-                                                    <input type="hidden" id="due-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                    <input name="paid" type="number" value="{{old('paid',0)}}" id="paid-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                    @error('paid')
+                                                        <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
+                                                    @enderror
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td><small>Due</small></td>
+                                                <td>
+                                                    <small class="mb-0 pl-2" id="due-show">0</small>
+                                                    <input value="{{old('due',0)}}" name="due" type="hidden" id="due-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                    @error('due')
+                                                        <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
+                                                    @enderror
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -125,7 +142,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
 
@@ -136,10 +152,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
 
                 </form>
             </div>
@@ -198,7 +210,7 @@
 
                 });
 
-                var totalPrice = totalServicePrice + totalProductPrice
+                var totalPrice = totalServicePrice + cartProductPrice
                 var discount = parseFloat($('#discount-value').val())||0;
 
 

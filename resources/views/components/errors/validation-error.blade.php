@@ -3,5 +3,5 @@
 @endif
 
 @error($error)
-    <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
+    <small class="text-danger error validation-error d-block mb-2">{{$message}}</small>
 @enderror
