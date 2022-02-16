@@ -29,7 +29,7 @@
             </thead>
             <tbody>
                 @foreach ($cart as $item)
-                    <tr>
+                    <tr class="cart-product">
                         <td>
                             {{$item['product']['name']}}
                             <input type="hidden" name="products[{{$loop->index}}][id]" value="{{$item['product']['id']}}">
@@ -60,7 +60,7 @@
 </div>
 
 @push('inner-script')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('js/select2.js')}}"></script>
 <script>
     $(document).ready(function() {
         $('.product-select').select2();
@@ -76,6 +76,7 @@
                 var data = e.params.data;
                 Livewire.emit('updatedProduct',data.id);
             });
+            calculatePayments();
         })
 
     });
@@ -85,6 +86,6 @@
 @endpush
 
 @push('inner-style')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="{{ asset('css/select2.css')}}" rel="stylesheet" />
 @endpush
 

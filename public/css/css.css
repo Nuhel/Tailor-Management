@@ -8,6 +8,9 @@
 .w-10{
     width: 10% !important
 }
+.w-15{
+    width: 15% !important
+}
 
 .select2-selection__arrow{
     margin-top: 5px;

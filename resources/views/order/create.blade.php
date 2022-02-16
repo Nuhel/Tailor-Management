@@ -1,8 +1,6 @@
 @extends('layout.layout')
 
 @section('content')
-
-
     <div class="content-wrapper">
         <div class="content  pt-3">
             <div class="container-fluid">
@@ -82,6 +80,50 @@
                                     ])
                                 </div>
                             </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <p>Payments</p>
+                                    <table class="table table-sm ">
+                                        <tbody>
+                                            <tr>
+                                                <td class="w-15"><small>Total</small></td>
+                                                <td>
+                                                    <p class="mb-0" id="total-show">0</p>
+                                                    <input type="hidden" id="total-value">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td ><small>Discount</small></td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm rounded only-bottom-border" id="discount-value">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td ><small>Net Payabel</small></td>
+                                                <td>
+                                                    <p class="mb-0" id="netpayable-show">0</p>
+                                                    <input type="hidden" id="netpayable-value">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td ><small>Paid</small></td>
+                                                <td>
+                                                    <input type="number" id="paid-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td ><small>Due</small></td>
+                                                <td>
+                                                    <p class="mb-0" id="due-show">0</p>
+                                                    <input type="hidden" id="due-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -128,11 +170,50 @@
 
         $(document).ready(function() {
             $('.customer-select').select2();
-            $(document).on('keyup change', '.price, .quantity', function() {
-                console.log("called");
+            $(document).on('keyup change', '.price, .quantity, #discount-value, #paid-value', function() {
+                calculatePayments()
             });
+            calculatePayments()
 
         });
+
+        function calculatePayments(){
+            var services = $('.service-repeater .repeater-item');
+                var totalProductPrice = 0;
+                $.each(services, function(index,service){
+                    //var price = $(this).find('.price').val();
+                    var price = parseFloat($(this).find('.price').val())||0;
+                    var quantity = parseFloat($(this).find('.quantity').val())||0;
+                    totalProductPrice += price*quantity;
+
+                });
+
+                var cartProducts = $('.cart-product');
+
+                $.each(cartProducts, function(index,service){
+                    //var price = $(this).find('.price').val();
+                    var price = parseFloat($(this).find('.price').val())||0;
+                    var quantity = parseFloat($(this).find('.quantity').val())||0;
+                    totalProductPrice += price*quantity;
+
+                });
+
+                var discount = parseFloat($('#discount-value').val())||0;
+
+
+                $('#total-show').text(totalProductPrice);
+                $('#total-value').val(totalProductPrice);
+
+                var netPayable = totalProductPrice-discount;
+
+                $('#netpayable-show').text(netPayable);
+                $('#netpayable-value').val(netPayable);
+
+                var paid = parseFloat($('#paid-value').val())||0;
+                $('#due-show').text(netPayable-paid);
+                $('#due-value').val(netPayable-paid);
+
+        }
     </script>
 @endsection
 
