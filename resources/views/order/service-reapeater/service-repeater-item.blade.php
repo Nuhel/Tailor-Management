@@ -40,8 +40,6 @@
             </div>
         </div>
 
-
-
         <div class="col-sm-12 col-md">
             <small>Craftsman</small>
             {!!
@@ -58,12 +56,6 @@
                 })
             !!}
         </div>
-
-        <div class="col-sm-12 col-md">
-            <p>Status Pending</p>
-        </div>
-
-
     </div>
 
     <a class="btn btn-link  measurement-show-btn px-0" data-toggle="collapse" href="#" role="button" aria-expanded="false" aria-controls="collapseExample">

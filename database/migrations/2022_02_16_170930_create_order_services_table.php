@@ -17,10 +17,10 @@ class CreateOrderServicesTable extends Migration
             $table->id();
             $table->bigInteger('order_id');
             $table->bigInteger('service_id');
-            $table->bigInteger('employee_id');
+            $table->bigInteger('employee_id')->nullable();
             $table->double('quantity');
             $table->double('price');
-            $table->string('status');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
