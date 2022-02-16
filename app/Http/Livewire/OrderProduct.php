@@ -7,46 +7,52 @@ use Livewire\Component;
 
 class OrderProduct extends Component
 {
-    public $selectedProducts;
+    public $cart;
     public $products;
-    public $product;
-    public $oldProductQuantities;
+    public $productId;
+    public $selectedProductPriceAndQuantity;
 
     protected $listeners = ['updatedProduct'];
 
-    public function mount($oldSelectedProducts, $oldProductQuantities){
-        $this->oldProductQuantities = $oldProductQuantities;
-        $this->selectedProducts = collect();
+    public function mount($oldCart){
+        $this->cart = collect();
+        $this->selectedProductPriceAndQuantity = collect();
         $this->products = Product::all();
-        foreach($oldSelectedProducts as $oldSelectedProduct){
-            if($this->products->contains('id',$oldSelectedProduct)){
-                $this->selectedProducts->put(
-                    $oldSelectedProduct,
-                    $this->products->where('id',$oldSelectedProduct)->first()
-                );
-            }
+
+        foreach($oldCart as $oldItem){
+            $this->addProductToSelected($oldItem['id'],$oldItem['price'],$oldItem['quantity']);
+        }
+    }
+
+    public function addProductToSelected($productId,$price = null, $quantity = 1){
+        if($this->products->contains('id',$productId)){
+            $product = $this->products->where('id',$productId)->first();
+            $this->cart->put(
+                $productId,
+                [
+                    'product'   => $product,
+                    'price'     => $price??$product['price'],
+                    'quantity'  => $quantity,
+                ]
+
+            );
         }
     }
 
     public function render()
     {
-        return view('livewire.order-product');
+        return view('order.livewire.order-product');
     }
 
     public function removeProduct($id){
-        $this->selectedProducts->forget($id);
+        $this->cart->forget($id);
+        $this->dispatchBrowserEvent('cartUpdated', ['newName' => "sdsd"]);
     }
 
-    public function updatedProduct($product){
-        $this->product = $product;
-        if(! $this->selectedProducts->has($product)){
-            if($this->products->contains('id',$product)){
-                $this->selectedProducts->put(
-                    $product,
-                    $this->products->where('id',$product)->first()
-                );
-            }
+    public function updatedProduct($productId){
+        if(! $this->cart->pluck('product')->has($productId)){
+            $this->addProductToSelected($productId);
         }
-        $this->dispatchBrowserEvent('updatedProduct', ['newName' => "sdsd"]);
+        $this->dispatchBrowserEvent('cartUpdated', ['newName' => "sdsd"]);
     }
 }

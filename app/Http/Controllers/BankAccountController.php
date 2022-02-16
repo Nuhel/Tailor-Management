@@ -72,7 +72,7 @@ class BankAccountController extends Controller
         $validator = Validator::make($request->all(), [
             "number" => "required|string|max:100",
             "bank_id" => "required|numeric|exists:App\Models\Bank,id",
-            "card" => "nullable|string|max:100",
+            "card" => "nullable|string|max:100|",
         ]);
 
         if ($validator->fails()) {

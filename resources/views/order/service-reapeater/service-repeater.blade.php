@@ -13,8 +13,6 @@
         @endforelse
 
     </div>
-
-
     <div class="card-body pt-0">
         <button href="" data-repeater-create class="btn btn-outline-success btn-sm" type="button">Add
             Service</button>
@@ -35,6 +33,7 @@
                     var newService = $(this);
                     cleanUpNewService(newService)
                     newService.slideDown()
+                    newService.addClass('mt-5')
                     manageNewServiceSelectBox(newService)
 
                 },

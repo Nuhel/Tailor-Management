@@ -32,7 +32,7 @@ class OrderPayments extends Component
     }
     public function render()
     {
-        return view('livewire.order-payments');
+        return view('order.livewire.order-payments');
     }
 
     public function updatedBankType($bank){

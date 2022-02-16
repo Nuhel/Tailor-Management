@@ -17,7 +17,7 @@
 
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="d-flex align-items-end">
                                         <div class="form-group d-flex w-auto flex-grow-1 flex-column mb-0">
                                             <label class="form-inline">Customer</label>
@@ -39,19 +39,21 @@
 
                                 </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-inline">Master Name</label>
-                                        <select name="master_id" class="form-control form-control-sm" >
-                                            <option value="">Select Master</option>
-                                            @foreach ($masters as $master)
-                                                <option value="{{ $master->id }}" {{$master->id == old('master_id')?"selected":""}}>{{ $master->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('master_id')
-                                            <span class="text-danger ">{{$message}}</span>
-                                        @enderror
-                                    </div>
+                                <div class="col-md-4">
+                                    {!!
+                                        Form::select()
+                                        ->setName('master_id')
+                                        ->setLabel('Master')
+                                        ->setPlaceholder('Select Master')
+                                        ->setValue(old('master_id'))
+                                        ->setOptions($masters)
+                                        ->setOptionBuilder(function($value){
+                                            return [$value->id, $value->name];
+                                        })
+                                    !!}
+                                </div>
+                                <div class="col-md-4">
+                                    {!!Form::input()->setName('delivery_date')->setValue(old('delivery_date'))->setType('date')!!}
                                 </div>
                             </div>
                         </div>
@@ -64,8 +66,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     @livewire('order-product',[
-                                        'oldSelectedProducts' => collect(old('products',[]))->pluck('id'),
-                                        'oldProductQuantities' => collect(old('products',[]))->pluck('quantity'),
+                                        'oldCart' => collect(old('products',[]))
                                     ])
                                 </div>
                             </div>
@@ -127,6 +128,10 @@
 
         $(document).ready(function() {
             $('.customer-select').select2();
+            $(document).on('keyup change', '.price, .quantity', function() {
+                console.log("called");
+            });
+
         });
     </script>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
 use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Master;
 use App\Models\Order;
 use App\Models\Service;
@@ -31,7 +32,9 @@ class OrderController extends Controller
         ->with('services',$services)
         ->with('json',$json)
         ->with('masters',$masters)
-        ->with('customers',Customer::all());
+        ->with('customers',Customer::all())
+        ->with('employees',Employee::all())
+        ;
     }
 
 

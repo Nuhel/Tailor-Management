@@ -1,11 +1,11 @@
-<div data-repeater-item  class="repeater-item border rounded p-2 mb-5 position-relative ">
+<div data-repeater-item  class="repeater-item border rounded p-2 position-relative ">
     @php
         $serviceObject = $services->where('id',Arr::get($oldService,'service_id',0))->first();
         $designs =  $serviceObject!=null? $serviceObject->designs:collect([]);
         $selectedDesignIds = collect(Arr::get($oldService,'designs',[]))->pluck('id');
     @endphp
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-sm-12 col-md">
             <div class="form-group">
                 <small >Select Service</small>
                 <select name="service_id" class="form-control form-control-sm service_id" data-index='0'>
@@ -20,26 +20,50 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-sm-12 col-md">
             <div class="form-group">
                 <small >Quantity</small>
-                <input name="quantity" class="form-control form-control-sm" type="number" value="{{Arr::get($oldService,'quantity','')}}"/>
+                <input name="quantity" class="form-control form-control-sm quantity" type="number" value="{{Arr::get($oldService,'quantity','')}}"/>
                 @error('services.'.$serviceIndex.'.quantity')
                     <span class="text-danger error">{{$message}}</span>
                 @enderror
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-sm-12 col-md">
             <div class="form-group">
                 <small >Price</small>
-                <input name="price" class="form-control form-control-sm" type="number" value="{{Arr::get($oldService,'price','')}}"/>
+                <input name="price" class="form-control form-control-sm price" type="number" value="{{Arr::get($oldService,'price','')}}"/>
                 @error('services.'.$serviceIndex.'.price')
                 <span class="text-danger error">{{$message}}</span>
                 @enderror
             </div>
-
         </div>
+
+
+
+        <div class="col-sm-12 col-md">
+            <small>Craftsman</small>
+            {!!
+                Form::select()
+                ->setName('employee_id')
+                ->setLabel('Master')
+                ->setEnableLabel(false)
+                ->setPlaceholder('Select Craftsman')
+                ->setValue(old(Arr::get($oldService,'employee_id','')))
+                ->setOptions($employees)
+                ->setError('services.'.$serviceIndex.'.employee_id')
+                ->setOptionBuilder(function($value){
+                    return [$value->id, $value->name];
+                })
+            !!}
+        </div>
+
+        <div class="col-sm-12 col-md">
+            <p>Status Pending</p>
+        </div>
+
+
     </div>
 
     <a class="btn btn-link  measurement-show-btn px-0" data-toggle="collapse" href="#" role="button" aria-expanded="false" aria-controls="collapseExample">
