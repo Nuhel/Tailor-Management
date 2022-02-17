@@ -6,13 +6,15 @@ use App\Models\Bank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\DataTables\BanksDataTable;
 
 class BankController extends Controller
 {
 
-    public function index()
+    public function index(BanksDataTable $dataTable)
     {
-        return view('bank.index')->with('banks',Bank::all());
+        return $dataTable->render('bank.index');
+        //return view('bank.index')->with('banks',Bank::all());
     }
 
 

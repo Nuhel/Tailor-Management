@@ -1,4 +1,14 @@
 @extends('layout.layout')
+
+@section('css')
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.6.0/jszip-2.5.0/dt-1.11.4/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.css"/>
+
+
+
+@endsection
+
 @section('content')
     <div class="content-wrapper">
         <div class="content pt-5">
@@ -8,51 +18,7 @@
                         <h2><strong>Bank List</strong></h2>
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="tablecolor emp">
-                                    <th>Serial No</th>
-                                    <th>Name</th>
-                                    <th>Mobile</th>
-                                    <th>Address</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($banks as $value)
-                                     <tr>
-                                         <td>{{$loop->index +1}}</td>
-                                        <td>{{ $value->name}}</td>
-                                        <td>{{ $value->type}}</td>
-                                        <td>{{ $value->address}}</td>
-                                        
-                                        <td>
-                                            <a href="{{route('banks.show', ['bank'=> $value->id] )}}"class="btn btn-outline-primary btn-sm mr-2">
-                                                <i class="fa fa-eye" aria-hidden="true">
-                                                    View
-                                                </i>
-                                            </a>
-                                            <a href="{{route('banks.edit', ['bank'=> $value->id] )}}"
-                                                class="btn btn-outline-primary btn-sm mr-2">
-                                                <i class="fa fa-edit" aria-hidden="true">
-                                                Edit
-                                                </i>
-                                            </a>
-                                            <form action="{{route('banks.destroy', ['bank'=> $value->id] )}}" method="post" class="d-inline-block">
-                                                @method('delete')
-                                                @csrf
-                                                <button type="submit"
-                                                class="btn btn-outline-danger btn-sm mr-2">
-                                                <i class="fa fa-trash" aria-hidden="true">
-                                                Delete
-                                                </i>
-                                            </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        {!! $dataTable->table() !!}
                     </div>
                 </div>
             </div>
@@ -61,3 +27,16 @@
 @endsection
 
 
+
+
+
+
+@section('script')
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.6.0/jszip-2.5.0/dt-1.11.4/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="/vendor/datatables/buttons.server-side.js"></script>
+{!! $dataTable->scripts() !!}
+@endsection
