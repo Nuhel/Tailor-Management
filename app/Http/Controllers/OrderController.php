@@ -28,13 +28,8 @@ class OrderController extends Controller
     {
 
         $orders = Order::with('customer')
-        ->with('products')
-        ->with(['services' => function($query){
-            return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with(['serviceDesigns' => function($query){
-                return $query->with('design')->with('style');
-            }]);
-        }])->get();
-        dd($orders->toArray());
+        ->get();
+        return view('order.index')->with('orders',$orders);
     }
 
 
@@ -52,8 +47,7 @@ class OrderController extends Controller
         ->with('json',$json)
         ->with('masters',$masters)
         ->with('customers',Customer::all())
-        ->with('employees',Employee::all())
-        ;
+        ->with('employees',Employee::all());
     }
 
 
@@ -62,10 +56,22 @@ class OrderController extends Controller
         //Load Up the design and styles to provide fallback name
         $this->designs = ServiceDesign::all();
         $this->styles = ServiceDesignStyle::all();
+        $this->storeOrder($request);
+        return redirect(route('orders.index'));
 
+
+    }
+
+    public function storeOrder(Request $request, $order=null){
+        $onSave = $order == null?true:false;
         try{
             DB::beginTransaction();
-            $order = new Order();
+            if($order == null){
+                $order = new Order();
+            }else{
+                $this->deleteOrderRelatedData($order);
+            }
+
             $order->customer_id     = $request->customer_id;
             $order->master_id       = $request->master_id;
             $order->account_id      = $request->account_id;
@@ -75,7 +81,12 @@ class OrderController extends Controller
             $order->netpayable      = $request->netpayable;
             $order->paid            = $request->paid;
             $order->due             = $request->due;
-            $order->save();
+
+            if($onSave){
+                $order->save();
+            }else{
+                $order->update();
+            }
 
             collect($request->services)->each(function ($service) use($order){
                 $orderService = new OrderService();
@@ -97,17 +108,12 @@ class OrderController extends Controller
                 return $product;
             });
             $order->products()->saveMany($products);
-
-
             DB::commit();
+            return true;
         }catch(\Exception $e){
-            dd($e);
             DB::rollBack();
+            return false;
         }
-
-        return redirect()->back()->withInput();
-
-
     }
 
     public function attachMeasurementsToService(OrderService $service, Collection $measurements){
@@ -148,7 +154,6 @@ class OrderController extends Controller
         ->load(['services' => function($query){
             return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns');
         }]);
-        //dd($order->toArray());
         return view('order.show')->with('order',$order);
 
     }
@@ -156,17 +161,60 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        //
+        $services = Service::with('measurements')->with('designs.styles')->get()->mapWithKeys(function ($service, $key) {
+            return [$service->id => $service];
+        });
+
+        $order = $order
+        ->load('products.product')
+        ->load(['services' => function($query){
+            return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns');
+        }]);
+
+        $json = str_replace("\u0022","\\\\\"",json_encode( $services,JSON_HEX_QUOT));
+
+        $masters = Master::all();
+        return view('order.edit')
+        ->with('services',$services)
+        ->with('json',$json)
+        ->with('masters',$masters)
+        ->with('customers',Customer::all())
+        ->with('employees',Employee::all())
+        ->with('order',$order);
     }
 
 
     public function update(OrderRequest $request, Order $order)
     {
-        //
+
+        //Load Up the design and styles to provide fallback name
+        $this->designs = ServiceDesign::all();
+        $this->styles = ServiceDesignStyle::all();
+        $this->storeOrder($request,$order);
+
+        return redirect(route('orders.index'));
+    }
+
+    public function deleteOrderRelatedData(Order $order){
+        $order->products()->delete();
+        foreach($order->services as $service){
+            $service->serviceMeasurements()->delete();
+            $service->serviceDesigns()->delete();
+        }
+        $order->services()->delete();
     }
 
     public function destroy(Order $order)
     {
-        //
+        try{
+            DB::beginTransaction();
+            $this->deleteOrderRelatedData($order);
+            $order->delete();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+        }
+        return redirect(route('orders.index'));
+
     }
 }

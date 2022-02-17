@@ -5,8 +5,7 @@
                 <label class="form-inline">Services's</label>
             </div>
         </div>
-
-        @forelse (old('services',[]) as $service)
+        @forelse ($oldServices as $service)
             @include('order.service-reapeater.service-repeater-item', ['services' => $services,'oldService' => $service,'serviceIndex' => $loop->index])
         @empty
             @include('order.service-reapeater.service-repeater-item', ['services' => $services,'oldService' => [], 'serviceIndex' => 0])

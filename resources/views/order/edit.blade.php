@@ -4,9 +4,17 @@
     <div class="content-wrapper">
         <div class="content pt-3">
             <div class="container-fluid">
-                <form method="POST" action="{{ route('orders.store') }}">
+                <form method="POST" action="{{ route('orders.update',['order'=>$order]) }}">
+                    @method('put')
                     @csrf
                     <div class="card">
+
+                        @if($errors->any())
+                            @php
+                                dump( $errors->all())
+                            @endphp
+                        @endif
+
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
@@ -16,7 +24,7 @@
                                            <select name="customer_id" class="customer-select form-control form-control-sm" id="customer_id">
                                                 <option value="">Select Customer</option>
                                                 @foreach ($customers as $customer)
-                                                    <option value="{{$customer->id}}" {{$customer->id == old('customer_id')?"selected":""}}>{{$customer->name}} ({{$customer->mobile}})</option>
+                                                    <option value="{{$customer->id}}" {{$customer->id == old('customer_id', $order->customer_id)?"selected":""}}>{{$customer->name}} ({{$customer->mobile}})</option>
                                                 @endforeach
                                            </select>
                                         </div>
@@ -37,7 +45,7 @@
                                         ->setName('master_id')
                                         ->setLabel('Master')
                                         ->setPlaceholder('Select Master')
-                                        ->setValue(old('master_id'))
+                                        ->setValue(old('master_id',$order->master_id))
                                         ->setOptions($masters)
                                         ->setOptionBuilder(function($value){
                                             return [$value->id, $value->name];
@@ -45,24 +53,24 @@
                                     !!}
                                 </div>
                                 <div class="col-md-3">
-                                    {!!Form::input()->setName('delivery_date')->setValue(old('delivery_date'))->setType('date')!!}
+                                    {!!Form::input()->setName('delivery_date')->setValue(old('delivery_date', $order->delivery_date))->setType('date')!!}
                                 </div>
 
                                 <div class="col-md-3">
-                                    {!!Form::input()->setName('trial_date')->setValue(old('trial_date'))->setType('date')!!}
+                                    {!!Form::input()->setName('trial_date')->setValue(old('trial_date', $order->trial_date))->setType('date')!!}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    @include('order.service-reapeater.service-repeater', ['oldServices'=>old('services',[])])
+                    @include('order.service-reapeater.service-repeater', ['oldServices'=>old('services',$order->services)])
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
                                     @livewire('order-product',[
-                                        'oldCart' => collect(old('products',[]))
+                                        'oldCart' => collect(old('products',$order->products))
                                     ])
                                 </div>
                             </div>
@@ -88,7 +96,7 @@
                                                 <td class="w-20"><small>Total</small></td>
                                                 <td>
                                                     <small class="mb-0 pl-2" id="total-show">0</small>
-                                                    <input value="{{old('total',0)}}" name="total" type="hidden"  id="total-value" >
+                                                    <input value="{{old('total',$order->total)}}" name="total" type="hidden"  id="total-value" >
                                                     @error('total')
                                                         <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
                                                     @enderror
@@ -97,7 +105,7 @@
                                             <tr>
                                                 <td ><small>Discount</small></td>
                                                 <td>
-                                                    <input name="discount" value="{{old('discount',0)}}" type="number" class="form-control form-control-sm rounded only-bottom-border" id="discount-value">
+                                                    <input name="discount" value="{{old('discount',$order->discount)}}" type="number" class="form-control form-control-sm rounded only-bottom-border" id="discount-value">
                                                     @error('discount')
                                                         <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
                                                     @enderror
@@ -107,7 +115,7 @@
                                                 <td ><small>Net Payabel</small></td>
                                                 <td>
                                                     <small class="mb-0 pl-2" id="netpayable-show">0</small>
-                                                    <input value="{{old('netpayable',0)}}" name="netpayable" type="hidden" id="netpayable-value">
+                                                    <input value="{{old('netpayable',$order->netpayable)}}" name="netpayable" type="hidden" id="netpayable-value">
                                                     @error('netpayable')
                                                         <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
                                                     @enderror
@@ -117,7 +125,7 @@
                                             <tr>
                                                 <td ><small>Paid</small></td>
                                                 <td>
-                                                    <input name="paid" type="number" value="{{old('paid',0)}}" id="paid-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                    <input name="paid" type="number" value="{{old('paid',$order->paid)}}" id="paid-value" class="form-control form-control-sm rounded only-bottom-border">
                                                     @error('paid')
                                                         <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
                                                     @enderror
@@ -128,7 +136,7 @@
                                                 <td><small>Due</small></td>
                                                 <td>
                                                     <small class="mb-0 pl-2" id="due-show">0</small>
-                                                    <input value="{{old('due',0)}}" name="due" type="hidden" id="due-value" class="form-control form-control-sm rounded only-bottom-border">
+                                                    <input value="{{old('due',$order->due)}}" name="due" type="hidden" id="due-value" class="form-control form-control-sm rounded only-bottom-border">
                                                     @error('due')
                                                         <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
                                                     @enderror

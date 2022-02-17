@@ -58,7 +58,8 @@ class OrderRequest extends BaseRequest
             'netpayable'                        =>  'required|numeric',
             'paid'                              =>  'required|numeric',
             'due'                               =>  'required|numeric',
-            'delivery_date'                     =>  'required|date'
+            'delivery_date'                     =>  'required|date',
+            'trial_date'                        =>  'required|date',
         ];
     }
 

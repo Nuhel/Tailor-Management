@@ -21,6 +21,10 @@
                                             <td>{{$order->master->name}}</td>
                                         </tr>
                                         <tr>
+                                            <td>Trial Date</td>
+                                            <td>{{$order->trial_date}}</td>
+                                        </tr>
+                                        <tr>
                                             <td>Delivary Date</td>
                                             <td>{{$order->delivery_date}}</td>
                                         </tr>
@@ -49,6 +53,16 @@
                                         <tr>
                                             <td>Total Payable</td>
                                             <td>{{$order->netpayable}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Paid</td>
+                                            <td>{{$order->paid}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Due</td>
+                                            <td>{{$order->due}}</td>
                                         </tr>
                                     </tbody>
 
@@ -155,7 +169,7 @@
                                                     <p class="mb-1">Design's</p>
                                                     @foreach ($service->serviceDesigns as $design)
                                                         <span class="badge badge-pill badge-info">
-                                                            {{Str::of($design->design->name)->headLine()}} : {{$design->style->name}}
+                                                            {{Str::of($design->design!=null ? $design->design->name: $design->design_name)->headLine()}} : {{$design->style!=null?$design->style->name:$design->style_name}}
                                                         </span>
                                                     @endforeach
                                                 </div>

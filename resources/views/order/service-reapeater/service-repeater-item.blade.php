@@ -1,8 +1,26 @@
 <div data-repeater-item  class="repeater-item border rounded p-2 position-relative ">
     @php
-        $serviceObject = $services->where('id',Arr::get($oldService,'service_id',0))->first();
-        $designs =  $serviceObject!=null? $serviceObject->designs:collect([]);
-        $selectedDesignIds = collect(Arr::get($oldService,'designs',[]))->pluck('id');
+        $serviceObject  = $services->where('id',Arr::get($oldService,'service_id',0))->first();
+        $designs        =  $serviceObject!=null? $serviceObject->designs:collect([]);
+
+        $edit = true;
+        if( count(Arr::get($oldService,'measurements',[])) > 0){
+            $edit = false;
+        }
+
+
+        if(!$edit){
+            $oldmeasurements = collect(Arr::get($oldService,'measurements',[]));
+            $oldDesigns = collect(Arr::get($oldService,'designs',[]));
+            $selectedDesignIds = $oldDesigns->pluck('style_id');
+        }else{
+            $oldmeasurements = collect(Arr::get($oldService,'serviceMeasurements',[]));
+            $oldDesigns = collect(Arr::get($oldService,'serviceDesigns',[]));
+            $selectedDesignIds = $oldDesigns->pluck('service_design_style_id');
+        }
+        //dump($oldService);
+
+        //
     @endphp
     <div class="row">
         <div class="col-sm-12 col-md">
@@ -70,15 +88,21 @@
                 </div>
                 <div class="">
                     <div class="measurement-inputs">
-                        @if (Arr::get($oldService,'measurements',null))
+                        @if ($oldmeasurements)
                             <table class='table table-sm table-borderless'>
-                                @foreach ( Arr::get($oldService,'measurements',[]) as $measurement )
+                                @foreach ( $oldmeasurements as $measurement )
+                                    @php
+
+                                        $size = $measurement['size'];
+                                        $measurement = $edit?$measurement->measurement:$measurement;
+                                        //dump($measurement->toArray());
+                                    @endphp
                                 <tr class="">
                                     <td class='w-5'><small>{{$measurement['name']}}</small></td>
                                     <td>
                                         <input type="text" name="services[{{$serviceIndex}}][measurements][{{$loop->index}}][size]"
                                         class="form-control form-control-sm "
-                                        placeholder="Size" value="{{$measurement['size']}}" />
+                                        placeholder="Size" value="{{$size}}" />
                                         @error('services.'.$serviceIndex.'.measurements.'.$loop->index.'.size')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror
@@ -104,7 +128,7 @@
 
                         <div class="col-12">
                             <div class="design-inputs">
-                                @if (Arr::get($oldService,'designs',null))
+                                @if ($oldDesigns)
                                     <table class='table table-sm table-borderless'>
                                         @foreach ( $designs as $design )
                                             <tr>
