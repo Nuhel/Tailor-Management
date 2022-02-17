@@ -28,6 +28,7 @@ class OrderRequest extends BaseRequest
         if($this->bank_type!="Cash Payment"){
             $accountIdRule[] = 'exists:bank_accounts,id';
         }
+
         return [
             'customer_id'                       =>  'required|numeric|exists:customers,id',
             'master_id'                         =>  'required|numeric|exists:masters,id',
@@ -44,7 +45,8 @@ class OrderRequest extends BaseRequest
             'services.*.measurements.*.id'      =>  'required|numeric|exists:service_measurements,id',
 
             'services.*.designs'                =>  'required|array',
-            'services.*.designs.*.id'           =>  'required|numeric|exists:service_design_styles,id',
+            'services.*.designs.*.id'           =>  'required|numeric|exists:service_designs,id',
+            'services.*.designs.*.style_id'     =>  'required|numeric|exists:service_design_styles,id',
 
             'products'                          =>  'nullable|array',
             'products.*.id'                     =>  'required|numeric|exists:products,id',
@@ -52,7 +54,7 @@ class OrderRequest extends BaseRequest
             'products.*.price'                  =>  'required|numeric|max:99999|min:1',
             'account_id'                        =>  $accountIdRule,
             'total'                             =>  'required|numeric',
-            'discount'                          =>  'required|numeric',
+            'discount'                          =>  'nullable|numeric',
             'netpayable'                        =>  'required|numeric',
             'paid'                              =>  'required|numeric',
             'due'                               =>  'required|numeric',

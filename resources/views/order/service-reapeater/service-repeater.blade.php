@@ -116,7 +116,8 @@
                             <tr class="">
                                 <td class='w-5'><small >`+value['name']+`</small></td>
                                 <td>
-                                    <select class="form-control form-control-sm" name="services[`+serviceIndex+`][designs][`+index+`][id]">`
+                                    <input type="hidden" value="`+value['id']+`" name="services[`+serviceIndex+`][designs][`+index+`][id]"/>
+                                    <select class="form-control form-control-sm" name="services[`+serviceIndex+`][designs][`+index+`][style_id]">`
                                         +options+
                                     `</select>
                                 </td>

@@ -45,7 +45,6 @@
             {!!
                 Form::select()
                 ->setName('employee_id')
-                ->setLabel('Master')
                 ->setEnableLabel(false)
                 ->setPlaceholder('Select Craftsman')
                 ->setValue(old(Arr::get($oldService,'employee_id','')))
@@ -111,7 +110,8 @@
                                             <tr>
                                                 <td class='w-5'><small>{{$design->name}}</small></td>
                                                 <td>
-                                                    <select class="form-control form-control-sm" name="services[{{$serviceIndex}}][designs][{{$loop->index}}][id]">
+                                                    <input type="hidden" value="{{$design->id}}" name="services[{{$serviceIndex}}][designs][{{$loop->index}}][id]"/>
+                                                    <select class="form-control form-control-sm" name="services[{{$serviceIndex}}][designs][{{$loop->index}}][style_id]">
                                                         <option value="">Select {{$design->name}}</option>
                                                         @foreach ($design->styles as $style)
                                                             <option value="{{$style->id}}" {{$selectedDesignIds->contains($style->id)?"selected":""}}>{{$style->name}}</option>

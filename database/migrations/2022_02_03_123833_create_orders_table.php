@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('account_id')->nullable();
             $table->date('delivery_date');
             $table->double('total');
-            $table->double('discount');
+            $table->double('discount')->nullable();
             $table->double('netpayable');
             $table->double('paid');
             $table->double('due');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderServicMeasurementsTable extends Migration
+class CreateOrderProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateOrderServicMeasurementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_servic_measurements', function (Blueprint $table) {
+        Schema::create('order_products', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('order_service_id');
-            $table->bigInteger('measurement_id');
-            $table->string('size');
+            $table->bigInteger('order_id');
+            $table->bigInteger('product_id');
+            $table->double('price');
+            $table->double('quantity');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateOrderServicMeasurementsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_servic_measurements');
+        Schema::dropIfExists('order_products');
     }
 }
