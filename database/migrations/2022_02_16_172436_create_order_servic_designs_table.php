@@ -16,8 +16,12 @@ class CreateOrderServicDesignsTable extends Migration
         Schema::create('order_servic_designs', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('order_service_id');
+
             $table->bigInteger('service_design_id');
+            $table->string('design_name')->nullable();
+
             $table->bigInteger('service_design_style_id');
+            $table->string('style_name')->nullable();
             $table->timestamps();
         });
     }

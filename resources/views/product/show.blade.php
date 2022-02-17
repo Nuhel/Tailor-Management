@@ -5,7 +5,7 @@
             <div class="container">
                 <div class="card mt-3">
                     <div class="card-header">
-                        <h2><strong>Customer List</strong></h2>
+                        <h2><strong>Product List</strong></h2>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
@@ -24,7 +24,7 @@
                                         <td>{{ $product->category->name}}</td>
                                         <td>{{ $product->price}}</td>
                                     </tr>
-                                
+
                             </tbody>
                         </table>
                     </div>

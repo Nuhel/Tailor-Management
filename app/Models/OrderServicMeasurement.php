@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class OrderServicMeasurement extends Model
 {
     use HasFactory;
+    public function measurement(){
+        return $this->belongsTo(ServiceMeasurement::class);
+    }
 }

@@ -12,6 +12,8 @@ use App\Models\OrderServicDesign;
 use App\Models\OrderService;
 use App\Models\Service;
 use App\Models\OrderServicMeasurement;
+use App\Models\ServiceDesign;
+use App\Models\ServiceDesignStyle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -19,13 +21,18 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
 
+    public $designs;
+    public $styles;
+
     public function index()
     {
 
         $orders = Order::with('customer')
         ->with('products')
         ->with(['services' => function($query){
-            return $query->with('service')->with('employee')->with('serviceMeasurements')->with('serviceDesigns');
+            return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with(['serviceDesigns' => function($query){
+                return $query->with('design')->with('style');
+            }]);
         }])->get();
         dd($orders->toArray());
     }
@@ -52,6 +59,9 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
+        //Load Up the design and styles to provide fallback name
+        $this->designs = ServiceDesign::all();
+        $this->styles = ServiceDesignStyle::all();
 
         try{
             DB::beginTransaction();
@@ -91,6 +101,7 @@ class OrderController extends Controller
 
             DB::commit();
         }catch(\Exception $e){
+            dd($e);
             DB::rollBack();
         }
 
@@ -109,10 +120,20 @@ class OrderController extends Controller
         $service->serviceMeasurements()->saveMany($measurements);
     }
     public function attachDesignToService(OrderService $service, Collection $designs){
+        //$this->designs
         $designs = $designs->map(function($value){
-            $design = new OrderServicDesign();
-            $design->service_design_id    = $value['id'];
+
+            $fallbackDesign = $this->designs->where('id',$value['id'])->first();
+            $fallbackDesignName = $fallbackDesign!=null?$fallbackDesign->name:"";
+
+            $fallbackStyle = $this->styles->where('id',$value['style_id'])->first();
+            $fallbackStyleName = $fallbackStyle!=null?$fallbackStyle->name:"";
+
+            $design                             = new OrderServicDesign();
+            $design->service_design_id          = $value['id'];
+            $design->design_name                = $fallbackDesignName;
             $design->service_design_style_id    = $value['style_id'];
+            $design->style_name                 = $fallbackStyleName;
             return $design;
         });
         $service->serviceDesigns()->saveMany($designs);
@@ -122,11 +143,14 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order = $order->load('customer')
-        ->load('products')
+        ->load('master')
+        ->load('products.product')
         ->load(['services' => function($query){
-            return $query->with('service')->with('employee')->with('serviceMeasurements')->with('serviceDesigns');
+            return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns');
         }]);
-        dd($order->toArray());
+        //dd($order->toArray());
+        return view('order.show')->with('order',$order);
+
     }
 
 

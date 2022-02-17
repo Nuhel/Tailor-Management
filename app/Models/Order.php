@@ -13,6 +13,10 @@ class Order extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    public function master(){
+        return $this->belongsTo(Master::class);
+    }
+
     public function services(){
         return $this->hasMany(OrderService::class);
     }
