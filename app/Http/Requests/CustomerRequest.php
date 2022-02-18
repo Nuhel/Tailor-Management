@@ -27,7 +27,7 @@ class CustomerRequest extends BaseRequest
         return [
             'name' => 'required|string|max:100',
             'mobile' => 'required|string|max:20',
-            'address' => 'nullable|string|max:500',
+            'address' => 'required|string|max:500',
         ];
     }
 }

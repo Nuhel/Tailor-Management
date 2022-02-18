@@ -14,9 +14,7 @@ class BankAccountController extends Controller
 
     public function index(BankAccountDataTable $dataTable)
     {
-
         return $dataTable->render('bank_account.index');
-        return view('bank_account.index')->with('bankAccounts',BankAccount::with('bank')->get());
     }
 
 
