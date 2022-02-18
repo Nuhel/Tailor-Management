@@ -14,7 +14,6 @@ class BankController extends Controller
     public function index(BanksDataTable $dataTable)
     {
         return $dataTable->render('bank.index');
-        //return view('bank.index')->with('banks',Bank::all());
     }
 
 

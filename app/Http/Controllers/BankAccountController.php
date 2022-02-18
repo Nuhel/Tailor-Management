@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
 use App\Models\BankAccount;
 use Illuminate\Http\Request;
-use App\Models\Bank;
+use App\DataTables\BanksDataTable;
+use App\DataTables\BankAccountDataTable;
 use Illuminate\Support\Facades\Validator;
+
 class BankAccountController extends Controller
 {
 
-    public function index()
+    public function index(BankAccountDataTable $dataTable)
     {
+
+        return $dataTable->render('bank_account.index');
         return view('bank_account.index')->with('bankAccounts',BankAccount::with('bank')->get());
     }
 

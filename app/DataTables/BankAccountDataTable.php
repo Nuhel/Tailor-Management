@@ -2,27 +2,25 @@
 
 namespace App\DataTables;
 
-use App\Models\Bank;
+use App\Models\BankAccount;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BanksDataTable extends DataTable
+class BankAccountDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
+
     public function dataTable($query)
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('actions', function(Bank $bank) {
-                return view('components.actionbuttons.table_actions')->with('route','banks')->with('param','bank')->with('value',$bank)->render();
+            ->addColumn('action', 'bankaccountdatatable.action')
+            ->addColumn('bank', function (BankAccount $bankAccount) {
+                return $bankAccount->bank->name;
+            })->addColumn('actions', function(BankAccount $bankAccount) {
+                return view('components.actionbuttons.table_actions')->with('route','bank_accounts')->with('param','bank_account')->with('value',$bankAccount)->render();
             })
             ->addIndexColumn()
             ->rawColumns(['actions']);
@@ -31,10 +29,10 @@ class BanksDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\BanksDataTable $model
+     * @param \App\Models\BankAccount $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Bank $model)
+    public function query(BankAccount $model)
     {
         return $model->newQuery();
     }
@@ -47,14 +45,14 @@ class BanksDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('banksdatatable-tablen')
+                    ->setTableId('bankaccountdatatable-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
                     ->orderBy(1)
                     ->buttons(
-                        Button::make('create')->addClass('btn btn-sm btn-info'),
-                        Button::make('export')->raw('<i class="fa fa-plus"></i>')->extend('export'),
+                        Button::make('create'),
+                        Button::make('export'),
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
@@ -69,7 +67,9 @@ class BanksDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('name'),
+            Column::computed('DT_RowIndex','SL')->width(20),
+            Column::make('bank'),
+            Column::make('number'),
             Column::computed('actions')->addClass('text-right'),
         ];
     }
@@ -81,6 +81,6 @@ class BanksDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Banks_' . date('YmdHis');
+        return 'BankAccount_' . date('YmdHis');
     }
 }

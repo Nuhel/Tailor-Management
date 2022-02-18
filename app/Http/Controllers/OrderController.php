@@ -7,23 +7,11 @@ use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Master;
 use App\Models\Order;
-use App\Models\OrderProduct;
-use App\Models\OrderServicDesign;
-use App\Models\OrderService;
 use App\Models\Service;
-use App\Models\OrderServicMeasurement;
-use App\Models\ServiceDesign;
-use App\Models\ServiceDesignStyle;
 use App\Services\OrderService as ServicesOrderService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-
-
-
     public function index(){
         $orders = Order::with('customer')
         ->get();
