@@ -14,6 +14,7 @@ class BankAccountController extends Controller
 
     public function index(BankAccountDataTable $dataTable)
     {
+        //dd($dataTable->render('bank_account.index'));
         return $dataTable->render('bank_account.index');
     }
 

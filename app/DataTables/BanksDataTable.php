@@ -1,22 +1,13 @@
 <?php
 
 namespace App\DataTables;
-
 use App\Models\Bank;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
-use Yajra\DataTables\Services\DataTable;
 
 class BanksDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
+    protected $tableId = "banksdatatable";
     public function dataTable($query)
     {
         return datatables()
@@ -28,47 +19,22 @@ class BanksDataTable extends DataTable
             ->rawColumns(['actions']);
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\BanksDataTable $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function query(Bank $model)
     {
         return $model->newQuery();
     }
 
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
-    public function html()
-    {
-        return $this->builder()
-                    ->setTableId('banksdatatable-tablen')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create')->addClass('btn btn-sm btn-info'),
-                        Button::make('export')->raw('<i class="fa fa-plus"></i>')->extend('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
-    }
+
 
     /**
      * Get columns.
      *
      * @return array
      */
-    protected function getColumns()
+    public function getColumns()
     {
         return [
+            Column::computed('index','SL')->width(20),
             Column::make('name'),
             Column::computed('actions')->addClass('text-right'),
         ];
@@ -82,5 +48,12 @@ class BanksDataTable extends DataTable
     protected function filename()
     {
         return 'Banks_' . date('YmdHis');
+    }
+
+    public function getFilters()
+    {
+        return [
+            '1'=>'Bnak',
+        ];
     }
 }

@@ -5,7 +5,7 @@
         @endif
 
         <input
-            class="{{$inputClass}}"
+            class="{{$inputClass}} @error($error) is-invalid @enderror"
             {{ $id? "id=".($id) ."": ""  }}
             name="{{$name}}"
             type="{{$type}}"

@@ -6,29 +6,29 @@ use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
-use Yajra\DataTables\Services\DataTable;
-
 class BankAccountDataTable extends DataTable
 {
-
+    protected $tableId = 'bankaccountdatatable';
     public function dataTable(Request $request,$query)
     {
-
         return datatables()
             ->eloquent($query)
             ->filter(function ($query) use ($request) {
                 //dd($request->toArray());
-                 $query;
+                //$query;
             },true)
+
             ->filterColumn('card', function($query, $keyword) {
                 $query->where('card', 'like', '%'.$keyword.'%');
             })
             ->filterColumn('number', function($query, $keyword) {
                 $query->where('number', 'like', '%'.$keyword.'%');
             })
-            ->addColumn('action', 'bankaccountdatatable.action')
+            ->filterColumn('bank', function($query, $keyword) {
+                $query->whereHas('bank', function ($query) use($keyword){
+                    $query->where('name', 'like', '%'.$keyword.'%');
+                });
+            })
             ->addColumn('bank', function (BankAccount $bankAccount) {
                 return $bankAccount->bank->name;
             })->addColumn('actions', function(BankAccount $bankAccount) {
@@ -54,30 +54,14 @@ class BankAccountDataTable extends DataTable
      *
      * @return \Yajra\DataTables\Html\Builder
      */
-    public function html()
-    {
-        return $this->builder()
-                    ->setTableId('bankaccountdatatable')
-                    ->addTableClass('table-sm table-striped')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
-    }
+
 
     /**
      * Get columns.
      *
      * @return array
      */
-    protected function getColumns()
+    public function getColumns()
     {
         return [
             Column::computed('index','SL')->width(20),
@@ -96,5 +80,14 @@ class BankAccountDataTable extends DataTable
     protected function filename()
     {
         return 'BankAccount_' . date('YmdHis');
+    }
+
+    public function getFilters()
+    {
+        return [
+            '1'=>'Bnak',
+            '2'=>'Number',
+            '3'=>'Card',
+        ];
     }
 }

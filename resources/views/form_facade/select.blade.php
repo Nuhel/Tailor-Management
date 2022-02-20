@@ -4,7 +4,7 @@
             <label class="{{$labelClass}}">{{ $label }}</label>
         @endif
 
-        <select  {{ $id? "id=".($id) ."": ""  }} class="{{$inputClass}}" name="{{$name}}">
+        <select  {{ $id? "id=".($id) ."": ""  }} class="{{$inputClass}} @error($error) is-invalid @enderror" name="{{$name}}">
             <option value="">{{$placeholder}}</option>
             @foreach ($options as $option)
                 @php
