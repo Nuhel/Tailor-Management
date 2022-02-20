@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ServiceDataTable;
 use App\Models\Service;
 use App\Models\ServiceDesign;
 use App\Models\ServiceDesignStyle;
@@ -15,10 +16,9 @@ use Mavinoo\Batch\BatchFacade as Batch;
 class ServiceController extends Controller
 {
 
-    public function index()
+    public function index(ServiceDataTable $dataTable)
     {
-        $services = Service::with('measurements')->with('designs.styles')->get();
-        return view('service.index')->with('services',$services);
+        return $dataTable->render('components.datatable.index',['heading'=>'Servvices']);
 
     }
 

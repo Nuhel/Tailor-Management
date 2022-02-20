@@ -77,4 +77,14 @@ class DummyClass extends DataTable
             DummyFilters
         ];
     }
+
+    public function overrideButtons(){
+        return [
+            'create'=>null,
+            'export'=>null,
+            'print'=>null,
+            'reset'=>null,
+            'reload'=>null,
+        ];
+    }
 }

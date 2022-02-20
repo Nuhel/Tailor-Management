@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\OrderDataTable;
 use App\Http\Requests\OrderRequest;
 use App\Models\Customer;
 use App\Models\Employee;
@@ -12,10 +13,8 @@ use App\Services\OrderService as ServicesOrderService;
 
 class OrderController extends Controller
 {
-    public function index(){
-        $orders = Order::with('customer')
-        ->get();
-        return view('order.index')->with('orders',$orders);
+    public function index(OrderDataTable $dataTable){
+        return $dataTable->render('components.datatable.index',['heading'=>'Orders']);
     }
 
 

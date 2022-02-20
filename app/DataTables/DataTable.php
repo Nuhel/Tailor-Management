@@ -1,10 +1,23 @@
 <?php
 namespace App\DataTables;
 
+use Illuminate\Support\Arr;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable as BaseDataTable;
 
 class DataTable extends BaseDataTable{
+    private $defaultButton;
+    private $buttonClass = 'btn btn-sm btn-info';
+    public function __construct()
+    {
+        $this->defaultButton = [
+            'create'=>Button::make('create')->raw('<i class="fa fa-plus"></i>')->extend('create')->addClass($this->buttonClass.' rounded-left'),
+            'export'=>Button::make('export')->raw('<i class="fa fa-download"></i>')->extend('export')->addClass($this->buttonClass),
+            'print'=>Button::make('print')->raw('<i class="fa fa-print"></i>')->extend('print')->addClass($this->buttonClass),
+            'reset'=>Button::make('reset')->raw('<i class="fa fa-redo"></i>')->extend('reload')->addClass($this->buttonClass),
+            'reload'=>Button::make('reload')->raw('<i class="fa fa-undo"></i>')->extend('reset')->addClass($this->buttonClass)->attr(['id'=>"reset-button"]),
+        ];
+    }
 
     protected $tableId = "datatable";
     public function getColumns(){
@@ -27,16 +40,15 @@ class DataTable extends BaseDataTable{
 
 
     public function getButtons(){
-        $buttonClass = 'btn btn-sm btn-info';
-        return [
 
-            Button::make('create')->extend('pageLength')->addClass($buttonClass.' rounded'),
-            Button::make('create')->raw('<p></p>')->addClass($buttonClass.' spacer'),
-            Button::make('create')->raw('<i class="fa fa-plus"></i>')->extend('create')->addClass($buttonClass.' rounded-left'),
-            Button::make('export')->raw('<i class="fa fa-download"></i>')->extend('export')->addClass($buttonClass),
-            Button::make('print')->raw('<i class="fa fa-print"></i>')->extend('print')->addClass($buttonClass),
-            Button::make('reset')->raw('<i class="fa fa-redo"></i>')->extend('reload')->addClass($buttonClass),
-            Button::make('reload')->raw('<i class="fa fa-undo"></i>')->extend('reset')->addClass($buttonClass)->attr(['id'=>"reset-button"])
+        return [
+            Button::make('pageLength')->addClass($this->buttonClass.' rounded'),
+            Button::make('spacer')->raw('<p></p>')->className('btn-link bg-transparent spacer')->attr(['disabled'=>'disabled']),
+            $this->getOverrideButton('create'),
+            $this->getOverrideButton('export'),
+            $this->getOverrideButton('print'),
+            $this->getOverrideButton('reset'),
+            $this->getOverrideButton('reload'),
         ];
     }
     /**
@@ -44,6 +56,17 @@ class DataTable extends BaseDataTable{
      */
     public function getFilters()
     {
+
+    }
+
+
+
+    private function getOverrideButton($buttonname){
+        $button =  Arr::get($this->overrideButtons(),$buttonname,null);
+        return $button instanceof Button?$button->addClass($this->buttonClass):Arr::get($this->defaultButton,$buttonname);
+    }
+
+    public function overrideButtons(){
 
     }
 

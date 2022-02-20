@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="content-wrapper">
-        <div class="content pt-5">
+        <div class="content pt-2">
             <div class="container">
                 @include('components.datatable.base',['heading' => $heading])
             </div>

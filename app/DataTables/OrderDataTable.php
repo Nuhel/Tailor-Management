@@ -2,16 +2,16 @@
 
 namespace App\DataTables;
 
-use App\Models\Customer;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 
-class CustomerDataTable extends DataTable
+class OrderDataTable extends DataTable
 {
 
-    protected $tableId = 'customer-table';
+    protected $tableId = 'order-table';
 
     /**
      * Build DataTable class.
@@ -24,15 +24,16 @@ class CustomerDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
-            ->filterColumn('name', function($query, $keyword) {
-                $query->where('name', "like", "%".$keyword."%");
-            })->filterColumn('mobile', function($query, $keyword) {
-                $query->where('mobile', "like", "%".$keyword."%");
-            })->filterColumn('address', function($query, $keyword) {
-                $query->where('address', "like", "%".$keyword."%");
+            ->filterColumn('customer_name', function($query, $keyword) {
+                $query->whereHas('customer', function ($query) use($keyword){
+                    $query->where('name', 'like', '%'.$keyword.'%');
+                });
             })
-            ->addColumn('actions', function(Customer $customer) {
-                return view('components.actionbuttons.table_actions')->with('route','customers')->with('param','customer')->with('value',$customer)->render();
+            ->addColumn('customer_name', function(Order $order) {
+                return $order->customer->name;
+            })
+            ->addColumn('actions', function(Order $order) {
+                return view('components.actionbuttons.table_actions')->with('route','orders')->with('param','order')->with('value',$order)->render();
             })
             ->addIndexColumn()
             ->rawColumns(['actions']);
@@ -41,12 +42,12 @@ class CustomerDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Customer $model
+     * @param \App\Models\Order $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Customer $model)
+    public function query(Order $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->with('customer');
     }
 
     /**
@@ -58,14 +59,13 @@ class CustomerDataTable extends DataTable
     {
         return [
             Column::computed('index','SL')->width(20),
-            Column::make('name'),
-            Column::make('mobile'),
-            Column::make('address'),
+            Column::make('customer_name'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)
                   ->width(240)
                   ->addClass('text-center')
+
         ];
     }
 
@@ -76,15 +76,23 @@ class CustomerDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Customer_' . date('YmdHis');
+        return 'Order_' . date('YmdHis');
     }
 
     public function getFilters()
     {
         return [
-            '1'=>'Name',
-            '2'=>'Mobile',
-            '3'=>'Address',
+            '1'=>'Customer Name',
+        ];
+    }
+
+    public function overrideButtons(){
+        return [
+            'create'=>null,
+            'export'=>null,
+            'print'=>null,
+            'reset'=>null,
+            'reload'=>null,
         ];
     }
 }

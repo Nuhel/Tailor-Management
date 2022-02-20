@@ -2,16 +2,16 @@
 
 namespace App\DataTables;
 
-use App\Models\Customer;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 
-class CustomerDataTable extends DataTable
+class ServiceDataTable extends DataTable
 {
 
-    protected $tableId = 'customer-table';
+    protected $tableId = 'service-table';
 
     /**
      * Build DataTable class.
@@ -26,13 +26,23 @@ class CustomerDataTable extends DataTable
             ->eloquent($query)
             ->filterColumn('name', function($query, $keyword) {
                 $query->where('name', "like", "%".$keyword."%");
-            })->filterColumn('mobile', function($query, $keyword) {
-                $query->where('mobile', "like", "%".$keyword."%");
-            })->filterColumn('address', function($query, $keyword) {
-                $query->where('address', "like", "%".$keyword."%");
+            })->filterColumn('measurements', function($query, $keyword) {
+                $query->whereHas('measurements', function ($query) use($keyword){
+                    $query->where('name', 'like', '%'.$keyword.'%');
+                });
             })
-            ->addColumn('actions', function(Customer $customer) {
-                return view('components.actionbuttons.table_actions')->with('route','customers')->with('param','customer')->with('value',$customer)->render();
+            ->addColumn('measurements', function(Service $service) {
+                $data = '';
+                foreach($service->measurements as $index => $measurement){
+                    $data.= $measurement->name;
+
+                    if(! ($index == $service->measurements->count()-1))
+                        $data .=',';
+                }
+                return $data;
+            })
+            ->addColumn('actions', function(Service $service) {
+                return view('components.actionbuttons.table_actions')->with('route','services')->with('param','service')->with('value',$service)->render();
             })
             ->addIndexColumn()
             ->rawColumns(['actions']);
@@ -41,12 +51,12 @@ class CustomerDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Customer $model
+     * @param \App\Models\Service $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Customer $model)
+    public function query(Service $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->with('measurements');
     }
 
     /**
@@ -59,13 +69,13 @@ class CustomerDataTable extends DataTable
         return [
             Column::computed('index','SL')->width(20),
             Column::make('name'),
-            Column::make('mobile'),
-            Column::make('address'),
+            Column::computed('measurements'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)
                   ->width(240)
                   ->addClass('text-center')
+
         ];
     }
 
@@ -76,15 +86,24 @@ class CustomerDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Customer_' . date('YmdHis');
+        return 'Service_' . date('YmdHis');
     }
 
     public function getFilters()
     {
         return [
             '1'=>'Name',
-            '2'=>'Mobile',
-            '3'=>'Address',
+            '2'=>'Measurements',
+        ];
+    }
+
+    public function overrideButtons(){
+        return [
+            'create'=>null,
+            'export'=>null,
+            'print'=>null,
+            'reset'=>null,
+            'reload'=>null,
         ];
     }
 }

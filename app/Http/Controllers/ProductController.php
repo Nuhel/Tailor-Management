@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ProductDataTable;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -14,11 +15,11 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ProductDataTable $dataTable)
     {
-        $products = Product::with('category')->get();
+
         $categories = Category::all();
-        return view('product.index')->with('products', $products)->with('categories',$categories);
+        return $dataTable->render('product.index',['heading'=>'Banks', 'categories'=>$categories]);
     }
 
     /**
@@ -46,7 +47,7 @@ class ProductController extends Controller
             "category_id" => "required|numeric|exists:App\Models\Category,id",
             "price" => "required|numeric",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
@@ -67,7 +68,7 @@ class ProductController extends Controller
             $response['status']= 400;
             $response['message']= "Failed To Add Product";
         }
-        
+
         return redirect(route('products.index'))->with('response',$response);
     }
 
@@ -103,7 +104,7 @@ class ProductController extends Controller
             "category_id" => "required|numeric|exists:App\Models\Category,id",
             "price" => "required|numeric",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
