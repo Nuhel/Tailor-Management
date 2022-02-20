@@ -12,10 +12,15 @@ use Illuminate\Support\Facades\Validator;
 class BankAccountController extends Controller
 {
 
+
+
+
     public function index(BankAccountDataTable $dataTable)
     {
+
+        return $dataTable->render('components.datatable.index',['heading'=>'Bank Accounts']);
         //dd($dataTable->render('bank_account.index'));
-        return $dataTable->render('bank_account.index');
+        //return $dataTable->render('bank_account.index');
     }
 
 

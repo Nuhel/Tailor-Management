@@ -1,0 +1,80 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyModel;
+use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Html\Editor\Fields;
+use Yajra\DataTables\Html\Editor\Editor;
+use Illuminate\Http\Request;
+
+class DummyClass extends DataTable
+{
+
+    protected $tableId = 'DummyTableId';
+
+    /**
+     * Build DataTable class.
+     *
+     * @param mixed $query Results from query() method.
+     * @return \Yajra\DataTables\DataTableAbstract
+     */
+    public function dataTable(Request $request,$query)
+    {
+
+        return datatables()
+            ->eloquent($query)
+            FilterQuery->addColumn('actions', function(ModelName $DummyParam) {
+                return view('components.actionbuttons.table_actions')->with('route','DummyRoute')->with('param','DummyParam')->with('value',$DummyParam)->render();
+            })
+            ->addIndexColumn()
+            ->rawColumns(['actions']);
+    }
+
+    /**
+     * Get query source of dataTable.
+     *
+     * @param \DummyModel $model
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function query(ModelName $model)
+    {
+        return $model->newQuery();
+    }
+
+    /**
+     * Get columns.
+     *
+     * @return array
+     */
+    public function getColumns()
+    {
+        return [
+            Column::computed('index','SL')->width(20),
+            DummyColumns
+            Column::computed('actions')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->width(240)
+                  ->addClass('text-center')
+
+        ];
+    }
+
+    /**
+     * Get filename for export.
+     *
+     * @return string
+     */
+    protected function filename()
+    {
+        return 'DummyFilename_' . date('YmdHis');
+    }
+
+    public function getFilters()
+    {
+        return [
+            DummyFilters
+        ];
+    }
+}

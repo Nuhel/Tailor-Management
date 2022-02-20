@@ -13,7 +13,7 @@ class BankController extends Controller
 
     public function index(BanksDataTable $dataTable)
     {
-        return $dataTable->render('bank.index');
+        return $dataTable->render('components.datatable.index',['heading'=>'Banks']);
     }
 
 

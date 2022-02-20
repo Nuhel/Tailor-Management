@@ -4,7 +4,7 @@
     <div class="content-wrapper">
         <div class="content pt-5">
             <div class="container">
-                @include('components.datatable.base',['heading' => 'Customer List'])
+                @include('components.datatable.base',['heading' => $heading])
             </div>
         </div>
     </div>

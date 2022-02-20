@@ -4,7 +4,6 @@ namespace App\DataTables;
 
 use App\Models\BankAccount;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 class BankAccountDataTable extends DataTable
 {
@@ -68,7 +67,11 @@ class BankAccountDataTable extends DataTable
             Column::make('bank'),
             Column::make('number'),
             Column::make('card'),
-            Column::computed('actions')->addClass('text-right'),
+            Column::computed('actions')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->width(240)
+                  ->addClass('text-center')
         ];
     }
 

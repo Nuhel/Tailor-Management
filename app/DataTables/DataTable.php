@@ -18,7 +18,7 @@ class DataTable extends BaseDataTable{
                     ->addTableClass('table-sm table-striped')
                     ->columns($this->getColumns())
                     ->lengthMenu([ 10, 25, 50, -1 ])
-                    ->searching(false)
+                    ->searching(true)
                     ->minifiedAjax()
                     ->dom('Bfrtip')
                     ->orderBy(1)
@@ -47,19 +47,6 @@ class DataTable extends BaseDataTable{
 
     }
 
-
-    /**
-     * Set the value of filters
-     *
-     * @return  self
-     */
-    public function setFilters($filters)
-    {
-        $this->filters = $filters;
-
-        return $this;
-    }
-
     public function render($view, $data = [], $mergeData = [])
     {
         if ($this->request()->ajax() && $this->request()->wantsJson()) {
@@ -74,6 +61,7 @@ class DataTable extends BaseDataTable{
             return app()->call([$this, $action]);
         }
         $data['datatableFilters'] = collect($this->getFilters())->toJson();
+        $data['datatableId'] = $this->tableId;
         return view($view, $data, $mergeData)->with($this->dataTableVariable, $this->getHtmlBuilder());
     }
 }

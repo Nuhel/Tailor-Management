@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\CategoryDataTable;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,10 +14,9 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(CategoryDataTable $categoryDataTable)
     {
-        $categories = Category::all();
-        return view('product_category.index')->with('categories', $categories);
+        return $categoryDataTable->render('components.datatable.index',['heading'=>'Categories']);
     }
 
     /**
@@ -41,7 +41,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
@@ -90,7 +90,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()

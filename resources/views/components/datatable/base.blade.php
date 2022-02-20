@@ -1,5 +1,5 @@
 @push('inner-css')
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"/>
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.6.0/jszip-2.5.0/dt-1.11.4/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/b-print-2.2.2/datatables.min.css"/>
     <style>
         .spacer{
@@ -19,13 +19,19 @@
     </style>
 @endpush
 
-<div  class="only-bottom-border mb-3">
-    <p>Filters</p>
-    <div id="search" class="row">
-
+<div class="card mt-3">
+    <div class="card-header">
+        <h2><strong>{{$heading}}</strong></h2>
+    </div>
+    <div class="card-body">
+        <div  class="only-bottom-border mb-3">
+            <p>Filters</p>
+            <div id="search" class="row">
+            </div>
+        </div>
+        {!! $dataTable->table() !!}
     </div>
 </div>
-{!! $dataTable->table() !!}
 
 
 
@@ -49,7 +55,7 @@
             const json = '{!! $datatableFilters !!} ';
             const filters = JSON.parse(json);
 
-            var dataTable = $('#{{$id}}').dataTable();
+            var dataTable = $('#{{$datatableId}}').dataTable();
 
             var columns = dataTable.api().columns();
             columns.every(function () {
@@ -66,6 +72,7 @@
                 }
 
             });
+            $('#{{$datatableId}}_filter').remove();
             $('#reset-button').click(function(){
                 $('#search').find('input').val('');
             });

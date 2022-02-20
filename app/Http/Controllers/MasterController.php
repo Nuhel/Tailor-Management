@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\MasterDataTable;
 use App\Models\Master;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -12,9 +13,10 @@ class MasterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(MasterDataTable $masterDataTable)
     {
-        return view('master.index')->with('masters',Master::all());
+        return $masterDataTable->render('components.datatable.index',['heading'=>'Masters']);
+
     }
 
     /**
@@ -42,7 +44,7 @@ class MasterController extends Controller
             "address" => "required|string|max:500",
             "salary" => "required|numeric",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()
@@ -59,7 +61,7 @@ class MasterController extends Controller
         return redirect(route('masters.index'));
     }
 
-    
+
     public function show(Master $master)
     {
         return view('master.show')->with('master',$master);
@@ -91,7 +93,7 @@ class MasterController extends Controller
             "address" => "required|string|max:500",
             "salary" => "required|numeric",
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()
             ->back()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\CustomerDataTable;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -9,10 +10,9 @@ use Illuminate\Http\Request;
 class CustomerController extends Controller
 {
 
-    public function index()
+    public function index(CustomerDataTable $customerDataTable)
     {
-        $customers = Customer::all();
-        return view('customer.index')->with('customers',$customers);
+        return $customerDataTable->render('customer.index');
     }
 
 

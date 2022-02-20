@@ -36,7 +36,11 @@ class BanksDataTable extends DataTable
         return [
             Column::computed('index','SL')->width(20),
             Column::make('name'),
-            Column::computed('actions')->addClass('text-right'),
+            Column::computed('actions')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->width(240)
+                  ->addClass('text-center')
         ];
     }
 

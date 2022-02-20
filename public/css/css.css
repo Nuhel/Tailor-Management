@@ -89,3 +89,10 @@
 .left-0px{
     left: 0px;
 }
+
+.layout-fixed .wrapper .sidebar{
+    height: calc(100vh - (1.5rem + 1px));
+}
+.content-wrapper{
+    background-color: transparent;
+}
