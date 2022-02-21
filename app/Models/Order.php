@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -23,5 +24,34 @@ class Order extends Model
 
     public function products(){
         return $this->hasMany(OrderProduct::class);
+    }
+
+    public function payments(){
+        return $this->morphMany(Transaction::class,'transactionable')->income();
+    }
+
+
+    public function scopePaid($query){
+        $transactionQuery = DB::table('transactions')
+                   ->select(
+                       'transactionable_id',
+                       //'transactionable_type',
+                       DB::raw('COUNT(*) AS transactions'),
+                       DB::raw('SUM(amount) AS paid'),
+                    )
+                   ->where('transactionable_type', "App\Models\\".class_basename($this))
+
+                   ->groupBy('transactionable_id');
+
+        return $query->joinSub(
+
+            $transactionQuery,'transactions',
+            function($join){
+                return $join
+                    ->on('transactions.transactionable_id', '=', 'orders.id')
+                    //->where('total_paid', '>',"sales.net_payable")
+                    ;
+            }
+        );
     }
 }

@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
 
   <link rel="stylesheet" href="{{ asset('css/css.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{asset('css/employee.css')}}">
   @yield('css')
 
 

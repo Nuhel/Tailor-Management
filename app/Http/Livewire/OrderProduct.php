@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Product;
+use Illuminate\Support\Arr;
 use Livewire\Component;
 
 class OrderProduct extends Component
@@ -19,8 +20,10 @@ class OrderProduct extends Component
         $this->selectedProductPriceAndQuantity = collect();
         $this->products = Product::all();
 
+
         foreach($oldCart as $oldItem){
-            $this->addProductToSelected($oldItem['id'],$oldItem['price'],$oldItem['quantity']);
+            if($oldItem != null)
+                $this->addProductToSelected(Arr::get($oldItem,'product_id', $oldItem['id']),$oldItem['price'],$oldItem['quantity']);
         }
     }
 

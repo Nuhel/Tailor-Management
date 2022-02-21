@@ -29,7 +29,17 @@ class OrderRequest extends BaseRequest
             $accountIdRule[] = 'exists:bank_accounts,id';
         }
 
-        return [
+        $aditionalRule = [];
+        if(! $this->passProductCheck){
+            $aditionalRule = [
+                'products'                          =>  'nullable|array',
+                'products.*.id'                     =>  'required|numeric|exists:products,id',
+                'products.*.quantity'               =>  'required|numeric|max:99999|min:1',
+                'products.*.price'                  =>  'required|numeric|max:99999|min:1',
+            ];
+        }
+
+        $basicRule =  [
             'customer_id'                       =>  'required|numeric|exists:customers,id',
             'master_id'                         =>  'required|numeric|exists:masters,id',
 
@@ -39,7 +49,6 @@ class OrderRequest extends BaseRequest
             'services.*.price'                  =>  'required|numeric',
             'services.*.employee_id'            =>  'nullable|numeric||exists:employees,id',
 
-
             'services.*.measurements'           =>  'required|array',
             'services.*.measurements.*.size'    =>  'required|string|max:15',
             'services.*.measurements.*.id'      =>  'required|numeric|exists:service_measurements,id',
@@ -48,19 +57,18 @@ class OrderRequest extends BaseRequest
             'services.*.designs.*.id'           =>  'required|numeric|exists:service_designs,id',
             'services.*.designs.*.style_id'     =>  'required|numeric|exists:service_design_styles,id',
 
-            'products'                          =>  'nullable|array',
-            'products.*.id'                     =>  'required|numeric|exists:products,id',
-            'products.*.quantity'               =>  'required|numeric|max:99999|min:1',
-            'products.*.price'                  =>  'required|numeric|max:99999|min:1',
             'account_id'                        =>  $accountIdRule,
-            'total'                             =>  'required|numeric',
-            'discount'                          =>  'nullable|numeric',
-            'netpayable'                        =>  'required|numeric',
-            'paid'                              =>  'required|numeric',
-            'due'                               =>  'required|numeric',
+            'total'                             =>  'required|numeric|min:0',
+            'discount'                          =>  'nullable|numeric|min:0',
+            'netpayable'                        =>  'required|numeric|gte:paid|gte:due',
+            'paid'                              =>  'required|numeric|min:0',
+            'due'                               =>  'required|numeric|min:0',
             'delivery_date'                     =>  'required|date',
             'trial_date'                        =>  'required|date',
+            'order_date'                        =>  'required|date',
         ];
+
+        return array_merge($basicRule,$aditionalRule);
     }
 
     public function attributes()

@@ -31,6 +31,8 @@ class OrderDataTable extends DataTable
             })
             ->addColumn('customer_name', function(Order $order) {
                 return $order->customer->name;
+            })->addColumn('due', function(Order $order) {
+                return ($order->netpayable - $order->paid);
             })
             ->addColumn('actions', function(Order $order) {
                 return view('components.actionbuttons.table_actions')->with('route','orders')->with('param','order')->with('value',$order)->render();
@@ -47,7 +49,7 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        return $model->newQuery()->with('customer');
+        return $model->newQuery()->with('customer')->paid();
     }
 
     /**
@@ -60,6 +62,8 @@ class OrderDataTable extends DataTable
         return [
             Column::computed('index','SL')->width(20),
             Column::make('customer_name'),
+            Column::computed('paid'),
+            Column::computed('due'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)

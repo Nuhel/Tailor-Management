@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($cart as $item)
+                @forelse ($cart as $item)
                     <tr class="cart-product">
                         <td>
                             <small>{{$item['product']['name']}}</small>
@@ -61,7 +61,10 @@
                         </td>
                         <td class="text-center"> <button type="button" class="btn btn-danger btn-sm" wire:click="removeProduct({{ $item['product']['id'] }})"><i class="fa fa-trash"></i></button> </td>
                     </tr>
-                @endforeach
+                @empty
+                    <input type="hidden" name="products[]">
+                    <input type="hidden" name="passProductCheck" value="true">
+                @endforelse
             </tbody>
         </table>
     </div>

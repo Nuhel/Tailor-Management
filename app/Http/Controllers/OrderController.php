@@ -17,7 +17,6 @@ class OrderController extends Controller
         return $dataTable->render('components.datatable.index',['heading'=>'Orders']);
     }
 
-
     public function create(){
         $services = Service::with('measurements')->with('designs.styles')->get()->mapWithKeys(function ($service, $key) {
             return [$service->id => $service];
@@ -41,12 +40,17 @@ class OrderController extends Controller
     }
 
     public function show(Order $order){
-        $order = $order->load('customer')
-        ->load('master')
-        ->load('products.product')
-        ->load(['services' => function($query){
+
+        $order = Order::paid()
+        ->with('customer')
+        ->with('master')
+        ->with('products.product')
+        ->with(['services' => function($query){
             return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns');
-        }]);
+        }])
+        ->find($order->id);
+
+        //dd($order->toArray());
         return view('order.show')->with('order',$order);
 
     }
@@ -56,15 +60,19 @@ class OrderController extends Controller
             return [$service->id => $service];
         });
 
-        $order = $order
-        ->load('products.product')
-        ->load(['services' => function($query){
+        $order = Order::paid()
+        ->with('customer')
+        ->with('master')
+        ->with('products.product')
+        ->with(['services' => function($query){
             return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns');
-        }]);
+        }])
+        ->find($order->id);
 
         $json = str_replace("\u0022","\\\\\"",json_encode( $services,JSON_HEX_QUOT));
 
         $masters = Master::all();
+
         return view('order.edit')
         ->with('services',$services)
         ->with('json',$json)

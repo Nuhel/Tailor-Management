@@ -44,11 +44,11 @@ class DataTable extends BaseDataTable{
         return [
             Button::make('pageLength')->addClass($this->buttonClass.' rounded'),
             Button::make('spacer')->raw('<p></p>')->className('btn-link bg-transparent spacer')->attr(['disabled'=>'disabled']),
-            $this->getOverrideButton('create'),
-            $this->getOverrideButton('export'),
-            $this->getOverrideButton('print'),
-            $this->getOverrideButton('reset'),
-            $this->getOverrideButton('reload'),
+            $this->getButton('create'),
+            $this->getButton('export'),
+            $this->getButton('print'),
+            $this->getButton('reset'),
+            $this->getButton('reload'),
         ];
     }
     /**
@@ -61,7 +61,7 @@ class DataTable extends BaseDataTable{
 
 
 
-    private function getOverrideButton($buttonname){
+    private function getButton($buttonname){
         $button =  Arr::get($this->overrideButtons(),$buttonname,null);
         return $button instanceof Button?$button->addClass($this->buttonClass):Arr::get($this->defaultButton,$buttonname);
     }

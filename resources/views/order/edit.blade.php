@@ -1,5 +1,4 @@
 @extends('layout.layout')
-
 @section('content')
     <div class="content-wrapper">
         <div class="content pt-3">
@@ -14,6 +13,7 @@
                                 dump( $errors->all())
                             @endphp
                         @endif
+
 
                         <div class="card-body">
                             <div class="row">
@@ -52,12 +52,21 @@
                                         })
                                     !!}
                                 </div>
-                                <div class="col-md-3">
-                                    {!!Form::input()->setName('delivery_date')->setValue(old('delivery_date', $order->delivery_date))->setType('date')!!}
-                                </div>
 
-                                <div class="col-md-3">
-                                    {!!Form::input()->setName('trial_date')->setValue(old('trial_date', $order->trial_date))->setType('date')!!}
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            {!!Form::input()->setName('delivery_date')->setValue(old('delivery_date',$order->delivery_date))->setType('date')!!}
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            {!!Form::input()->setName('trial_date')->setValue(old('trial_date',$order->trial_date))->setType('date')!!}
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            {!!Form::input()->setName('order_date')->setValue(old('order_date',$order->order_date))->setType('date')!!}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -69,6 +78,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
+
                                     @livewire('order-product',[
                                         'oldCart' => collect(old('products',$order->products))
                                     ])
@@ -95,7 +105,7 @@
                                             <tr>
                                                 <td class="w-20"><small>Total</small></td>
                                                 <td>
-                                                    <small class="mb-0 pl-2" id="total-show">0</small>
+                                                    <small class="mb-0 pl-2" id="total-show">{{old('total',$order->total)}}</small>
                                                     <input value="{{old('total',$order->total)}}" name="total" type="hidden"  id="total-value" >
                                                     @error('total')
                                                         <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
@@ -114,7 +124,7 @@
                                             <tr>
                                                 <td ><small>Net Payabel</small></td>
                                                 <td>
-                                                    <small class="mb-0 pl-2" id="netpayable-show">0</small>
+                                                    <small class="mb-0 pl-2" id="netpayable-show">{{old('netpayable',$order->netpayable)}}</small>
                                                     <input value="{{old('netpayable',$order->netpayable)}}" name="netpayable" type="hidden" id="netpayable-value">
                                                     @error('netpayable')
                                                         <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
@@ -135,8 +145,9 @@
                                             <tr>
                                                 <td><small>Due</small></td>
                                                 <td>
-                                                    <small class="mb-0 pl-2" id="due-show">0</small>
-                                                    <input value="{{old('due',$order->due)}}" name="due" type="hidden" id="due-value" class="form-control form-control-sm rounded only-bottom-border">
+
+                                                    <small class="mb-0 pl-2" id="due-show">{{old('due',($order->netpayable - $order->paid))}}</small>
+                                                    <input value="{{old('due',($order->netpayable - $order->paid))}}" name="due" type="hidden" id="due-value" class="form-control form-control-sm rounded only-bottom-border">
                                                     @error('due')
                                                         <span class="text-danger error validation-error d-block mb-2">{{$message}}</span>
                                                     @enderror

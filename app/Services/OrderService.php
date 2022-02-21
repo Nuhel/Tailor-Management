@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\Transaction;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use App\Models\ServiceDesign;
@@ -34,28 +35,35 @@ class OrderService{
 
     public function storeOrder(){
         try{
+
             DB::beginTransaction();
+
             if($this->onEdit){
+                $this->loadPayments();
                 $this->deleteRelatedData();
             }
-
-
 
             $this->order->customer_id     = $this->request->customer_id;
             $this->order->master_id       = $this->request->master_id;
             $this->order->account_id      = $this->request->account_id;
             $this->order->delivery_date   = $this->request->delivery_date;
             $this->order->trial_date      = $this->request->trial_date;
+            $this->order->order_date      = $this->request->order_date;
             $this->order->total           = $this->request->total;
             $this->order->discount        = $this->request->discount;
             $this->order->netpayable      = $this->request->netpayable;
-            $this->order->paid            = $this->request->paid;
-            $this->order->due             = $this->request->due;
+            $this->order->initially_paid  = $this->request->paid;
+            $this->order->initial_due     = $this->request->due;
 
             if($this->onEdit){
                 $this->order->update();
             }else{
                 $this->order->save();
+            }
+
+            $amountToAttach = $this->getPaymentAmount();
+            if($amountToAttach){
+                $this->attachPayment($amountToAttach);
             }
 
             $orderId = $this->order->id;
@@ -72,13 +80,18 @@ class OrderService{
             });
 
             $products = collect($this->request->products)->map(function($value){
+                if($value == null)
+                    return null;
                 $product = new OrderProduct();
                 $product->product_id    = $value['id'];
                 $product->price         = $value['price'];
                 $product->quantity      = $value['quantity'];
                 return $product;
             });
-            $this->order->products()->saveMany($products);
+
+            if(count($products))
+                $this->order->products()->saveMany($products);
+
             DB::commit();
             return true;
         }catch(\Exception $e){
@@ -125,8 +138,11 @@ class OrderService{
         $this->order->services()->delete();
     }
 
-    public function delete()
-    {
+    public function loadPayments(){
+        $this->order = Order::paid()->find($this->order->id);
+    }
+
+    public function delete(){
         try{
             DB::beginTransaction();
             $this->deleteRelatedData();
@@ -137,5 +153,36 @@ class OrderService{
             DB::rollBack();
         }
         return false;
+    }
+
+    public function getPaymentAmount(){
+        $previouslyPaid =  0;
+        if($this->onEdit){
+            $previouslyPaid =  $this->order->paid;
+            $payable = $this->request->netpayable;
+            $returnAmount = 0;
+            if($previouslyPaid > $payable){
+                $returnAmount = $previouslyPaid - $payable;
+            }
+            $newlyPaid = $this->request->paid - $previouslyPaid;
+            if($returnAmount > 0){
+                return  -1 * abs($returnAmount);
+            }else if(isset($newlyPaid) ){
+                return$newlyPaid;
+            }else{
+                return null;
+            }
+        }else{
+            return $this->order->paid;
+        }
+    }
+
+    public function attachPayment($amount){
+        $payment = new Transaction();
+        $payment->transaction_date  = $this->order->order_date;
+        $payment->amount            = $amount;
+        $payment->type              = "Debit";
+        $payment->description       = "Paid To Order";
+        $this->order->payments()->save($payment);
     }
 }
