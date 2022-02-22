@@ -13,12 +13,6 @@ class OrderDataTable extends DataTable
 
     protected $tableId = 'order-table';
 
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
     public function dataTable(Request $request,$query)
     {
 
@@ -35,49 +29,43 @@ class OrderDataTable extends DataTable
                 return ($order->netpayable - $order->paid);
             })
             ->addColumn('actions', function(Order $order) {
-                return view('components.actionbuttons.table_actions')->with('route','orders')->with('param','order')->with('value',$order)->render();
+                $extraButton = "";
+                if($order->paid < $order->netpayable)
+
+                    $extraButton = '
+                    <button type="button" class="btn btn-outline-primary btn-sm mr-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'">
+                        <i class="fa fa-edit" aria-hidden="true">
+                        Take
+                        </i>
+                    </button>';
+                return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','orders')->with('param','order')->with('value',$order)->render();
             })
             ->addIndexColumn()
             ->rawColumns(['actions']);
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Order $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function query(Order $model)
     {
         return $model->newQuery()->with('customer')->paid();
     }
 
-    /**
-     * Get columns.
-     *
-     * @return array
-     */
     public function getColumns()
     {
         return [
             Column::computed('index','SL')->width(20),
             Column::make('customer_name'),
-            Column::computed('paid'),
-            Column::computed('due'),
+            Column::computed('netpayable')->addClass('netpayable'),
+            Column::computed('paid')->addClass('paid'),
+            Column::computed('due')->addClass('due'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(240)
+                  ->width(320)
                   ->addClass('text-center')
 
         ];
     }
 
-    /**
-     * Get filename for export.
-     *
-     * @return string
-     */
     protected function filename()
     {
         return 'Order_' . date('YmdHis');

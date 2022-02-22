@@ -1,5 +1,3 @@
-
-
 <div class="modal" tabindex="-1" role="dialog" id="create-customer-modal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -12,7 +10,6 @@
         <div class="modal-body">
             <div class="c">
                 <form method="POST" action="{{route('customers.store')}}" id="customer-create-form">
-                    @csrf
                     <div class="form-group" id="name">
                         <label class="form-inline">Customer Name</label>
                         <input type="text" name="name" id="empName" class="form-control" placeholder="Enter Customer Name">
@@ -31,8 +28,8 @@
 
 
                     <div class="form-group text-right">
-                        <button type="submit" class="btn btn-success mr-3" name="submit">Submit</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancle</button>
+                        <button type="submit" class="btn btn-sm btn-success mr-3" name="submit">Submit</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancle</button>
                     </div>
                 </form>
             </div>

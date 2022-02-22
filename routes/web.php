@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function(){
     Route::resource('/bank_accounts',BankAccountController::class);
     Route::resource('/services',ServiceController::class);
     Route::resource('/orders',OrderController::class);
+    Route::post('orders/{order}/take-payment',[OrderController::class,'takePayment']);
 });
 
 

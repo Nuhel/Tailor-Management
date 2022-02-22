@@ -1,4 +1,6 @@
 <div>
+
+    {!! $extraButton??"" !!}
     <a href="{{route($route.'.show', [$param=> $value] )}}" class="btn btn-outline-primary btn-sm mr-2">
         <i class="fa fa-eye" aria-hidden="true">
             View

@@ -12,6 +12,7 @@ use App\Models\ServiceDesignStyle;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrderServicMeasurement;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\OrderService as OrderServiceModel;
 
 class OrderService{
@@ -178,11 +179,36 @@ class OrderService{
     }
 
     public function attachPayment($amount){
+        return self::attachPaymentToOrder($this->order, $amount);
+    }
+
+    /**
+     * Attach Payment To Order
+     *
+     * @param  \App\Models\Order  $order
+     * @param  double  $amount
+     * @param  mixed  $date
+     * @return bool
+     */
+
+    static function attachPaymentToOrder(Order $order, $amount,$date = null){
         $payment = new Transaction();
-        $payment->transaction_date  = $this->order->order_date;
+        $payment->transaction_date  = $date??$order->order_date;
         $payment->amount            = $amount;
         $payment->type              = "Debit";
         $payment->description       = "Paid To Order";
-        $this->order->payments()->save($payment);
+        return $order->payments()->save($payment);
+    }
+
+    static function attachRelationalData(Order $order, bool $withTransactions = false):Builder{
+        $order =  $order->with('customer')
+        ->with('master')
+        ->with('products.product')
+        ->with(['services' => function($query){
+            return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns');
+        }]);
+        if($withTransactions)
+            $order = $order->paid();
+        return $order;
     }
 }

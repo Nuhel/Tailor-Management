@@ -62,7 +62,7 @@
 
                                         <tr>
                                             <td>Due</td>
-                                            <td>{{$order->due}}</td>
+                                            <td>{{$order->netpayable - $order->paid}}</td>
                                         </tr>
                                     </tbody>
 

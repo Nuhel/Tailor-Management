@@ -8,7 +8,10 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
 class BaseRequest extends FormRequest
 {
-
+    public function authorize()
+    {
+        return true;
+    }
 
     protected function failedValidation(Validator $validator)
     {
