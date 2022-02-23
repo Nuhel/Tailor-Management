@@ -17,7 +17,7 @@
     ];
 @endphp
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar  elevation-4">
+<aside class="main-sidebar elevation-4">
 
  <!-- Brand Logo -->
  <!-- <a href="index.php" class="brand-link">
@@ -30,9 +30,9 @@
 <div class="sidebar">
   <!-- Sidebar user panel (optional) -->
   <div class="">
-    <a href="{{URL::to('')}}" class="  d-block nav-btn py-3 px-4">
+    <a href="{{URL::to('')}}" class="  d-block nav-logo">
         <div class="logo b-block text-center">
-            <img src="{{asset('asset/img/logo.jpeg')}}"  class="img-circle rounded w-75 img-fluid" alt="User Image">
+            <img src="{{asset('asset/img/logo.jpeg')}}"  class="" alt="User Image">
         </div>
 
     </a>

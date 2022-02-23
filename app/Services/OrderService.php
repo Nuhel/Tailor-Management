@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use App\Models\ServiceDesign;
+use Illuminate\Support\Carbon;
 use App\Models\OrderServicDesign;
 use App\Models\ServiceDesignStyle;
 use Illuminate\Support\Collection;
@@ -44,7 +45,9 @@ class OrderService{
                 $this->deleteRelatedData();
             }
 
+
             $this->order->customer_id     = $this->request->customer_id;
+            $this->order->invoice_no      = $this->order->invoice_no??$this->getInvoiceNumber();
             $this->order->master_id       = $this->request->master_id;
             $this->order->account_id      = $this->request->account_id;
             $this->order->delivery_date   = $this->request->delivery_date;
@@ -61,11 +64,11 @@ class OrderService{
             }else{
                 $this->order->save();
             }
-
             $amountToAttach = $this->getPaymentAmount();
             if($amountToAttach){
                 $this->attachPayment($amountToAttach);
             }
+
 
             $orderId = $this->order->id;
             collect($this->request->services)->each(function ($service) use($orderId){
@@ -96,6 +99,7 @@ class OrderService{
             DB::commit();
             return true;
         }catch(\Exception $e){
+            dd($e);
             DB::rollBack();
         }
         return false;
@@ -174,7 +178,7 @@ class OrderService{
                 return null;
             }
         }else{
-            return $this->order->paid;
+            return $this->request->paid;
         }
     }
 
@@ -210,5 +214,11 @@ class OrderService{
         if($withTransactions)
             $order = $order->paid();
         return $order;
+    }
+
+
+    public function getInvoiceNumber(){
+        $count =  Order::whereDate('created_at', '=', Carbon::today())->count();
+        return "INV-".Carbon::today()->format('y-m-d')."-".str_pad($count+1, 3, "0", STR_PAD_LEFT);
     }
 }

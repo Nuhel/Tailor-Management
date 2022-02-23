@@ -31,13 +31,22 @@ class OrderRequest extends BaseRequest
 
         $aditionalRule = [];
         if(! $this->passProductCheck){
-            $aditionalRule = [
-                'products'                          =>  'nullable|array',
-                'products.*.id'                     =>  'required|numeric|exists:products,id',
-                'products.*.quantity'               =>  'required|numeric|max:99999|min:1',
-                'products.*.price'                  =>  'required|numeric|max:99999|min:1',
-            ];
+
         }
+
+
+        $aditionalRule = [
+            'products'                          =>  'nullable|array',
+            'products.*.id'                     =>  [Rule::requiredIf(function(){
+                return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
+            }),'numeric','exists:products,id'],
+            'products.*.quantity'               =>  [Rule::requiredIf(function(){
+                return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
+            }),'numeric','max:99999','min:1'],
+            'products.*.price'                  =>  [Rule::requiredIf(function(){
+                return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
+            }),'numeric','max:99999','min:1'],
+        ];
 
         $basicRule =  [
             'customer_id'                       =>  'required|numeric|exists:customers,id',

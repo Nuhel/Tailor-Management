@@ -18,6 +18,9 @@ class OrderDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
+            ->filterColumn('invoice_no', function($query, $keyword) {
+                $query->where('invoice_no', 'like', '%'.$keyword.'%');
+            })
             ->filterColumn('customer_name', function($query, $keyword) {
                 $query->whereHas('customer', function ($query) use($keyword){
                     $query->where('name', 'like', '%'.$keyword.'%');
@@ -25,8 +28,15 @@ class OrderDataTable extends DataTable
             })
             ->addColumn('customer_name', function(Order $order) {
                 return $order->customer->name;
-            })->addColumn('due', function(Order $order) {
-                return ($order->netpayable - $order->paid);
+            })->addColumn('transaction', function(Order $order) {
+
+                $return =  "Net Payable: ".($order->netpayable).
+                "<br>Paid: ".($order->paid);
+
+                if($order->netpayable - $order->paid)
+                $return.="<br>Due: ".($order->netpayable - $order->paid);
+
+                return $return;
             })
             ->addColumn('actions', function(Order $order) {
                 $extraButton = "";
@@ -41,7 +51,7 @@ class OrderDataTable extends DataTable
                 return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','orders')->with('param','order')->with('value',$order)->render();
             })
             ->addIndexColumn()
-            ->rawColumns(['actions']);
+            ->rawColumns(['actions','transaction']);
     }
 
     public function query(Order $model)
@@ -53,10 +63,9 @@ class OrderDataTable extends DataTable
     {
         return [
             Column::computed('index','SL')->width(20),
+            Column::make('invoice_no'),
             Column::make('customer_name'),
-            Column::computed('netpayable')->addClass('netpayable'),
-            Column::computed('paid')->addClass('paid'),
-            Column::computed('due')->addClass('due'),
+            Column::computed('transaction')->addClass('due'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)
@@ -74,7 +83,8 @@ class OrderDataTable extends DataTable
     public function getFilters()
     {
         return [
-            '1'=>'Customer Name',
+            '1'=>'Invoice',
+            '2'=>'Customer Name',
         ];
     }
 

@@ -45,7 +45,6 @@
         modalView.on('show.bs.modal', function (e) {
             var target = $(e.relatedTarget);
             var id = target.data('id');
-            var due = $(target.parents('tr')[0]).find('.due').text();
             $(this).find(`input[name='id']`).val(id);
         })
 

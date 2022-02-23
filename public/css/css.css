@@ -91,8 +91,31 @@
 }
 
 .layout-fixed .wrapper .sidebar{
-    height: calc(100vh - (1.5rem + 1px));
+    background-color: white;
 }
 .content-wrapper{
     background-color: transparent;
+}
+
+.sidebar-mini.sidebar-collapse .sidebar .nav-logo{
+    margin: .25rem !important;
+}
+
+
+.sidebar-mini .sidebar .nav-logo, .main-sidebar:hover  .sidebar .nav-logo{
+    margin: 1rem 1.5rem 1rem 1.5rem !important;
+}
+
+.sidebar-mini.sidebar-collapse .sidebar .nav-logo img{
+    height: 35px !important;
+    width: 35px !important;
+    border-radius: 50% !important;
+    transition: all .5s;
+}
+
+.main-sidebar:hover  .sidebar .nav-logo img,
+.sidebar-mini .sidebar .nav-logo img{
+    height: auto !important;
+    width: 75% !important;
+    border-radius: .25rem !important;
 }
