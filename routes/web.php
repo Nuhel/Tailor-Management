@@ -11,6 +11,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\ProductionController;
 
 Auth::routes();
 
@@ -26,6 +27,14 @@ Route::middleware('auth')->group(function(){
     Route::resource('/services',ServiceController::class);
     Route::resource('/orders',OrderController::class);
     Route::post('orders/{order}/take-payment',[OrderController::class,'takePayment']);
+
+    Route::controller(ProductionController::class)->group(function(){
+        Route::get('productions','index')->name('productions.index');
+        Route::get('productions/pending', 'pendingDataTable')->name('productions.pending');
+        Route::get('productions/processing','processingDataTable')->name('productions.processing');
+        Route::get('productions/delivard','delivardDataTable')->name('productions.delivard');
+    });
+
 });
 
 

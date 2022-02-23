@@ -1,17 +1,16 @@
 <?php
+namespace App\DataTables\Productions;
 
-namespace App\DataTables;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\DataTables\DataTable;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 
-class OrderDataTable extends DataTable
+class PendingDataTable extends DataTable
 {
 
-    protected $tableId = 'order-table';
+    protected $tableId = 'pending-table';
 
     public function dataTable(Request $request,$query)
     {
@@ -38,26 +37,23 @@ class OrderDataTable extends DataTable
 
                 return $return;
             })
-            ->addColumn('actions', function(Order $order) {
-                $extraButton = "";
-                if($order->paid < $order->netpayable)
 
-                    $extraButton = '
-                    <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'">
-                        <i class="fa fa-edit" aria-hidden="true">
-                        Take
-                        </i>
-                    </a>';
-                return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','orders')->with('param','order')->with('value',$order)
-                ->with('enableBottomMargin', true)->render();
-            })
             ->addIndexColumn()
-            ->rawColumns(['actions','transaction']);
+            ->rawColumns(['transaction']);
+    }
+
+    public function html(){
+        $htmlBuilder = parent::html();
+        return $htmlBuilder->minifiedAjax( route('productions.pending') );
     }
 
     public function query(Order $model)
     {
-        return $model->newQuery()->with('customer')->paid();
+        return $model->newQuery()->with('customer')->paid()
+        ->with('services')
+        ->whereHas('services', function ($query){
+            $query->where('status', 'pending');
+        });
     }
 
     public function getColumns():array
@@ -67,11 +63,6 @@ class OrderDataTable extends DataTable
             Column::make('invoice_no'),
             Column::make('customer_name'),
             Column::computed('transaction')->addClass('due'),
-            Column::computed('actions')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(160)
-                  ->addClass('text-center')
 
         ]);
     }

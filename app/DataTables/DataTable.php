@@ -15,24 +15,37 @@ class DataTable extends BaseDataTable{
             'export'=>Button::make('export')->raw('<i class="fa fa-download"></i>')->extend('export')->addClass($this->buttonClass),
             'print'=>Button::make('print')->raw('<i class="fa fa-print"></i>')->extend('print')->addClass($this->buttonClass),
             'reset'=>Button::make('reset')->raw('<i class="fa fa-redo"></i>')->extend('reload')->addClass($this->buttonClass),
-            'reload'=>Button::make('reload')->raw('<i class="fa fa-undo"></i>')->extend('reset')->addClass($this->buttonClass)->attr(['id'=>"reset-button"]),
+            'reload'=>Button::make('reload')->raw('<i class="fa fa-undo"></i>')->extend('reset')->addClass($this->buttonClass)->attr(['id'=>$this->getId()."-reset-button"]),
         ];
     }
 
     protected $tableId = "datatable";
+
+    public function getId(){
+        return $this->tableId;
+    }
     public function getColumns(){
         return [];
     }
 
+    public function addVerticalAlignmentToColumns($coulmns){
+        return collect($coulmns)->map(function($value){
+            if($value->name != "actions")
+                $value->addClass('align-middle');
+            return $value;
+        })->toArray();
+    }
+
+
+
     public function html()
     {
         return $this->builder()
-                    ->setTableId($this->tableId)
+                    ->setTableId($this->getId())
                     ->addTableClass('table-sm table-striped')
                     ->columns($this->getColumns())
                     ->lengthMenu([ 10, 25, 50, -1 ])
                     ->searching(true)
-                    ->minifiedAjax()
                     ->dom('Bfrtip')
                     ->orderBy(1)
                     ->buttons($this->getButtons());

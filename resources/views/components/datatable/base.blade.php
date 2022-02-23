@@ -26,7 +26,7 @@
     <div class="card-body">
         <div  class="only-bottom-border mb-3">
             <p>Filters</p>
-            <div id="search" class="row">
+            <div id="{{$datatableId}}-search" class="row">
             </div>
         </div>
         {!! $dataTable->table() !!}
@@ -68,13 +68,13 @@
                         column.search($(this).val(), false, false, true).draw();
                     }).wrap('<div>').parent().addClass('form-group')
                     .wrap('<div>').parent().addClass('col-sm-12 col-md')
-                    .appendTo($('#search'));
+                    .appendTo($('#{{$datatableId}}-search'));
                 }
 
             });
             $('#{{$datatableId}}_filter').remove();
-            $('#reset-button').click(function(){
-                $('#search').find('input').val('');
+            $('#{{$datatableId}}-reset-button').click(function(){
+                $('#{{$datatableId}}-search').find('input').val('');
             });
 
 
