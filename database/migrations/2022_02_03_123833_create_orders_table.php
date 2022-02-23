@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('master_id');
             $table->bigInteger('account_id')->nullable();
             $table->date('delivery_date');
+            $table->date('delivered_at')->nullable();
             $table->date('trial_date');
             $table->date('order_date');
             $table->double('total');
