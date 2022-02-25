@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function(){
         Route::get('productions/pending', 'pendingDataTable')->name('productions.pending');
         Route::get('productions/processing','processingDataTable')->name('productions.processing');
         Route::get('productions/delivard','delivardDataTable')->name('productions.delivard');
+        Route::post('productions/sent-to-production/{orderService}','sentToProduction')->name('productions.sentToProduction');
     });
 
 });

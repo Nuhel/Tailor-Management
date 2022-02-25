@@ -4,7 +4,7 @@
             <label class="{{$labelClass}}">{{ $label }}</label>
         @endif
 
-        <select  {{ $id? "id=".($id) ."": ""  }} class="{{$inputClass}} @error($error) is-invalid @enderror" name="{{$name}}">
+        <select  {{ $id? "id=".($id) ."": ""  }} class="{{$inputClass}} @error($error) is-invalid @enderror" name="{{$name}}" {!!$attributes!!}>
             <option value="">{{$placeholder}}</option>
             @foreach ($options as $option)
                 @php
@@ -13,7 +13,7 @@
                         throw new \ErrorException('Option Builder Should Return An Array With Two Value');
                     }
                 @endphp
-                <option value="{{ $values[0] }}" {{ (($selected === null)?old($name): $selected) == $values[0]?"selected":""}}>{{ $values[1] }}</option>
+                <option value="{{ $values[0] }}" {{ (($selected === null)?old($name): $selected) == $values[0]?"selected":""}}>{{ $values[1] }} {{$selected}}</option>
             @endforeach
         </select>
         {!! $append??"" !!}

@@ -13,7 +13,7 @@
       </li>
 
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{route('orders.index')}}" class="nav-link">Productions</a>
+        <a href="{{route('productions.index')}}" class="nav-link">Productions</a>
       </li>
     </ul>
 

@@ -12,8 +12,7 @@ class PendingDataTable extends DataTable
 
     protected $tableId = 'pending-table';
 
-    public function dataTable(Request $request,$query)
-    {
+    public function dataTable(Request $request,$query){
 
         return datatables()
             ->eloquent($query)
@@ -27,19 +26,42 @@ class PendingDataTable extends DataTable
             })
             ->addColumn('customer_name', function(Order $order) {
                 return $order->customer->name;
-            })->addColumn('transaction', function(Order $order) {
+            })->addColumn('services', function(Order $order) {
+                $table = "<table class='table table-sm m-0'>
+                            <thead>
+                                <tr>
+                                    <th> Name</th>
+                                    <th class='text-right'>CraftsMan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        ";
+                foreach($order->services as $service){
+                    $hasEmployee = $service->employee != null?true:false;
+                    $button = "<a href='' class='btn-clipboard' data-toggle='modal' data-target='#asign-craftsman-modal' data-id='".$service->id."'> "
+                        .($hasEmployee? $service->employee->name :"Send To Production")
+                        .($hasEmployee?"<i class='fa fa-edit ml-2' aria-hidden='true'></i>":"").
+                        "</a>";
 
+                    $table .= "<tr>
+                                    <td><small>".$service->service->name."</small></td>
+                                    <td class='text-right'><small>".
+                                        ($button)."</small></td>
+                                </tr>";
+                }
+                $table .= " </tbody>
+                        </table>";
+                return $table;
+            })->addColumn('transaction', function(Order $order) {
                 $return =  "Net Payable: ".($order->netpayable).
                 "<br>Paid: ".($order->paid);
-
                 if($order->netpayable - $order->paid)
                 $return.="<br>Due: ".($order->netpayable - $order->paid);
-
                 return $return;
             })
 
             ->addIndexColumn()
-            ->rawColumns(['transaction']);
+            ->rawColumns(['transaction','services']);
     }
 
     public function html(){
@@ -50,7 +72,9 @@ class PendingDataTable extends DataTable
     public function query(Order $model)
     {
         return $model->newQuery()->with('customer')->paid()
-        ->with('services')
+        ->with(['services' => function($query){
+            return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns')->where('status', 'pending');
+        }])
         ->whereHas('services', function ($query){
             $query->where('status', 'pending');
         });
@@ -62,14 +86,14 @@ class PendingDataTable extends DataTable
             Column::computed('index','SL')->width(20),
             Column::make('invoice_no'),
             Column::make('customer_name'),
+            Column::computed('services'),
             Column::computed('transaction')->addClass('due'),
-
         ]);
     }
 
     protected function filename()
     {
-        return 'Order_' . date('YmdHis');
+        return 'Pending-Services' . date('YmdHis');
     }
 
     public function getFilters()

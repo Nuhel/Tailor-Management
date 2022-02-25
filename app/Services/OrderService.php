@@ -78,6 +78,7 @@ class OrderService{
                 $orderService->employee_id  = $service['employee_id'];
                 $orderService->quantity     = $service['quantity'];
                 $orderService->price        = $service['price'];
+                $orderService->status       = $service['employee_id'] != null?'processing':'pending';
                 $orderService->save();
                 $this->attachMeasurementsToService($orderService,collect($service['measurements']));
                 $this->attachDesignToService($orderService,collect($service['designs']));

@@ -1,6 +1,8 @@
 <?php
 namespace App\Form\Inputs;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+
 abstract class BaseInput{
 
 
@@ -23,6 +25,8 @@ abstract class BaseInput{
     protected $viewName = 'form_facade.input';
     protected $view;
     protected $append;
+
+    protected $attribute = [];
 
     public function __construct(){
         $this->enableLabel = true;
@@ -84,7 +88,6 @@ abstract class BaseInput{
     public function setValue($value= null)
     {
         $this->value = $value;
-
         return $this;
     }
 
@@ -158,6 +161,7 @@ abstract class BaseInput{
         ->with('labelClass',$this->getLabelClass())
         ->with('append',$this->getAppend())
         ->with('enableLabel',$this->getEnableLabel())
+        ->with('attributes', $this->parseAttributes())
         ;
     }
 
@@ -271,5 +275,29 @@ abstract class BaseInput{
 
     public function __toString(){
         return $this->render();
+    }
+
+    public function getAttributes()
+    {
+        return $this->attribute;
+    }
+
+
+    public function setAttributes($attribute)
+    {
+        if(!Arr::isAssoc($attribute)){
+            throw new \ErrorException('Options Must Be An Associative Array');
+        }
+        $this->attribute = $attribute;
+
+        return $this;
+    }
+
+    public function parseAttributes(){
+        $parsedAttribute = '';
+        foreach($this->getAttributes() as $key => $value){
+            $parsedAttribute.= $key.'='. "'".$value."' ";
+        }
+        return $parsedAttribute;
     }
 }

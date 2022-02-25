@@ -19,6 +19,7 @@ class OrderRequest extends BaseRequest
 
     public function rules()
     {
+
         $accountIdRule = [
             Rule::requiredIf(function(){
                 return $this->bank_type!="Cash Payment";
@@ -88,7 +89,7 @@ class OrderRequest extends BaseRequest
             'services.*.price'                 => "Price",
             'services.*.employee_id'           => "Craftsman",
             'services.*.measurements.*.size'   => "Size",
-            'services.*.designs.*.id'          => "Design ",
+            'services.*.designs.*.style_id'    => "Design",
             'products.*.id'                    => "Product",
             'products.*.quantity'              => "Quantity",
             'account_id'                       => "Account",

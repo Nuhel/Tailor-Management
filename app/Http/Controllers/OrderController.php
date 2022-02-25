@@ -53,7 +53,6 @@ class OrderController extends Controller
         $order = ServicesOrderService::attachRelationalData($order, true)->find($order->id);
 
         $masters = Master::all();
-
         return view('order.edit')
         ->with('services',$services)
         ->with('json',$this->getJson($services))

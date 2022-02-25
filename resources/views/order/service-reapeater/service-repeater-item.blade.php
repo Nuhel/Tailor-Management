@@ -65,7 +65,7 @@
                 ->setName('employee_id')
                 ->setEnableLabel(false)
                 ->setPlaceholder('Select Craftsman')
-                ->setValue(old(Arr::get($oldService,'employee_id','')))
+                ->setValue(Arr::get($oldService,'employee_id',''))
                 ->setOptions($employees)
                 ->setError('services.'.$serviceIndex.'.employee_id')
                 ->setOptionBuilder(function($value){
@@ -141,7 +141,7 @@
                                                             <option value="{{$style->id}}" {{$selectedDesignIds->contains($style->id)?"selected":""}}>{{$style->name}}</option>
                                                         @endforeach
                                                     </select>
-                                                    @error('services.'.$serviceIndex.'.designs.'.$loop->index.'.id')
+                                                    @error('services.'.$serviceIndex.'.designs.'.$loop->index.'.style_id')
                                                         <span class="text-danger">{{$message}}</span>
                                                     @enderror
                                                 </td>
