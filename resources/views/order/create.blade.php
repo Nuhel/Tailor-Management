@@ -45,17 +45,20 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            {!!Form::input()->setName('delivery_date')->setValue(old('delivery_date'))->setType('date')!!}
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            {!!Form::input()->setName('trial_date')->setValue(old('trial_date'))->setType('date')!!}
-                                        </div>
 
                                         <div class="col-md-4">
                                             {!!Form::input()->setName('order_date')->setValue(old('order_date',now()->format('Y-m-d')))->setType('date')!!}
                                         </div>
+
+                                        <div class="col-md-4">
+                                            {!!Form::input()->setName('trial_date')->setValue(old('trial_date', now()->addDays(3)->format('Y-m-d')))->setType('date')!!}
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            {!!Form::input()->setName('delivery_date')->setValue(old('delivery_date',now()->addDays(5)->format('Y-m-d')))->setType('date')!!}
+                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>

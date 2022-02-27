@@ -44,8 +44,8 @@
         var modalView =  $('#create-customer-modal');
         modalView.on('hidden.bs.modal', function (e) {
             $(this).find('.error').remove();
-            $("input").val('')
-            $("textarea").val('')
+            $(this).find("input").val('')
+            $(this).find("textarea").val('')
         })
 
         $('#customer-create-form').on('submit', function(event){
