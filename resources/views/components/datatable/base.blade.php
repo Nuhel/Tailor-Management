@@ -1,22 +1,6 @@
 @push('inner-css')
-
     <link rel="stylesheet" type="text/css" href="{{asset('/vendor/datatables/css/datatable.css')}}"/>
-    <style>
-        .spacer{
-            flex-basis: calc(100% - 268px) !important;
-            background: transparent;
-            border: none;
-        }
-        .spacer:hover,.spacer:active,.spacer:focus{
-            background: transparent;
-            pointer-events: none;
-            border: none;
-            box-shadow: none
-        }
-        .dt-buttons.btn-group.flex-wrap{
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{asset('/vendor/datatables/css/datatable-extended.css')}}"/>
 @endpush
 
 <div class="card mt-3">

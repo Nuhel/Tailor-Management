@@ -32,6 +32,7 @@ class ProcessingDataTable extends DataTable
                                 <tr>
                                     <th> Name</th>
                                     <th class='text-right'>CraftsMan</th>
+                                    <th class='text-right'>Ready</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,11 +44,20 @@ class ProcessingDataTable extends DataTable
                         .($hasEmployee?"<i class='fa fa-edit ml-2' aria-hidden='true'></i>":"").
                         "</a>";
 
-                    $table .= "<tr>
-                                    <td><small>".$service->service->name."</small></td>
-                                    <td class='text-right'><small>".
-                                        ($button)."</small></td>
-                                </tr>";
+                        $table .= "<tr>
+                            <td><small>".$service->service->name."</small></td>
+                            <td class='text-right'>
+                                    <small>".($button)."</small>
+
+                            </td>
+
+                            <td class='text-right'>
+                                <div class='icheck-success icheck-inline mr-3'>
+                                    <input type='checkbox' id='service-ready".$service->id."'>
+                                    <label for='service-ready".$service->id."'></label>
+                                </div>
+                            </td>
+                        </tr>";
                 }
                 $table .= " </tbody>
                         </table>";
@@ -84,9 +94,9 @@ class ProcessingDataTable extends DataTable
     {
         return $this->addVerticalAlignmentToColumns( [
             Column::computed('index','SL')->width(20),
-            Column::make('invoice_no'),
+            Column::make('invoice_no')->width(100),
             Column::make('customer_name'),
-            Column::computed('services'),
+            Column::computed('services')->width(300),
             Column::computed('transaction')->addClass('due'),
         ]);
     }

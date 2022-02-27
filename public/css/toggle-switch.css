@@ -1,0 +1,45 @@
+:root {
+    --switch-width: 40px;
+    --switch-height: 15px;
+  }
+.toggle-switch > input[type=checkbox]{
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+.toggle-switch > label {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: var(--switch-width);
+	height: calc(var(--switch-height) + 6px);
+	background: #0056b3;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+}
+
+.toggle-switch > label:after {
+	content: '';
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: calc(var(--switch-height) - 5px);
+	height: calc(var(--switch-height) - 5px);
+	background: #fff;
+	border-radius: 90px;
+	transition: 0.3s;
+}
+
+.toggle-switch > input:checked + label {
+	background: #17a2b8;
+}
+
+.toggle-switch > input:checked +  label:after {
+	left: calc(100% - 5px);
+	transform: translateX(-100%);
+}
+
+.toggle-switch > label:active:after {
+	width: var(--switch-width);
+}

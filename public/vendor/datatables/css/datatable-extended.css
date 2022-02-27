@@ -1,0 +1,14 @@
+.spacer{
+    flex-basis: calc(100% - 268px) !important;
+    background: transparent;
+    border: none;
+}
+.spacer:hover,.spacer:active,.spacer:focus{
+    background: transparent;
+    pointer-events: none;
+    border: none;
+    box-shadow: none
+}
+.dt-buttons.btn-group.flex-wrap{
+    width: 100%;
+}

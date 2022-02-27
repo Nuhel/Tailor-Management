@@ -12,6 +12,10 @@
     </div>
 </div>
 
+@push('inner-css')
+<link rel="stylesheet" href="{{ asset('css/icheck.css') }}">
+@endpush
+
 @push('inner-script')
     {!! $dataTable->scripts() !!}
     <script>

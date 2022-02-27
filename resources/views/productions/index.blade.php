@@ -3,14 +3,14 @@
     <div class="content-wrapper">
         <div class="content">
             <div class="container pt-5">
-                <div class="">
+                <div class="w-100">
 
                     <!-- Tabs content -->
                     <ul role="tablist" class="nav nav-tabs">
                         <li class="nav-item">
-                            <a id="home-tab" data-toggle="tab" href="#pending-tab" role="tab" aria-controls="home" aria-selected="true" class="nav-link active show">পেন্ডিং</a></li>
+                            <a id="home-tab" data-toggle="tab" href="#pending-tab" role="tab" aria-controls="home" aria-selected="true" class="nav-link active show" data-tableid='{{$pendingDataTable->getId()}}'>পেন্ডিং</a></li>
                         <li class="nav-item">
-                            <a id="profile-tab" data-toggle="tab" href="#processing-tab" role="tab" aria-controls="profile" aria-selected="false" class="nav-link">প্রসেসিং</a></li>
+                            <a id="profile-tab" data-toggle="tab" href="#processing-tab" role="tab" aria-controls="profile" aria-selected="false" class="nav-link" data-tableid='{{$processingDataTable->getId()}}'>প্রসেসিং</a></li>
                         <li class="nav-item">
                             <a id="p-tab" data-toggle="tab" href="#home-3" role="tab" aria-controls="p" aria-selected="false" class="nav-link">রিসিভ</a></li>
 
@@ -59,22 +59,8 @@
     @stack('inner-css')
 
     <link rel="stylesheet" type="text/css" href="{{asset('/vendor/datatables/css/datatable.css')}}"/>
-    <style>
-        .spacer{
-            flex-basis: calc(100% - 268px) !important;
-            background: transparent;
-            border: none;
-        }
-        .spacer:hover,.spacer:active,.spacer:focus{
-            background: transparent;
-            pointer-events: none;
-            border: none;
-            box-shadow: none
-        }
-        .dt-buttons.btn-group.flex-wrap{
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{asset('/vendor/datatables/css/datatable-extended.css')}}"/>
+
     <style>
         table{
             width: 100% !important;
@@ -88,4 +74,17 @@
     <script src="{{asset('/vendor/datatables/buttons.js')}}"></script>
     <script src="{{asset('/vendor/datatables/buttons.server-side.js')}}"></script>
     @stack('inner-script')
+
+    <script>
+        $('.nav-tabs').find('a').on('shown.bs.tab', function () {
+            // Some code you want to run after the tab is shown (callback)
+            console.log($(this).data('tableid'));
+
+            var tableId = $(this).data('tableid');
+
+            if(tableId != undefined && tableId!= null){
+                $('#'+tableId).dataTable().fnAdjustColumnSizing();
+            }
+        });
+    </script>
 @endsection
