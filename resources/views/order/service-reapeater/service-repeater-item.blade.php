@@ -18,22 +18,22 @@
             $oldDesigns = collect(Arr::get($oldService,'serviceDesigns',[]));
             $selectedDesignIds = $oldDesigns->pluck('service_design_style_id');
         }
-        //dump($oldService);
-
-        //
+        $baseErrorName = 'services.'.$serviceIndex;
     @endphp
+
+
     <div class="row">
         <div class="col-sm-12 col-md">
             <div class="form-group">
                 <small >Select Service</small>
-                <select name="service_id" class="form-control form-control-sm service_id" data-index='0'>
+                <select name="service_id" class="form-control form-control-sm service_id @error($baseErrorName.'.service_id') is-invalid @enderror" data-index='0'>
                     <option value="" selected>Select Service</option>
                     @foreach ($services as $service)
                         <option value="{{ $service->id }}" {{Arr::get($oldService,'service_id',0)==$service->id?"selected":""}}>{{ $service->name }}</option>
                     @endforeach
                 </select>
-                @error('services.'.$serviceIndex.'.service_id')
-                    <span class="text-danger error">{{$message}}</span>
+                @error($baseErrorName.'.service_id')
+                    <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
                 @enderror
             </div>
         </div>
@@ -41,9 +41,9 @@
         <div class="col-sm-12 col-md">
             <div class="form-group">
                 <small >Quantity</small>
-                <input name="quantity" class="form-control form-control-sm quantity" type="number" value="{{Arr::get($oldService,'quantity','')}}"/>
-                @error('services.'.$serviceIndex.'.quantity')
-                    <span class="text-danger error">{{$message}}</span>
+                <input name="quantity" class="form-control form-control-sm quantity @error($baseErrorName.'.quantity') is-invalid @enderror" type="number" value="{{Arr::get($oldService,'quantity','')}}"/>
+                @error($baseErrorName.'.quantity')
+                    <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
                 @enderror
             </div>
         </div>
@@ -51,9 +51,9 @@
         <div class="col-sm-12 col-md">
             <div class="form-group">
                 <small >Price</small>
-                <input name="price" class="form-control form-control-sm price" type="number" value="{{Arr::get($oldService,'price','')}}"/>
-                @error('services.'.$serviceIndex.'.price')
-                <span class="text-danger error">{{$message}}</span>
+                <input name="price" class="form-control form-control-sm price @error($baseErrorName.'.price') is-invalid @enderror" type="number" value="{{Arr::get($oldService,'price','')}}"/>
+                @error($baseErrorName.'.price')
+                    <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
                 @enderror
             </div>
         </div>
@@ -95,16 +95,16 @@
 
                                         $size = $measurement['size'];
                                         $measurement = $edit?$measurement->measurement:$measurement;
-                                        //dump($measurement->toArray());
+                                        $errorName = 'services.'.$serviceIndex.'.measurements.'.$loop->index.'.size';
                                     @endphp
                                 <tr class="">
                                     <td class='w-5'><small>{{$measurement['name']}}</small></td>
                                     <td>
                                         <input type="text" name="services[{{$serviceIndex}}][measurements][{{$loop->index}}][size]"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm @error($errorName) is-invalid @enderror"
                                         placeholder="Size" value="{{$size}}" />
-                                        @error('services.'.$serviceIndex.'.measurements.'.$loop->index.'.size')
-                                            <span class="text-danger">{{$message}}</span>
+                                        @error($errorName)
+                                            <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
                                         @enderror
 
                                         <input type="hidden" name="services[{{$serviceIndex}}][measurements][{{$loop->index}}][id]" value="{{$measurement['id']}}" />
@@ -131,18 +131,23 @@
                                 @if ($oldDesigns)
                                     <table class='table table-sm table-borderless'>
                                         @foreach ( $designs as $design )
+
+                                        @php
+                                            $errorName = 'services.'.$serviceIndex.'.designs.'.$loop->index.'.style_id';
+                                        @endphp
                                             <tr>
+
                                                 <td class='w-5'><small>{{$design->name}}</small></td>
                                                 <td>
                                                     <input type="hidden" value="{{$design->id}}" name="services[{{$serviceIndex}}][designs][{{$loop->index}}][id]"/>
-                                                    <select class="form-control form-control-sm" name="services[{{$serviceIndex}}][designs][{{$loop->index}}][style_id]">
+                                                    <select class="form-control form-control-sm @error($errorName) is-invalid @enderror" name="services[{{$serviceIndex}}][designs][{{$loop->index}}][style_id]">
                                                         <option value="">Select {{$design->name}}</option>
                                                         @foreach ($design->styles as $style)
                                                             <option value="{{$style->id}}" {{$selectedDesignIds->contains($style->id)?"selected":""}}>{{$style->name}}</option>
                                                         @endforeach
                                                     </select>
-                                                    @error('services.'.$serviceIndex.'.designs.'.$loop->index.'.style_id')
-                                                        <span class="text-danger">{{$message}}</span>
+                                                    @error($errorName)
+                                                        <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
                                                     @enderror
                                                 </td>
                                             </tr>

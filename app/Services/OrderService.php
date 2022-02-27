@@ -94,7 +94,7 @@ class OrderService{
                 return $product;
             });
 
-            if(count($products))
+            if( $products != null && count($products) && $products[0] != null)
                 $this->order->products()->saveMany($products);
 
             DB::commit();

@@ -10,24 +10,23 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div class="d-flex align-items-end">
+                                    <div class="d-flex align-items-{{ $errors->has('customer_id')?"center":"end"}}">
                                         <div class="form-group d-flex w-auto flex-grow-1 flex-column mb-0">
                                             <label class="form-inline">Customer</label>
-                                           <select name="customer_id" class="customer-select form-control form-control-sm" id="customer_id">
+                                           <select name="customer_id" class="customer-select form-control form-control-sm @error('customer_id') is-invalid @enderror" id="customer_id">
                                                 <option value="">Select Customer</option>
                                                 @foreach ($customers as $customer)
                                                     <option value="{{$customer->id}}" {{$customer->id == old('customer_id')?"selected":""}}>{{$customer->name}} ({{$customer->mobile}})</option>
                                                 @endforeach
                                            </select>
+                                           @error('customer_id')
+                                                <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
+                                            @enderror
                                         </div>
-
                                         <a class="btn btn-sm btn-outline-success ml-1 " data-toggle="modal" data-target="#create-customer-modal">
                                             <i class="fa fa-plus"></i>
                                         </a>
                                     </div>
-                                    @error('customer_id')
-                                        <span class="text-danger ">{{$message}}</span>
-                                    @enderror
 
                                 </div>
 

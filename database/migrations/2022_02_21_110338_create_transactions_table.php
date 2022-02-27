@@ -15,12 +15,12 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->double("amount");
-            $table->timestamp("transaction_date");
+            $table->dateTime("transaction_date");
             $table->text("description")->nullable();
             $table->morphs("transactionable");
             $table->enum('type', ['Debit', 'Credit']);
+            $table->timestamps();
         });
     }
 
