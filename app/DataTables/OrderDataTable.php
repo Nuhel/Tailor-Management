@@ -3,7 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Order;
-use App\Const\ServiceStatus;
+use App\Constant\ServiceStatus;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
