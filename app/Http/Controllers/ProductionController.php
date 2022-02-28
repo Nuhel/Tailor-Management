@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
-use App\Const\ServiceStatus;
+use App\Constant\ServiceStatus;
 use App\Models\OrderService;
 use Illuminate\Http\Request;
 use App\DataTables\Productions\ReadyDataTable;
