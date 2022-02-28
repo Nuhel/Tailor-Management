@@ -3,7 +3,7 @@
 namespace App\View\Components;
 
 use App\Models\Order;
-use App\Const\ServiceStatus;
+use App\Constant\ServiceStatus;
 use Illuminate\Support\Carbon;
 use Illuminate\View\Component;
 

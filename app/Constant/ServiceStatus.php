@@ -1,5 +1,5 @@
 <?php
-namespace App\Const;
+namespace App\Constant;
 
 class ServiceStatus{
     const PENDING = "pending";

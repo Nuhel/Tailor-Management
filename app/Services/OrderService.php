@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\Transaction;
-use App\Const\ServiceStatus;
+use App\Constant\ServiceStatus;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use App\Models\ServiceDesign;
