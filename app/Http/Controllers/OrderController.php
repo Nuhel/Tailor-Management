@@ -7,7 +7,6 @@ use App\Models\Master;
 use App\Models\Service;
 use App\Models\Customer;
 use App\Models\Employee;
-use App\Const\ServiceStatus;
 use Illuminate\Http\Request;
 use App\DataTables\OrderDataTable;
 use App\Http\Requests\OrderRequest;
