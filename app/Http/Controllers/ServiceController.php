@@ -83,12 +83,13 @@ class ServiceController extends Controller
                 $serviceDesign->styles()->saveMany($serviceDesignStyle);
             }
             DB::commit();
-            return redirect(route('services.index'));
+
         } catch (\Exception $e) {
+
             DB::rollBack();
             return redirect()->back()->withInput();
         }
-        //return redirect(route('services.index'));
+        return $this->redirectWithAlert(true, 'services');
 
     }
 
@@ -133,14 +134,13 @@ class ServiceController extends Controller
             $this->handelMeasurementUpdate($request,$service);
             $this->handelDesignUpdate($request,$service);
             DB::commit();
-            return redirect(route('services.index'));
-
 
         } catch (\Exception $e) {
 
             DB::rollBack();
             return redirect()->back()->withInput();
         }
+        return $this->redirectWithAlert(true, 'services');
     }
 
     public function handelMeasurementUpdate(Request $request,Service $service){
@@ -315,9 +315,10 @@ class ServiceController extends Controller
             $service->designs()->delete();
             $service->delete();
             DB::commit();
+            return $this->redirectWithAlert(true, 'services');
         }catch(\Exception $e){
             DB::rollBack();
+            return $this->redirectWithAlert(false, 'services');
         }
-        return redirect(route('services.index'));
     }
 }

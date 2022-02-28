@@ -34,7 +34,6 @@
     </div>
   </div>
   @push('inner-script')
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
 
             var datatableIds = {!!collect($tableIds)->toJson()!!};
@@ -66,31 +65,20 @@
                     method: "post",
                     url: url,
                     data: bodyFormData,
-                    })
-                    .then(function (response) {
-
-                        if(datatableIds != null){
-                            $.each(datatableIds, function(index,datatableId){
-                                var datatable = $('#'+datatableId).dataTable();
-                                datatable.api().ajax.reload();
-                            })
-
-                        }
-                        modalView.modal('hide')
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                        return;
-                        $.each(error.response.data, function(index,val){
-
-                            $('#'+index).append(`
-                                <span class='text-danger error validation-error invalid-feedback' role="alert">`+val[0]+`</span>
-                            `)
-                            $('#'+index).find('input').addClass('is-invalid');
-                            $('#'+index).find('select').addClass('is-invalid');
-
+                })
+                .then(function (response) {
+                    if(datatableIds != null){
+                        $.each(datatableIds, function(index,datatableId){
+                            var datatable = $('#'+datatableId).dataTable();
+                            datatable.api().ajax.reload();
                         })
-                    });
+                    }
+                    modalView.modal('hide')
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    return;
+                });
             })
     </script>
   @endpush

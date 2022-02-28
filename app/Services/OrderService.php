@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\Transaction;
+use App\Const\ServiceStatus;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use App\Models\ServiceDesign;
@@ -35,7 +36,7 @@ class OrderService{
         $this->styles = ServiceDesignStyle::all();
     }
 
-    public function storeOrder(){
+    public function handelOrder(){
         try{
 
             DB::beginTransaction();
@@ -78,7 +79,7 @@ class OrderService{
                 $orderService->employee_id  = $service['employee_id'];
                 $orderService->quantity     = $service['quantity'];
                 $orderService->price        = $service['price'];
-                $orderService->status       = $service['employee_id'] != null?'processing':'pending';
+                $orderService->status       = $service['employee_id'] != null?ServiceStatus::PROCESSING :ServiceStatus::PENDING;
                 $orderService->save();
                 $this->attachMeasurementsToService($orderService,collect($service['measurements']));
                 $this->attachDesignToService($orderService,collect($service['designs']));
@@ -100,7 +101,7 @@ class OrderService{
             DB::commit();
             return true;
         }catch(\Exception $e){
-            dd($e);
+
             DB::rollBack();
         }
         return false;

@@ -12,9 +12,9 @@
                             @csrf
                             @method('put')
 
-                            {!!Form::input()->setName('name')->setValue($customer->name)->setLabel()->setPlaceholder()->render()!!}
-                            {!!Form::input()->setName('mobile')->setValue($customer->mobile)->setLabel()->setPlaceholder()->render()!!}
-                            {!!Form::textarea()->setName('address')->setValue($customer->address)->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::input()->setName('name')->setValue($employee->name)->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::input()->setName('mobile')->setValue($employee->mobile)->setLabel()->setPlaceholder()->render()!!}
+                            {!!Form::textarea()->setName('address')->setValue($employee->address)->setLabel()->setPlaceholder()->render()!!}
 
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>

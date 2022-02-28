@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Order;
+use App\Const\ServiceStatus;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -27,8 +28,17 @@ class OrderDataTable extends DataTable
                 });
             })
             ->addColumn('customer_name', function(Order $order) {
+
                 return $order->customer->name;
-            })->addColumn('transaction', function(Order $order) {
+            })->addColumn('status', function(Order $order) {
+
+                $return =  "Pending : ".($order->service_pending).
+                "<br>Processing: ".($order->service_processing).
+                "<br>Ready: ".($order->service_ready);
+
+                return $return;
+            })
+            ->addColumn('transaction', function(Order $order) {
 
                 $return =  "Net Payable: ".($order->netpayable).
                 "<br>Paid: ".($order->paid);
@@ -41,7 +51,6 @@ class OrderDataTable extends DataTable
             ->addColumn('actions', function(Order $order) {
                 $extraButton = "";
                 if($order->paid < $order->netpayable)
-
                     $extraButton = '
                     <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'">
                         <i class="fa fa-edit" aria-hidden="true">
@@ -52,12 +61,18 @@ class OrderDataTable extends DataTable
                 ->with('enableBottomMargin', true)->render();
             })
             ->addIndexColumn()
-            ->rawColumns(['actions','transaction']);
+            ->rawColumns(['actions','status','transaction']);
     }
 
     public function query(Order $model)
     {
-        return $model->newQuery()->with('customer')->paid();
+        return $model->newQuery()->with('customer')->paid()->withCount([
+            'services as service_processing' => function($query){ $query->where('status', ServiceStatus::PROCESSING);}
+        ])->withCount([
+            'services as service_pending' => function($query){ $query->where('status', ServiceStatus::PENDING);}
+        ])->withCount([
+            'services as service_ready' => function($query){ $query->where('status', ServiceStatus::READY);}
+        ]);
     }
 
     public function getColumns():array
@@ -66,6 +81,7 @@ class OrderDataTable extends DataTable
             Column::computed('index','SL')->width(20),
             Column::make('invoice_no'),
             Column::make('customer_name'),
+            Column::computed('status'),
             Column::computed('transaction')->addClass('due'),
             Column::computed('actions')
                   ->exportable(false)

@@ -13,15 +13,12 @@
 </div>
 
 @push('inner-css')
-    <link rel="stylesheet" href="{{ asset('css/icheck.css') }}">
+<link rel="stylesheet" href="{{ asset('css/icheck.css') }}">
 @endpush
 
 @push('inner-script')
-
     {!! $dataTable->scripts() !!}
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        var datatableIds = {!!collect($tableIds)->toJson()!!};
         $(document).ready(function() {
             const json = '{!! $datatableFilters !!} ';
             const filters = JSON.parse(json);
@@ -43,34 +40,6 @@
             $('#{{$datatableId}}-reset-button').click(function(){
                 $('#{{$datatableId}}-search').find('input').val('');
             });
-
-            $(document).on('change','.ready-checkbox', function(event){
-                var baseUrl = "{{URL::to('/productions/make-ready/')}}";
-                var id = $(this).data('id');
-                var url = baseUrl+'/'+id
-                var bodyFormData = new FormData();
-                bodyFormData.append('_token', '{{ csrf_token() }}');
-                bodyFormData.append('ready', $(this).is(":checked"));
-
-                axios({
-                    method: "post",
-                    url: url,
-                    data: bodyFormData,
-                })
-                .then(function (response) {
-                    console.log(response);
-                    if(datatableIds != null){
-                        $.each(datatableIds, function(index,datatableId){
-                            var datatable = $('#{{$datatableId}}').dataTable();
-                            datatable.api().ajax.reload();
-                        })
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    return;
-                });
-            })
         });
     </script>
 @endpush

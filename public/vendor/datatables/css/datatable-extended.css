@@ -12,3 +12,7 @@
 .dt-buttons.btn-group.flex-wrap{
     width: 100%;
 }
+
+table.dataTable.table-sm .sorting::before, table.dataTable.table-sm .sorting_asc::before, table.dataTable.table-sm .sorting_desc::before {
+    margin-right: 4px;
+  }

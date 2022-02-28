@@ -57,8 +57,7 @@ class MasterController extends Controller
         $master->mobile = $request->mobile;
         $master->address = $request->address;
         $master->salary = $request->salary;
-        $master->save();
-        return redirect(route('masters.index'));
+        return $this->redirectWithAlert($master->save());
     }
 
 
@@ -105,8 +104,7 @@ class MasterController extends Controller
         $master->mobile = $request->mobile;
         $master->address = $request->address;
         $master->salary = $request->salary;
-        $master->update();
-        return redirect(route('masters.index'));
+        return $this->redirectWithAlert($master->update());
     }
 
     /**
@@ -117,7 +115,6 @@ class MasterController extends Controller
      */
     public function destroy(Master $master)
     {
-        $master->delete();
-        return redirect(route('masters.index'));
+        return $this->redirectWithAlert($master->delete());
     }
 }

@@ -47,8 +47,10 @@ class BankController extends Controller
         $bank->name = $request->name;
         $bank->type = $request->type;
         $bank->address = $request->address;
-        $bank->save();
-        return redirect(route('banks.index'));
+        //$bank->save();
+
+        return $this->redirectWithAlert($bank->save());
+        //return redirect(route('banks.index'));
     }
 
 
@@ -87,8 +89,7 @@ class BankController extends Controller
         $bank->name = $request->name;
         $bank->type = $request->type;
         $bank->address = $request->address;
-        $bank->update();
-        return redirect(route('banks.index'));
+        return $this->redirectWithAlert($bank->update());
     }
 
     /**
@@ -99,7 +100,6 @@ class BankController extends Controller
      */
     public function destroy(Bank $bank)
     {
-        $bank->delete();
-        return redirect(route('banks.index'));
+        return $this->redirectWithAlert($bank->delete());
     }
 }

@@ -32,6 +32,8 @@ class CustomerController extends Controller
 
         if($request->wantsJson()){
             return response($customer->toJson());
+        }else{
+            return $this->redirectWithAlert();
         }
         return redirect(route('customers.index'));
     }
@@ -51,13 +53,11 @@ class CustomerController extends Controller
         $customer->name = $request->name;
         $customer->mobile = $request->mobile;
         $customer->address = $request->address;
-        $customer->update();
-        return redirect(route('customers.index'));
+        return $this->redirectWithAlert($customer->update());
     }
 
     public function destroy(Customer $customer)
     {
-        $customer->delete();
-        return redirect(route('customers.index'));
+        return $this->redirectWithAlert($customer->delete());
     }
 }

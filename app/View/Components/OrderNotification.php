@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use App\Models\Order;
+use App\Const\ServiceStatus;
 use Illuminate\Support\Carbon;
 use Illuminate\View\Component;
 
@@ -18,17 +19,11 @@ class OrderNotification extends Component
 
 
     }
-
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
-     */
     public function render()
     {
         $orders = Order::with('services')
         ->whereHas('services', function ($query){
-            $query->where('status', 'pending');
+            $query->where('status','!=', ServiceStatus::READY);
         })
         ->whereDate('delivery_date', '<=', Carbon::today()->addDays(5)->toDateString())
         ->whereNull('delivered_at')

@@ -17,10 +17,14 @@ use App\Services\OrderService as ServicesOrderService;
 class OrderController extends Controller
 {
     public function index(OrderDataTable $dataTable){
+
+
         return $dataTable->render('order.index');
     }
 
     public function create(){
+
+
         $services = Service::with('measurements')->with('designs.styles')->get()->mapWithKeys(function ($service, $key) {
             return [$service->id => $service];
         });
@@ -36,8 +40,8 @@ class OrderController extends Controller
 
 
     public function store(OrderRequest $request){
-        (new ServicesOrderService(null,$request))->storeOrder();
-        return redirect(route('orders.index'));
+
+        return $this->redirectWithAlert((new ServicesOrderService(null,$request))->handelOrder());
     }
 
     public function show(Order $order){
@@ -63,13 +67,11 @@ class OrderController extends Controller
     }
 
     public function update(OrderRequest $request, Order $order){
-        (new ServicesOrderService($order,$request))->storeOrder();
-        return redirect(route('orders.index'));
+        return $this->redirectWithAlert((new ServicesOrderService($order,$request))->handelOrder());
     }
 
     public function destroy(Order $order){
-        (new ServicesOrderService($order,null))->delete();
-        return redirect(route('orders.index'));
+        return $this->redirectWithAlert((new ServicesOrderService($order,null))->delete());
     }
 
 

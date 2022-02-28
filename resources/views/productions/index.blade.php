@@ -12,7 +12,7 @@
                         <li class="nav-item">
                             <a id="profile-tab" data-toggle="tab" href="#processing-tab" role="tab" aria-controls="profile" aria-selected="false" class="nav-link" data-tableid='{{$processingDataTable->getId()}}'>প্রসেসিং</a></li>
                         <li class="nav-item">
-                            <a id="p-tab" data-toggle="tab" href="#home-3" role="tab" aria-controls="p" aria-selected="false" class="nav-link">রিসিভ</a></li>
+                            <a id="p-tab" data-toggle="tab" href="#home-3" role="tab" aria-controls="p" aria-selected="false" class="nav-link" data-tableid='{{$readyDataTable->getId()}}'>রিসিভ</a></li>
 
 
                     </ul>
@@ -32,12 +32,21 @@
                             @include('productions.datatables.processing',['heading' => 'Processing',
                                 'dataTable'=> $processingDataTable->html(),
                                 'datatableFilters' => collect($processingDataTable->getFilters())->toJson(),
-                                'datatableId' => $processingDataTable->getId()
-                                ])
+                                'datatableId' => $processingDataTable->getId(),
+                                'tableIds'=> [
+                                    $pendingDataTable->getId(),
+                                    $processingDataTable->getId(),
+                                    $readyDataTable->getId()
+                                ]
+                            ])
                         </div>
 
                         <div id="home-3" role="tabpanel" aria-labelledby="home-tab" class="tab-pane fade">
-
+                            @include('productions.datatables.ready',['heading' => 'Ready',
+                            'dataTable'=> $readyDataTable->html(),
+                            'datatableFilters' => collect($readyDataTable->getFilters())->toJson(),
+                            'datatableId' => $readyDataTable->getId()
+                            ])
                         </div>
                     </div>
 
@@ -48,7 +57,8 @@
 
 @include('productions.datatables.assign-craftsman-modal',['craftMans' => $craftMans,'tableIds'=> [
             $pendingDataTable->getId(),
-            $processingDataTable->getId()
+            $processingDataTable->getId(),
+            $readyDataTable->getId()
         ],
     ]
 )

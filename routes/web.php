@@ -32,8 +32,9 @@ Route::middleware('auth')->group(function(){
         Route::get('productions','index')->name('productions.index');
         Route::get('productions/pending', 'pendingDataTable')->name('productions.pending');
         Route::get('productions/processing','processingDataTable')->name('productions.processing');
-        Route::get('productions/delivard','delivardDataTable')->name('productions.delivard');
+        Route::get('productions/delivard','readyDataTable')->name('productions.ready');
         Route::post('productions/sent-to-production/{orderService}','sentToProduction')->name('productions.sentToProduction');
+        Route::post('productions/make-ready/{orderService}','makeReady')->name('productions.makeReady');
     });
 
 });

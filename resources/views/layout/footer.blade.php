@@ -12,4 +12,14 @@
 
 <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <script src="{{ asset('dist/js/adminlte.js')}}"></script>
+<script src="{{ asset('js/sweet-alert.js')}}"></script>
 
+@if (Session::has('alert'))
+    <script>
+        Swal.fire({
+            icon: '{{Session::get('alert')['status']}}',
+            title: '{{Session::get('alert')['title']}}',
+            text: '{{Session::get('alert')['text']}}',
+        })
+    </script>
+@endif

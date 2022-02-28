@@ -51,16 +51,7 @@ class BankAccountController extends Controller
         $bankAccount->bank_id = $request->bank_id;
         $bankAccount->card = $request->card;
 
-        $response = [];
-        if($bankAccount->save()){
-            $response['status']= 200;
-            $response['message']= "Bank Account Added Successfully";
-        }else{
-            $response['status']= 400;
-            $response['message']= "Failed To Add Bank Account";
-        }
-
-        return redirect(route('bank_accounts.index'))->with('response',$response);
+        return $this->redirectWithAlert($bankAccount->save(),"bank_accounts");
 
     }
 
@@ -94,23 +85,13 @@ class BankAccountController extends Controller
         $bankAccount->number = $request->number;
         $bankAccount->bank_id = $request->bank_id;
         $bankAccount->card = $request->card;
+        return $this->redirectWithAlert($bankAccount->update(),"bank_accounts");
 
-        $response = [];
-        if($bankAccount->update()){
-            $response['status']= 200;
-            $response['message']= "Bank Account Updated Successfully";
-        }else{
-            $response['status']= 400;
-            $response['message']= "Failed To Updated Bank Account";
-        }
-
-        return redirect(route('bank_accounts.index'))->with('response',$response);
     }
 
 
     public function destroy(BankAccount $bankAccount)
     {
-        $bankAccount->delete();
-        return redirect(route('bank_accounts.index'));
+        return $this->redirectWithAlert($bankAccount->delete(),"bank_accounts");
     }
 }

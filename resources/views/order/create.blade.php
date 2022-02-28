@@ -193,7 +193,6 @@
                 calculatePayments()
             });
             calculatePayments()
-
         });
 
         function calculatePayments(){

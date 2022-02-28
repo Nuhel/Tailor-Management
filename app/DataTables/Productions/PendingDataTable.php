@@ -3,7 +3,7 @@ namespace App\DataTables\Productions;
 
 
 use App\Models\Order;
-use Illuminate\Http\Request;
+use App\Const\ServiceStatus;
 use App\DataTables\DataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -12,7 +12,7 @@ class PendingDataTable extends DataTable
 
     protected $tableId = 'pending-table';
 
-    public function dataTable(Request $request,$query){
+    public function dataTable($query){
 
         return datatables()
             ->eloquent($query)
@@ -73,10 +73,10 @@ class PendingDataTable extends DataTable
     {
         return $model->newQuery()->with('customer')->paid()
         ->with(['services' => function($query){
-            return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns')->where('status', 'pending');
+            return $query->with('service')->with('employee')->with('serviceMeasurements.measurement')->with('serviceDesigns')->where('status', ServiceStatus::PENDING);
         }])
         ->whereHas('services', function ($query){
-            $query->where('status', 'pending');
+            $query->where('status', ServiceStatus::PENDING);
         });
     }
 

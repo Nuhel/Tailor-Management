@@ -59,17 +59,8 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->category_id = $request->category_id;
         $product->price = $request->price;
+        return $this->redirectWithAlert($product->save());
 
-        $response = [];
-        if($product->save()){
-            $response['status']= 200;
-            $response['message']= "Product Added Successfully";
-        }else{
-            $response['status']= 400;
-            $response['message']= "Failed To Add Product";
-        }
-
-        return redirect(route('products.index'))->with('response',$response);
     }
 
     /**
@@ -114,8 +105,7 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->category_id = $request->category_id;
         $product->price = $request->price;
-        $product->update();
-        return redirect(route('products.index'));
+        return $this->redirectWithAlert($product->update());
     }
 
     /**
@@ -126,6 +116,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        return $this->redirectWithAlert($product->delete());
     }
 }

@@ -44,8 +44,7 @@ class EmployeeController extends Controller
         $employee->name = $request->name;
         $employee->mobile = $request->mobile;
         $employee->address = $request->address;
-        $employee->save();
-        return redirect(route('employees.index'));
+        return $this->redirectWithAlert($employee->save());
     }
 
     /**
@@ -76,8 +75,7 @@ class EmployeeController extends Controller
         $employee->name = $request->name;
         $employee->mobile = $request->mobile;
         $employee->address = $request->address;
-        $employee->update();
-        return redirect(route('employees.index'));
+        return $this->redirectWithAlert($employee->update());
     }
 
     /**
@@ -88,7 +86,6 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        $employee->delete();
-        return redirect(route('employees.index'));
+        return $this->redirectWithAlert($employee->delete());
     }
 }

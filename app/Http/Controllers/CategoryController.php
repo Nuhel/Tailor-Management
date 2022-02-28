@@ -52,8 +52,7 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->name = $request->name;
-        $category->save();
-        return redirect(route('categories.index'));
+        return $this->redirectWithAlert($category->save());
     }
 
     /**
@@ -98,8 +97,7 @@ class CategoryController extends Controller
             ->withErrors($validator->errors());
         }
         $category->name = $request->name;
-        $category->save();
-        return redirect(route('categories.index'));
+        return $this->redirectWithAlert($category->update());
     }
 
     /**
@@ -110,7 +108,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
-        return redirect(route('categories.index'));
+        return $this->redirectWithAlert($category->delete());
     }
 }
