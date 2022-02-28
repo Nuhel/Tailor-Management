@@ -46,13 +46,35 @@
 
             $(document).on('change','.ready-checkbox', function(event){
                 var baseUrl = "{{URL::to('/productions/make-ready/')}}";
-                var id = $(this).data('id');
+                var checkBoxRef = $(this);
+                var id = checkBoxRef.data('id');
                 var url = baseUrl+'/'+id
                 var bodyFormData = new FormData();
                 bodyFormData.append('_token', '{{ csrf_token() }}');
                 bodyFormData.append('ready', $(this).is(":checked"));
 
-                axios({
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Approved As Ready!'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        makeReady(url,bodyFormData,checkBoxRef)
+                    }else{
+                        checkBoxRef.prop("checked", false);
+                    }
+                })
+
+
+            })
+        });
+
+        function makeReady(url,bodyFormData,checkBoxRef){
+            axios({
                     method: "post",
                     url: url,
                     data: bodyFormData,
@@ -67,10 +89,10 @@
                     }
                 })
                 .catch(function (error) {
+                    checkBoxRef.prop("checked", false);
                     console.log(error);
                     return;
                 });
-            })
-        });
+        }
     </script>
 @endpush

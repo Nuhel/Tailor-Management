@@ -54,4 +54,17 @@ class Order extends Model
             }
         );
     }
+
+    public function scopePaidRaw($query){
+        return $query->selectRaw("
+        (
+            SELECT
+                SUM(amount) AS paid
+            FROM
+                `transactions`
+            WHERE
+                `orders`.`id` = `transactions`.`transactionable_id`
+                AND `transactionable_type` = 'App\\\Models\\\Order') AS `paid`
+        ");
+    }
 }

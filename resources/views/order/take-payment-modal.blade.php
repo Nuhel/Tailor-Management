@@ -2,7 +2,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Take Payment</h5>
+          <h5 class="modal-title">Take Payment (Due amount: <span class="text-danger" id="due-amount"></span>)</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -40,12 +40,14 @@
             $(this).find('.error').remove();
             $(this).find(`input`).val('');
             $(this).find(`input`).removeClass('is-invalid');
+            $(this).find('#due-amount').text('')
         })
 
         modalView.on('show.bs.modal', function (e) {
             var target = $(e.relatedTarget);
             var id = target.data('id');
             $(this).find(`input[name='id']`).val(id);
+            $(this).find('#due-amount').text(target.data('due'))
         })
 
         $('#take-payment-form').on('submit', function(event){
@@ -54,8 +56,9 @@
             var id = $("input[name='id']").val();
             var url = baseUrl+'/'+id+'/take-payment'
             var bodyFormData = new FormData();
+            var amount = $("input[name='amount']").val();
             bodyFormData.append('_token', '{{ csrf_token() }}');
-            bodyFormData.append('amount', $("input[name='amount']").val());
+            bodyFormData.append('amount', amount);
             bodyFormData.append('date', $("input[name='date']").val());
             axios({
                 method: "post",
@@ -66,9 +69,15 @@
                     modalView.modal('hide')
                     var dataTable = $('#{{$datatableId}}').dataTable();
                     dataTable.api().ajax.reload();
+
+                    Swal.fire(
+                        'Success!',
+                        'Amount: '+amount+' Taken Successfully',
+                        'success'
+                    )
+
                 })
                 .catch(function (error) {
-
                     $.each(error.response.data, function(index,val){
                         console.log(index);
                         $('#'+index).append(`

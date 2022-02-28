@@ -7,18 +7,18 @@ use App\Models\Master;
 use App\Models\Service;
 use App\Models\Customer;
 use App\Models\Employee;
+use App\Const\ServiceStatus;
 use Illuminate\Http\Request;
 use App\DataTables\OrderDataTable;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\OrderPaymentRequest;
 use App\Services\OrderService as ServicesOrderService;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     public function index(OrderDataTable $dataTable){
-
-
         return $dataTable->render('order.index');
     }
 

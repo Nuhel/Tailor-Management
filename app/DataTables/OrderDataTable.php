@@ -39,20 +39,17 @@ class OrderDataTable extends DataTable
                 return $return;
             })
             ->addColumn('transaction', function(Order $order) {
-
                 $return =  "Net Payable: ".($order->netpayable).
                 "<br>Paid: ".($order->paid);
-
                 if($order->netpayable - $order->paid)
                 $return.="<br>Due: ".($order->netpayable - $order->paid);
-
                 return $return;
             })
             ->addColumn('actions', function(Order $order) {
                 $extraButton = "";
                 if($order->paid < $order->netpayable)
                     $extraButton = '
-                    <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'">
+                    <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'" data-due="'.($order->netpayable - $order->paid).'">
                         <i class="fa fa-edit" aria-hidden="true">
                         Take
                         </i>
@@ -66,13 +63,13 @@ class OrderDataTable extends DataTable
 
     public function query(Order $model)
     {
-        return $model->newQuery()->with('customer')->paid()->withCount([
+        return $model->newQuery()->with('customer')->withCount([
             'services as service_processing' => function($query){ $query->where('status', ServiceStatus::PROCESSING);}
         ])->withCount([
             'services as service_pending' => function($query){ $query->where('status', ServiceStatus::PENDING);}
         ])->withCount([
             'services as service_ready' => function($query){ $query->where('status', ServiceStatus::READY);}
-        ]);
+        ])->paidRaw();
     }
 
     public function getColumns():array
