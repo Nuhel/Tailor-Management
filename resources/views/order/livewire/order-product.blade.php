@@ -52,6 +52,8 @@
                             ->setValue(old('products.'.$loop->index.'.quantity',$item['quantity']))
                             ->setType('number')
                             ->setError('products.'.$loop->index.'.quantity')!!}
+                            <span>Max {{!$onEdit?$item['stock']:$item['stock']+$item['quantity']}}</span>
+
 
                         </td>
                         <td>

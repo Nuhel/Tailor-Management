@@ -7,13 +7,18 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Validation\Rule;
 
-class EnsureStockValidator implements Rule
+class EnsureStock implements Rule
 {
 
     private $requestProducts;
-    public function __construct($requestProducts)
+    private $route;
+    private $max = 0;
+    private $order;
+    public function __construct($requestProducts, $route,$order)
     {
         $this->requestProducts = $requestProducts;
+        $this->order = $order;
+        $this->route = $route;
     }
 
     /**
@@ -25,16 +30,30 @@ class EnsureStockValidator implements Rule
      */
     public function passes($attribute, $value)
     {
+
+        $previousQuantity = 0;
+        if($this->order != null && $this->order->products != null){
+            $index = Str::of($attribute)->replace('.quantity','')->replace('products.','').'';
+            $previousProduct = $this->order->products->get($index);
+
+            if($previousProduct != null){
+                $previousQuantity = $this->order->products->get($index)->quantity;
+            }
+        }
+
+
+
+
         $key = Str::of($attribute)->replace('quantity','id')->replace('products.','');
         $productId = Arr::get($this->requestProducts,$key.'');
 
         if (Product::where('id', $productId)->exists()) {
             $product = Product::find($productId);
-            return $value<=$product->stock;
+            $this->max = $product->stock + $previousQuantity;
+            return $value <= $this->max;
         }else{
             return false;
         }
-
     }
 
     /**
@@ -44,6 +63,6 @@ class EnsureStockValidator implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'Quantity can not be greater than '.$this->max;
     }
 }

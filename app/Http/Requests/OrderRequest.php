@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\EnsureStockValidator;
+use App\Rules\EnsureStock;
 use Illuminate\Validation\Rule;
+
+use App\Services\OrderService as ServiceOrderService;
 class OrderRequest extends BaseRequest
 {
 
@@ -22,6 +24,12 @@ class OrderRequest extends BaseRequest
     public function rules()
     {
 
+        $order  = $this->route('order');
+        if($order != null){
+            $order  = ServiceOrderService::attachRelationalData($order, true)->find($order->id);
+        }
+
+
         $accountIdRule = [
             Rule::requiredIf(function(){
                 return $this->bank_type!="Cash Payment";
@@ -32,12 +40,6 @@ class OrderRequest extends BaseRequest
             $accountIdRule[] = 'exists:bank_accounts,id';
         }
 
-        $aditionalRule = [];
-        if(! $this->passProductCheck){
-
-        }
-
-
         $aditionalRule = [
             'products'                          =>  'nullable|array',
             'products.*.id'                     =>  [Rule::requiredIf(function(){
@@ -45,7 +47,7 @@ class OrderRequest extends BaseRequest
             }),'numeric','exists:products,id'],
             'products.*.quantity'               =>  [Rule::requiredIf(function(){
                 return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
-            }),'numeric','max:99999','min:1', new EnsureStockValidator($this->products)],
+            }),'numeric','max:99999','min:1', new EnsureStock($this->products,$this->route(),$order) ],
             'products.*.price'                  =>  [Rule::requiredIf(function(){
                 return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
             }),'numeric','max:99999','min:1'],

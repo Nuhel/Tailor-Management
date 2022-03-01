@@ -12,21 +12,22 @@ class OrderProduct extends Component
     public $products;
     public $productId;
     public $selectedProductPriceAndQuantity;
-
     protected $listeners = ['updatedProduct'];
+    public $onEdit = false;
 
-    public function mount($oldCart){
+    public function mount($oldCart, $onEdit = false){
         $this->cart = collect();
         $this->selectedProductPriceAndQuantity = collect();
         $this->products = Product::all();
-
-
-
+        $this->onEdit = $onEdit;
 
         foreach($oldCart as $oldItem){
-            //dd($oldItem['quantity']);
             if($oldItem != null)
-                $this->addProductToSelected(Arr::get($oldItem,'product_id', $oldItem['id']),$oldItem['price'],$oldItem['quantity']);
+                $this->addProductToSelected(
+                    Arr::get($oldItem,'product_id', $oldItem['id']),
+                    $oldItem['price'],
+                    $oldItem['quantity']
+            );
         }
     }
 
@@ -39,6 +40,7 @@ class OrderProduct extends Component
                     'product'   => $product,
                     'price'     => $price??$product['price'],
                     'quantity'  => $quantity,
+                    'stock'       => $product['stock']
                 ]
 
             );

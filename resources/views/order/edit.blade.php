@@ -80,7 +80,8 @@
                                 <div class="card-body">
 
                                     @livewire('order-product',[
-                                        'oldCart' => collect(old('products',$order->products))
+                                        'oldCart' => collect(old('products',$order->products)),
+                                        'onEdit' => true
                                     ])
                                 </div>
                             </div>
