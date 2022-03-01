@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Master;
+use App\Models\Product;
 use App\Models\Service;
 use App\Models\ServiceDesign;
 use App\Models\ServiceDesignStyle;
@@ -29,6 +31,8 @@ class DatabaseSeeder extends Seeder
         $this->createMeasurements();
         $this->createDesign();
         $this->createStyle();
+        Category::factory(15)->create();
+        Product::factory(1500)->create();
 
 
     }
