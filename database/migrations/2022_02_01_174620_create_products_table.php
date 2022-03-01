@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->bigInteger('category_id');
             $table->double('price');
+            $table->double('stock')->default(1);
             $table->timestamps();
         });
     }

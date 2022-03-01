@@ -48,7 +48,10 @@
                             {!!Form::input()
                             ->appendInputClass('quantity')
                             ->setName('products['.$loop->index.'][quantity]')
-                            ->setEnableLabel(false)->setPlaceHolder('quantity')->setValue(old('products.'.$loop->index.'.quantity',1))->setType('number')->setError('products.'.$loop->index.'.quantity')!!}
+                            ->setEnableLabel(false)->setPlaceHolder('quantity')
+                            ->setValue(old('products.'.$loop->index.'.quantity',$item['quantity']))
+                            ->setType('number')
+                            ->setError('products.'.$loop->index.'.quantity')!!}
 
                         </td>
                         <td>

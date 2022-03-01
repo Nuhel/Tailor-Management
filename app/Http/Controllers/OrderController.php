@@ -10,10 +10,8 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\DataTables\OrderDataTable;
 use App\Http\Requests\OrderRequest;
-use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\OrderPaymentRequest;
 use App\Services\OrderService as ServicesOrderService;
-use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -22,8 +20,6 @@ class OrderController extends Controller
     }
 
     public function create(){
-
-
         $services = Service::with('measurements')->with('designs.styles')->get()->mapWithKeys(function ($service, $key) {
             return [$service->id => $service];
         });

@@ -33,6 +33,8 @@ class ProductDataTable extends DataTable
                 });
             })->filterColumn('price', function($query, $keyword) {
                 $query->where('price', "like", "%".$keyword."%");
+            })->filterColumn('stock', function($query, $keyword) {
+                $query->where('price', "like", "%".$keyword."%");
             })
             ->addColumn('category', function(Product $product) {
                 return $product->category->name;
@@ -67,6 +69,7 @@ class ProductDataTable extends DataTable
             Column::make('name'),
             Column::make('category'),
             Column::make('price'),
+            Column::make('stock'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)

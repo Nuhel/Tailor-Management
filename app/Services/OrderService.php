@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Transaction;
-use App\Constant\ServiceStatus;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use App\Models\ServiceDesign;
 use Illuminate\Support\Carbon;
+use App\Constant\ServiceStatus;
 use App\Models\OrderServicDesign;
 use App\Models\ServiceDesignStyle;
 use Illuminate\Support\Collection;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\OrderServicMeasurement;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\OrderService as OrderServiceModel;
+use Mavinoo\Batch\BatchFacade as Batch;
 
 class OrderService{
     public $designs;
@@ -84,19 +86,28 @@ class OrderService{
                 $this->attachMeasurementsToService($orderService,collect($service['measurements']));
                 $this->attachDesignToService($orderService,collect($service['designs']));
             });
-
-            $products = collect($this->request->products)->map(function($value){
+            $productStockUpdate = array();
+            $products = collect($this->request->products)->map(function($value) use(&$productStockUpdate){
                 if($value == null)
                     return null;
                 $product = new OrderProduct();
                 $product->product_id    = $value['id'];
                 $product->price         = $value['price'];
                 $product->quantity      = $value['quantity'];
+
+                $productStockUpdate[] = [
+                    'id' => $value['id'],
+                    'stock' => ['-', $value['quantity'] ],
+                ];
+
                 return $product;
             });
 
-            if( $products != null && count($products) && $products[0] != null)
+            if( $products != null && count($products) && $products[0] != null){
                 $this->order->products()->saveMany($products);
+                Batch::update(new Product(), $productStockUpdate, 'id');
+            }
+
 
             DB::commit();
             return true;
@@ -105,6 +116,21 @@ class OrderService{
             DB::rollBack();
         }
         return false;
+    }
+
+
+    public function restockSoldProducts(){
+        $productStockUpdate = [];
+            $this->order->products->each(function($val,$index) use(&$productStockUpdate){
+                $productStockUpdate[] = [
+                    'id' =>$val->product_id,
+                    'stock' => ['+', $val->quantity,],
+                ];
+            });
+            if(count($productStockUpdate)){
+                Batch::update(new Product(), $productStockUpdate, 'id');
+            }
+            //$sale->details()->delete();
     }
 
     public function attachMeasurementsToService(OrderServiceModel $service, Collection $measurements){
@@ -137,6 +163,7 @@ class OrderService{
     }
 
     public function deleteRelatedData(){
+        $this->restockSoldProducts();
         $this->order->products()->delete();
         foreach($this->order->services as $service){
             $service->serviceMeasurements()->delete();

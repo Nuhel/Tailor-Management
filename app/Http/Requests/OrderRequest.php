@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
+
+use App\Rules\EnsureStockValidator;
 use Illuminate\Validation\Rule;
 class OrderRequest extends BaseRequest
 {
@@ -43,7 +45,7 @@ class OrderRequest extends BaseRequest
             }),'numeric','exists:products,id'],
             'products.*.quantity'               =>  [Rule::requiredIf(function(){
                 return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
-            }),'numeric','max:99999','min:1'],
+            }),'numeric','max:99999','min:1', new EnsureStockValidator($this->products)],
             'products.*.price'                  =>  [Rule::requiredIf(function(){
                 return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
             }),'numeric','max:99999','min:1'],

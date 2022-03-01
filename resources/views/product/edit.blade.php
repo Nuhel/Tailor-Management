@@ -12,7 +12,7 @@
                             @csrf
                             @method('put')
 
-                            {!!Form::input()->setName('name')->setValue($product->name)->setLabel('Product Name')->setPlaceholder('Product Name')->render()!!}
+                            {!!Form::input()->setName('name')->setValue(old('name',$product->name))->setLabel('Product Name')->setPlaceholder('Product Name')->render()!!}
 
                             {!!
                                 Form::select()
@@ -28,7 +28,9 @@
                                 )
                                 ->render()
                             !!}
-                            {!!Form::input()->setName('price')->setValue($product->price)->setLabel('Product Price')->setPlaceholder('Product Price')->setType('number')->render()!!}
+                            {!!Form::input()->setName('price')->setValue(old('price',$product->price))->setLabel('Product Price')->setPlaceholder('Product Price')->setType('number')->render()!!}
+                            {!!Form::input()->setName('stock')->setValue(old('stock',$product->stock))->setLabel('Product Stock')->setPlaceholder('Product Stock')->setType('number')->render()!!}
+
 
 
                             <div class="form-group text-center">

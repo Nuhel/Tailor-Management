@@ -21,7 +21,10 @@ class OrderProduct extends Component
         $this->products = Product::all();
 
 
+
+
         foreach($oldCart as $oldItem){
+            //dd($oldItem['quantity']);
             if($oldItem != null)
                 $this->addProductToSelected(Arr::get($oldItem,'product_id', $oldItem['id']),$oldItem['price'],$oldItem['quantity']);
         }
