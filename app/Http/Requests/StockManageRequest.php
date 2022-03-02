@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class CustomerRequest extends BaseRequest
+class StockManageRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,16 @@ class CustomerRequest extends BaseRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:100',
-            'mobile' => 'required|string|max:20',
-            'address' => 'required|string|max:500',
+            'products'          =>  'required|array',
+            'products.*.id'     =>  ['numeric','exists:products,id'],
+            'products.*.stock'  =>  ['numeric','min:1']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'products.*.stock.numeric' => "Stock Must Be A Number"
         ];
     }
 }

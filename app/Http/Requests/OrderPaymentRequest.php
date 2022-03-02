@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Services\OrderService as ServiceOrderService;
-use Illuminate\Foundation\Http\FormRequest;
 
 class OrderPaymentRequest extends BaseRequest
 {

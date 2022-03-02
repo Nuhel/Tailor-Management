@@ -22,6 +22,8 @@ Route::middleware('auth')->group(function(){
     Route::resource('/customers',CustomerController::class);
     Route::resource('/categories',CategoryController::class);
     Route::resource('/products',ProductController::class);
+    Route::get('/manage-stock', [ProductController::class, 'manageStock'])->name('manageStock');
+    Route::post('/manage-stock', [ProductController::class, 'updateStock'])->name('updateStock');
     Route::resource('/banks',BankController::class);
     Route::resource('/bank_accounts',BankAccountController::class);
     Route::resource('/services',ServiceController::class);

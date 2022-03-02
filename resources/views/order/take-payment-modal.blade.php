@@ -64,28 +64,28 @@
                 method: "post",
                 url: url,
                 data: bodyFormData,
-                })
-                .then(function (response) {
-                    modalView.modal('hide')
-                    var dataTable = $('#{{$datatableId}}').dataTable();
-                    dataTable.api().ajax.reload();
+            })
+            .then(function (response) {
+                modalView.modal('hide')
+                var dataTable = $('#{{$datatableId}}').dataTable();
+                dataTable.api().ajax.reload();
 
-                    Swal.fire(
-                        'Success!',
-                        'Amount: '+amount+' Taken Successfully',
-                        'success'
-                    )
+                Swal.fire(
+                    'Success!',
+                    'Amount: '+amount+' Taken Successfully',
+                    'success'
+                )
 
+            })
+            .catch(function (error) {
+                $.each(error.response.data, function(index,val){
+                    console.log(index);
+                    $('#'+index).append(`
+                        <span class='text-danger error validation-error invalid-feedback' role="alert">`+val[0]+`</span>
+                    `)
+                    $('#'+index).find('input').addClass('is-invalid');
                 })
-                .catch(function (error) {
-                    $.each(error.response.data, function(index,val){
-                        console.log(index);
-                        $('#'+index).append(`
-                            <span class='text-danger error validation-error invalid-feedback' role="alert">`+val[0]+`</span>
-                        `)
-                        $('#'+index).find('input').addClass('is-invalid');
-                    })
-                });
+            });
         })
   </script>
   @endpush

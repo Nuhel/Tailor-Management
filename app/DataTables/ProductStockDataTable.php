@@ -9,7 +9,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 
-class ProductDataTable extends DataTable
+class ProductStockDataTable extends DataTable
 {
 
     protected $tableId = 'product-table';
@@ -27,23 +27,20 @@ class ProductDataTable extends DataTable
             ->eloquent($query)
             ->filterColumn('name', function($query, $keyword) {
                 $query->where('name', "like", "%".$keyword."%");
-            })->filterColumn('category', function($query, $keyword) {
-                $query->whereHas('category', function ($query) use($keyword){
-                    $query->where('name', 'like', '%'.$keyword.'%');
-                });
-            })->filterColumn('price', function($query, $keyword) {
-                $query->where('price', "like", "%".$keyword."%");
             })->filterColumn('stock', function($query, $keyword) {
                 $query->where('stock', "like", "%".$keyword."%");
             })
-            ->addColumn('category', function(Product $product) {
-                return $product->category->name;
-            })
-            ->addColumn('actions', function(Product $product) {
-                return view('components.actionbuttons.table_actions')->with('route','products')->with('param','product')->with('value',$product)->render();
+
+            ->addColumn('stock-input', function(Product $product) {
+                return "
+                    <div class='form-group mb-0' id='products-".$product->id."'>
+                        <input class='form-control form-control-sm' name='products[".$product->id."][stock]' value='".$product->stock."'/>
+                        <input name='products[".$product->id."][id]' type='hidden' value='".$product->id."'/>
+                    </div>
+                ";
             })
             ->addIndexColumn()
-            ->rawColumns(['actions']);
+            ->rawColumns(['stock-input','name']);
     }
 
     /**
@@ -67,14 +64,8 @@ class ProductDataTable extends DataTable
         return [
             Column::computed('index','SL')->width(20),
             Column::make('name'),
-            Column::make('category'),
-            Column::make('price'),
             Column::make('stock'),
-            Column::computed('actions')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(240)
-                  ->addClass('text-center')
+            Column::computed('stock-input'),
 
         ];
     }
@@ -93,8 +84,6 @@ class ProductDataTable extends DataTable
     {
         return [
             '1'=>'Name',
-            '2'=>'Category',
-            '3'=>'Price',
         ];
     }
 

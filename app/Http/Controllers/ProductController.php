@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\ProductDataTable;
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\DataTables\ProductDataTable;
+use Mavinoo\Batch\BatchFacade as Batch;
+use App\DataTables\ProductStockDataTable;
+use App\Http\Requests\StockManageRequest;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -15,11 +18,17 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ProductDataTable $dataTable)
-    {
-
+    public function index(ProductDataTable $dataTable){
         $categories = Category::all();
-        return $dataTable->render('product.index',['heading'=>'Banks', 'categories'=>$categories]);
+        return $dataTable->render('product.index',['heading'=>'Products', 'categories'=>$categories]);
+    }
+
+    public function manageStock(ProductStockDataTable $dataTable){
+        return $dataTable->render('product.manage-stock',['heading'=>'Manage Stock']);
+    }
+
+    public function updateStock(StockManageRequest $request){
+        return Batch::update(new Product(), $request->products, 'id');
     }
 
     /**
