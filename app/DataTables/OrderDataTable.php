@@ -57,8 +57,16 @@ class OrderDataTable extends DataTable
                 return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','orders')->with('param','order')->with('value',$order)
                 ->with('enableBottomMargin', true)->render();
             })
+            ->addColumn('print', function(Order $order) {
+                return '
+                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm mr-2 mb-2" href="'.route('makeInvoice',['order'=>$order]).'">
+                        <i class="fa fa-edit" aria-hidden="true">
+                        Print Invoice
+                        </i>
+                    </a>';
+            })
             ->addIndexColumn()
-            ->rawColumns(['actions','status','transaction']);
+            ->rawColumns(['actions','status','transaction','print']);
     }
 
     public function query(Order $model)
@@ -80,6 +88,7 @@ class OrderDataTable extends DataTable
             Column::make('customer_name'),
             Column::computed('status'),
             Column::computed('transaction')->addClass('due'),
+            Column::computed('print')->addClass('due'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)

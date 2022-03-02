@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function(){
     Route::resource('/services',ServiceController::class);
     Route::resource('/orders',OrderController::class);
     Route::post('orders/{order}/take-payment',[OrderController::class,'takePayment']);
+    Route::get('orders/{order}/invoice',[OrderController::class,'makeInvoice'])->name('makeInvoice');
 
     Route::controller(ProductionController::class)->group(function(){
         Route::get('productions','index')->name('productions.index');

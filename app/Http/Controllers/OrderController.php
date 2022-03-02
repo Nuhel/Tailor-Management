@@ -78,4 +78,9 @@ class OrderController extends Controller
         ServicesOrderService::attachPaymentToOrder($order,$request->amount,$request->date);
         echo "Success";
     }
+
+    public function makeInvoice(Order $order){
+        $order = $order = ServicesOrderService::attachRelationalData($order, true)->find($order->id);
+        return view('order.invoice.invoice')->with('order',$order);
+    }
 }
