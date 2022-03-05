@@ -12,11 +12,11 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function redirectWithAlert(bool $success = true,$moduleName = null){
+    public function redirectWithAlert(bool $success = true,$moduleName = null, $defaultMessage = null){
         $trace = debug_backtrace()[1];
         $moduleName = $moduleName??$this->resolveModuleName($trace);
         $callerFunction = ($trace['function']);
-        return $this->redirect($moduleName,$callerFunction, !$success);
+        return $this->redirect($moduleName,$callerFunction, !$success, $defaultMessage);
     }
 
     public function resolveModuleName($trace){
@@ -24,7 +24,7 @@ class Controller extends BaseController
         return  Str::of($baseClass)->replace('Controller','')->lower();
     }
 
-    public function getResponseArray($moduleName,$callerFunction, bool $hasError = false){
+    public function getResponseArray($moduleName,$callerFunction, bool $hasError = false, $defaultMessage = null){
 
         $message = "dummymodule Successfully dummyfunction";
 
@@ -44,17 +44,17 @@ class Controller extends BaseController
         return [
             'status' => $hasError?'error':'success',
             'title' => $hasError?'Oops...':'Great',
-            'text' => Str::of($message)->replace('dummyfunction',$readableAction)->replace('dummymodule', Str::of($moduleName)->singular()->headline()),
+            'text' => $defaultMessage??Str::of($message)->replace('dummyfunction',$readableAction)->replace('dummymodule', Str::of($moduleName)->singular()->headline()),
         ];
     }
 
-    public function redirect($moduleName,$callerFunction, bool $hasError = false){
+    public function redirect($moduleName,$callerFunction, bool $hasError = false, $defaultMessage = null){
         $return = null;
 
         if($hasError)
             $return = redirect()->back();
         else
             $return = redirect(route(Str::of($moduleName)->plural().'.index'));
-        return $return->with('alert', $this->getResponseArray($moduleName,$callerFunction, $hasError));
+        return $return->with('alert', $this->getResponseArray($moduleName,$callerFunction, $hasError,$defaultMessage));
     }
 }

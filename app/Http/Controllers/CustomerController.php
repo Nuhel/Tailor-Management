@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\CustomerDataTable;
-use App\Http\Requests\CustomerRequest;
+use App\Http\Requests\BasicPersonRequest;
 use App\Models\Customer;
-use Illuminate\Http\Request;
-
+use App\Http\Traits\BasicPersonTrait;
 class CustomerController extends Controller
 {
-
+    use BasicPersonTrait;
     public function index(CustomerDataTable $customerDataTable)
     {
         return $customerDataTable->render('customer.index');
@@ -18,17 +17,17 @@ class CustomerController extends Controller
 
     public function create()
     {
-        return view('customer.create');
+        return view('basic_person.create')->with([
+            'route' => route('customers.store'),
+            'personRole' => "Customer"
+        ]);
     }
 
 
-    public function store(CustomerRequest $request)
+    public function store(BasicPersonRequest $request)
     {
         $customer = new Customer();
-        $customer->name = $request->name;
-        $customer->mobile = $request->mobile;
-        $customer->address = $request->address;
-        $customer->save();
+        $this->storePerson($request,$customer);
 
         if($request->wantsJson()){
             return response($customer->toJson());
@@ -45,15 +44,15 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer)
     {
-        return view('customer.edit')->with('customer',$customer);
+        return view('basic_person.edit')->with([
+            'route' => route('customers.update',  ['customer'=> $customer]),
+            'personRole' => "Customer"
+        ])->with('person',$customer);
     }
 
-    public function update(CustomerRequest $request, Customer $customer)
+    public function update(BasicPersonRequest $request, Customer $customer)
     {
-        $customer->name = $request->name;
-        $customer->mobile = $request->mobile;
-        $customer->address = $request->address;
-        return $this->redirectWithAlert($customer->update());
+        return $this->redirectWithAlert($this->updatePerson($request,$customer));
     }
 
     public function destroy(Customer $customer)

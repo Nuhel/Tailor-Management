@@ -9,6 +9,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\ProductionController;
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function(){
     Route::resource('/employees',EmployeeController::class);
     Route::resource('/masters',MasterController::class);
     Route::resource('/customers',CustomerController::class);
+    Route::resource('/suppliers',SupplierController::class);
     Route::resource('/categories',CategoryController::class);
     Route::resource('/products',ProductController::class);
     Route::get('/manage-stock', [ProductController::class, 'manageStock'])->name('manageStock');
@@ -41,9 +43,5 @@ Route::middleware('auth')->group(function(){
     });
 
 });
-
-
-
-
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

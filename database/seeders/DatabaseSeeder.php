@@ -11,6 +11,7 @@ use App\Models\Service;
 use App\Models\ServiceDesign;
 use App\Models\ServiceDesignStyle;
 use App\Models\ServiceMeasurement;
+use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -24,7 +25,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::factory(1)->create();
-        Customer::factory(112)->create();
+        Customer::factory(50)->create();
+        Supplier::factory(30)->create();
         Employee::factory(12)->create();
         Master::factory(12)->create();
         $this->createServices();
@@ -32,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->createDesign();
         $this->createStyle();
         Category::factory(15)->create();
-        Product::factory(1500)->create();
+        Product::factory(100)->create();
 
 
     }

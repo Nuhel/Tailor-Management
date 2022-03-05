@@ -5,10 +5,10 @@
             <div class="container">
                 <div class="card mt-3">
                     <div class="card-header">
-                        <h2><strong>Insert Employee</strong></h2>
+                        <h2><strong>Insert {{$personRole}}</strong></h2>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{route('employees.store')}}">
+                        <form method="POST" action="{{$route}}">
                             @csrf
 
                             {!!Form::input()->setName('name')->setValue()->setLabel()->setPlaceholder()->render()!!}

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class EmployeeRequest extends BaseRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class BasicPersonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
