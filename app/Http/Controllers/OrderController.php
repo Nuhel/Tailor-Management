@@ -35,8 +35,12 @@ class OrderController extends Controller
 
 
     public function store(OrderRequest $request){
-
-        return $this->redirectWithAlert((new ServicesOrderService(null,$request))->handelOrder());
+        $order = (new ServicesOrderService(null,$request))->handelOrder();
+        if($order && ($request->print == 'true')){
+            return redirect(route('makeInvoice',['order'=>$order]));
+        }else{
+            return $this->redirectWithAlert($order?true:false);
+        }
     }
 
     public function show(Order $order){

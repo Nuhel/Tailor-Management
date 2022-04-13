@@ -53,15 +53,33 @@ class ReadyDataTable extends DataTable
                         </table>";
                 return $table;
             })->addColumn('transaction', function(Order $order) {
-                $return =  "Net Payable: ".($order->netpayable).
-                "<br>Paid: ".($order->paid);
+                $return =  "<div>Net Payable: ".($order->netpayable)."</div>".
+                "<div>Paid: ".($order->paid)."</div>";
                 if($order->netpayable - $order->paid)
-                $return.="<br>Due: ".($order->netpayable - $order->paid);
+                $return.="<div><span>Due: ".($order->netpayable - $order->paid). '</span></div>';
                 return $return;
+            })
+            ->addColumn('print', function(Order $order) {
+
+                $extraButton = "";
+                if($order->paid < $order->netpayable)
+                    $extraButton = '
+                    <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'" data-due="'.($order->netpayable - $order->paid).'">
+                        <i class="fa fa-edit" aria-hidden="true">
+                        Take
+                        </i>
+                    </a>';
+
+                return '
+                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm mr-2 mb-2" href="'.route('makeInvoice',['order'=>$order]).'">
+                        <i class="fa fa-edit" aria-hidden="true">
+                        Print Invoice
+                        </i>
+                    </a>'.$extraButton;
             })
 
             ->addIndexColumn()
-            ->rawColumns(['transaction','services']);
+            ->rawColumns(['transaction','services','print']);
     }
 
     public function html(){
@@ -88,6 +106,8 @@ class ReadyDataTable extends DataTable
             Column::make('customer_name'),
             Column::computed('services'),
             Column::computed('transaction')->addClass('due'),
+            Column::computed('print'),
+
         ]);
     }
 

@@ -110,7 +110,7 @@ class OrderService{
 
 
             DB::commit();
-            return true;
+            return $this->order;
         }catch(\Exception $e){
 
             DB::rollBack();

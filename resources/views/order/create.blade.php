@@ -155,7 +155,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group text-right">
-                                <button type="submit" class="btn btn-success mt-3" name="submit">Submit</button>
+                                <button type="submit" class="btn btn-success mt-3" name="print" value="false">Submit</button>
+                                <button type="submit" class="btn btn-success mt-3" name="print" value="true">Submit & Print</button>
                             </div>
                         </div>
                     </div>

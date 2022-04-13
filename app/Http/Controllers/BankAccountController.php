@@ -13,8 +13,6 @@ class BankAccountController extends Controller
 {
 
 
-
-
     public function index(BankAccountDataTable $dataTable)
     {
 

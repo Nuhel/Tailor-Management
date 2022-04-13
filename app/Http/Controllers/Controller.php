@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Str;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -56,5 +57,13 @@ class Controller extends BaseController
         else
             $return = redirect(route(Str::of($moduleName)->plural().'.index'));
         return $return->with('alert', $this->getResponseArray($moduleName,$callerFunction, $hasError,$defaultMessage));
+    }
+
+    public function redirectWithCustomAlert(RedirectResponse $redirectTo, $defaultMessage, bool $hasError = false){
+        return $redirectTo->with('alert', [
+            'status' => $hasError?'error':'success',
+            'title' => $hasError?'Oops...':'Great',
+            'text' => $defaultMessage,
+        ]);
     }
 }

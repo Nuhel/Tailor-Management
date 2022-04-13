@@ -88,7 +88,7 @@ class OrderDataTable extends DataTable
             Column::make('customer_name'),
             Column::computed('status'),
             Column::computed('transaction')->addClass('due'),
-            Column::computed('print')->addClass('due'),
+            Column::computed('print'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)
