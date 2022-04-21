@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
+
+    public function payments(){
+        return $this->morphMany(EmployeePayment::class,'transactionable')->expense();
+    }
 }

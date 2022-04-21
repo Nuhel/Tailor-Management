@@ -1,6 +1,7 @@
 @php
     $resourceMenus = [
         'employees',
+        'employee-payments',
         'masters',
         'customers',
         'categories',

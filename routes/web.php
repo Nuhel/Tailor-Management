@@ -9,16 +9,18 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductionController;
+use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\EmployeePaymentController;
 
 Auth::routes();
 
 Route::middleware('auth')->group(function(){
     Route::get('/', [OrderController::class,'create'])->name('dashboard');
     Route::resource('/employees',EmployeeController::class);
+    Route::resource('/employee-payments',EmployeePaymentController::class);
     Route::resource('/masters',MasterController::class);
     Route::resource('/customers',CustomerController::class);
     Route::resource('/suppliers',SupplierController::class);
