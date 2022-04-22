@@ -2,9 +2,10 @@
 
 namespace App\DataTables;
 
+use Carbon\Carbon;
 use App\Models\Order;
-use App\Constant\ServiceStatus;
 use Illuminate\Http\Request;
+use App\Constant\ServiceStatus;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
@@ -18,7 +19,24 @@ class OrderDataTable extends DataTable
     {
 
         return datatables()
+
             ->eloquent($query)
+            ->filter(function ($query) use ($request) {
+                if($request->has('from') && strlen($request->from)){
+                    try{
+                        return $query->whereDate('order_date', '>=', Carbon::parse($request->from));
+                    }catch(\Exception $e){
+                        return $query;
+                    }
+                }
+                if($request->has('to') && strlen($request->to)){
+                    try{
+                        return $query->whereDate('order_date', '<=', Carbon::parse($request->to));
+                    }catch(\Exception $e){
+                        return $query;
+                    }
+                }
+            })
             ->filterColumn('customer_name', function($query, $keyword) {
                 $query->whereHas('customer', function ($query) use($keyword){
                     $query->where('name', 'like', '%'.$keyword.'%');
@@ -71,6 +89,15 @@ class OrderDataTable extends DataTable
         ])->whereIsSale(0)->paidRaw();
     }
 
+    public function html(){
+        return parent::html()->ajax([
+            'data' => 'function(data){
+                data.from = $(".from").val();
+                data.to = $(".to").val();
+            }'
+        ]);
+    }
+
     public function getColumns():array
     {
         return $this->addVerticalAlignmentToColumns( [
@@ -99,10 +126,6 @@ class OrderDataTable extends DataTable
     {
         return [
             '1'=>'Invoice',
-            '2'=> [
-                'name' => 'Order Date',
-                'type' => 'date'
-            ],
             '3'=>'Customer Name',
 
         ];
