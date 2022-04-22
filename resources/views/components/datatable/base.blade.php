@@ -56,8 +56,18 @@
                         .wrap('<div>').parent().addClass('col-sm-12 col-md')
                         .appendTo($('#{{$datatableId}}-search'));
                     }else if(typeof filter === 'object'){
-                        console.log(filter.name);
-                        console.log(filter.type);
+
+                        var input = $('<input/>', {
+                            class: 'w-100 form-control form-control-sm rounded',
+                            placeholder: filter.name,
+                            type: filter.type
+                        }).on('change', function () {
+                            column.search($(this).val(), false, false, true).draw();
+                        }).wrap('<div>').parent().addClass('form-group')
+                        .wrap('<div>').parent().addClass('col-sm-12 col-md')
+                        .appendTo($('#{{$datatableId}}-search'));
+
+
                     }
 
                 }

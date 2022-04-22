@@ -20,7 +20,7 @@
                                 ->setOptions($orderServices)
                                 ->setOptionBuilder(
                                     function($value) {
-                                        return [ $value->id,"(".$value->order->invoice_no.")".$value->service->name."(".$value->employee->name.")"."(Due".$value->crafting_price-$value->paid.")"];
+                                        return [ $value->id,"(".$value->order->invoice_no.")".$value->service->name."(".($value->employee?$value->employee->name:'Not Assigned').")"."(Due".$value->crafting_price-$value->paid.")"];
                                     }
                                 )
                                 ->render()

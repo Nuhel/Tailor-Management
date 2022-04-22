@@ -27,7 +27,7 @@ class EmployeePaymentsDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addColumn('employee', function(OrderService $employeepayment) {
-                return $employeepayment->employee->name;
+                return $employeepayment->employee?$employeepayment->employee->name:"Not Assigned";
             })->addColumn('service', function(OrderService $employeepayment) {
                 return $employeepayment->service->name;
             })->addColumn('order', function(OrderService $employeepayment) {
