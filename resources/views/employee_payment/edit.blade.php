@@ -21,7 +21,7 @@
                                 ->setOptionBuilder(
                                     function($value) {
                                         $employeeName = $value->employee!=null?$value->employee->name:'Not Assigned';
-                                        return [ $value->id,"(".$value->order->invoice_no.")".$value->service->name."(".$employeeName.")"."(Due".($value->crafting_price-$value->paid??0).")"];
+                                        return [ $value->id,"(".$value->order->invoice_no.")".$value->service->name."(".$employeeName.")"."(Due".($value->crafting_price-($value->paid??0)).")"];
                                     }
                                 )
                                 ->render()
