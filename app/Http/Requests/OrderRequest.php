@@ -23,7 +23,7 @@ class OrderRequest extends BaseRequest
 
     public function rules()
     {
-        dd($this->toArray());
+
         $order  = $this->route('order');
         if($order != null){
             $order  = ServiceOrderService::attachRelationalData($order, true)->find($order->id);
