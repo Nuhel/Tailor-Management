@@ -44,7 +44,7 @@ class OrderService extends Model
 
                    ->groupBy('transactionable_id');
 
-        return $query->joinSub(
+        return $query->leftJoinSub(
 
             $transactionQuery,'transactions',
             function($join){

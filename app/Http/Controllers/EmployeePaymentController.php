@@ -10,6 +10,7 @@ use App\Http\Requests\EmployeePaymentRequest;
 use App\Models\OrderService;
 use App\Models\Transaction;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class EmployeePaymentController extends Controller
 {
@@ -22,6 +23,7 @@ class EmployeePaymentController extends Controller
 
     public function create()
     {
+
         $orderServices = OrderService::with(['employee' => function($query){
             $query->select('name','id');
         }])->with(['service' => function($query){
@@ -29,6 +31,7 @@ class EmployeePaymentController extends Controller
         }])->with(['order' => function($query){
             $query->select('invoice_no','id');
         }])->paid()->where('crafting_price','>=','paid')->get();
+
         return view('employee_payment.create')->with('orderServices', $orderServices);
     }
 
@@ -61,6 +64,7 @@ class EmployeePaymentController extends Controller
         }])->with(['order' => function($query){
             $query->select('invoice_no','id');
         }])->paid()->where('crafting_price','>=','paid')->get();
+
         return view('employee_payment.edit')->with('orderServices', $orderServices)->with('employee_payment',$employee_payment);
     }
 
