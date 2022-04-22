@@ -4,7 +4,8 @@ namespace App\DataTables;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use App\Models\EmployeePayment;
+use App\Models\OrderService;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
@@ -25,25 +26,54 @@ class EmployeePaymentsDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
-            ->addColumn('employee', function(EmployeePayment $employeepayment) {
+            ->addColumn('employee', function(OrderService $employeepayment) {
                 return $employeepayment->employee->name;
+            })->addColumn('service', function(OrderService $employeepayment) {
+                return $employeepayment->service->name;
+            })->addColumn('order', function(OrderService $employeepayment) {
+                return $employeepayment->order->invoice_no;
+            })->addColumn('due', function(OrderService $employeepayment) {
+                return $employeepayment->crafting_price - $employeepayment->paid;
             })
-            ->addColumn('actions', function(EmployeePayment $employeepayment) {
-                return view('components.actionbuttons.table_actions')->with('route','employee-payments')->with('param','employee_payment')->with('value',$employeepayment)->render();
+            ->addColumn('payments', function(OrderService $employeepayment){
+                $data = "<table class='table table-sm'>
+                            <thead>
+                                <tr>
+                                    <td>Amount</td>
+                                    <td>Date</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>";
+                foreach($employeepayment->payments as $payment){
+                    $action  = view('components.actionbuttons.table_actions')->with('route','employee-payments')->with('param','employee_payment')->with('value',$payment)->render();
+                    $date = Carbon::parse($payment->transaction_date)->format('Y-m-d');
+                    $data.= "
+                        <tr>
+                            <td>{$payment->amount}</td>
+                            <td>{$date}</td>
+                            <td>{$action}</td>
+                        </tr>";
+                }
+
+                $data .="<tbody> </table>";
+                return $data;
             })
+
             ->addIndexColumn()
-            ->rawColumns(['actions']);
+            ->rawColumns(['actions','payments']);
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\EmployeePayment $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(EmployeePayment $model)
+
+    public function query(OrderService $model)
     {
-        return $model->newQuery()->with('employee');
+        return $model->newQuery()->with(['employee' => function($query){
+            $query->select('name','id');
+        }])->with(['service' => function($query){
+            $query->select('name','id');
+        }])->with(['order' => function($query){
+            $query->select('invoice_no','id');
+        }])->with('payments')->paid();
     }
 
     /**
@@ -55,15 +85,12 @@ class EmployeePaymentsDataTable extends DataTable
     {
         return [
             Column::computed('index','SL')->width(20),
+            Column::make('order'),
+            Column::make('service'),
             Column::make('employee'),
-            Column::make('amount'),
-            Column::make('transaction_date'),
-            Column::make('description'),
-            Column::computed('actions')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(240)
-                  ->addClass('text-center')
+            Column::make('paid'),
+            Column::computed('due'),
+            Column::computed('payments'),
 
         ];
     }

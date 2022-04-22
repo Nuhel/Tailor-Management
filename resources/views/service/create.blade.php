@@ -10,7 +10,17 @@
                     <div class="card-body">
                         <form method="POST" action="{{ route('services.store') }}" class="">
                             @csrf
-                            {!!Form::input()->setName('name')->setValue()->setLabel('Service Name')->setPlaceholder('Service Name')->render()!!}
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {!!Form::input()->setName('name')->setValue()->setLabel('Service Name')->setPlaceholder('Service Name')->render()!!}
+                                </div>
+
+                                <div class="col-md-6">
+                                    {!!Form::input()->setName('crafting_price')->setValue()->setLabel('Crafting Cost')->setPlaceholder('Crafting Cost')->render()!!}
+                                </div>
+                            </div>
+
 
 
                             <div class="repeater form-group border p-2 rounded">

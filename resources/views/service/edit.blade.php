@@ -12,7 +12,16 @@
                             @csrf
                             @method('put')
 
-                            {!!Form::input()->setName('name')->setValue(old('name',$service->name))->setLabel('Service Name')->setPlaceholder('Service Name')->render()!!}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {!!Form::input()->setName('name')->setValue(old('name',$service->name))->setLabel('Service Name')->setPlaceholder('Service Name')->render()!!}
+                                </div>
+
+                                <div class="col-md-6">
+                                    {!!Form::input()->setName('crafting_price')->setValue(old('crafting_price',$service->crafting_price))->setLabel('Crafting Cost')->setPlaceholder('Crafting Cost')->render()!!}
+                                </div>
+                            </div>
+
 
                             <div class="repeater form-group border p-2 rounded">
                                 <label class="form-inline">Measurement's</label>

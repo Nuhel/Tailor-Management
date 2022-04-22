@@ -20,6 +20,8 @@ class CreateTransactionsTable extends Migration
             $table->text("description")->nullable();
             $table->morphs("transactionable");
             $table->enum('type', ['Debit', 'Credit']);
+            $table->bigInteger('order_id')->nullable();
+            $table->bigInteger('order_service_id')->nullable();
             $table->timestamps();
         });
     }

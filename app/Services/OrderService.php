@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\OrderServicMeasurement;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\OrderService as OrderServiceModel;
+use App\Models\Service;
 use Mavinoo\Batch\BatchFacade as Batch;
 
 class OrderService{
@@ -78,9 +79,13 @@ class OrderService{
                 $orderService = new OrderServiceModel();
                 $orderService->order_id     = $orderId;
                 $orderService->service_id   = $service['service_id'];
+
+                $serviceData = Service::find($service['service_id']);
+
                 $orderService->employee_id  = $service['employee_id'];
                 $orderService->quantity     = $service['quantity'];
                 $orderService->price        = $service['price'];
+                $orderService->crafting_price        = $serviceData->crafting_price;
                 $orderService->status       = $service['employee_id'] != null?ServiceStatus::PROCESSING :ServiceStatus::PENDING;
                 $orderService->save();
                 $this->attachMeasurementsToService($orderService,collect($service['measurements']));
@@ -112,7 +117,7 @@ class OrderService{
             DB::commit();
             return $this->order;
         }catch(\Exception $e){
-
+            dd($e);
             DB::rollBack();
         }
         return false;

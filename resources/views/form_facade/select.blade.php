@@ -13,7 +13,7 @@
                         throw new \ErrorException('Option Builder Should Return An Array With Two Value');
                     }
                 @endphp
-                <option value="{{ $values[0] }}" {{ (($selected === null)?old($name): $selected) == $values[0]?"selected":""}}>{{ $values[1] }} {{$selected}}</option>
+                <option value="{{ $values[0] }}" {{ (($selected === null)?old($name): $selected) == $values[0]?"selected":""}}>{{ $values[1] }} </option>
             @endforeach
         </select>
         {!! $append??"" !!}

@@ -13,14 +13,14 @@
                             @method('PUT ')
                             {!!
                                 Form::select()
-                                ->setLabel('Craftsman')
-                                ->setName('craftsman_id')
-                                ->setPlaceHolder('Select Payable Craftsman')
+                                ->setLabel('Service')
+                                ->setName('order_service_id')
+                                ->setPlaceHolder('Select Payable Service')
                                 ->setValue($employee_payment->transactionable_id)
-                                ->setOptions($employees)
+                                ->setOptions($orderServices)
                                 ->setOptionBuilder(
                                     function($value) {
-                                        return [ $value->id,$value->name];
+                                        return [ $value->id,"(".$value->order->invoice_no.")".$value->service->name."(".$value->employee->name.")"."(Due".$value->crafting_price-$value->paid.")"];
                                     }
                                 )
                                 ->render()

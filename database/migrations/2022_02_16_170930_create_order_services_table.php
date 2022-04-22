@@ -20,6 +20,7 @@ class CreateOrderServicesTable extends Migration
             $table->bigInteger('employee_id')->nullable();
             $table->double('quantity');
             $table->double('price');
+            $table->double('crafting_price');
             $table->string('status')->default('pending');
             $table->timestamps();
         });

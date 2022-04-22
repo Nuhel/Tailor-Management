@@ -33,6 +33,7 @@ class ServiceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
+            "crafting_price" => "required|numeric",
             "measurement" => "required|array",
             "measurement.*.name" => "required|string",
             "design" => "required|array",
@@ -55,6 +56,7 @@ class ServiceController extends Controller
             DB::beginTransaction();
             $service = new Service();
             $service->name = $request->name;
+            $service->crafting_price = $request->crafting_price;
             $service->save();
             $measurementNames = Arr::pluck($request->measurement, 'name');
 
@@ -108,7 +110,7 @@ class ServiceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
-            //"name2" => "required|string|max:100",
+            "crafting_price" => "required|numeric",
             "measurement" => "required|array",
             "measurement.*.name" => "required|string",
             "design" => "required|array",
@@ -130,6 +132,7 @@ class ServiceController extends Controller
 
         try {
             $service->name = $request->name;
+            $service->crafting_price = $request->crafting_price;
             $service->update();
             $this->handelMeasurementUpdate($request,$service);
             $this->handelDesignUpdate($request,$service);

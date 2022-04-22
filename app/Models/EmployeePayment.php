@@ -17,13 +17,13 @@ class EmployeePayment extends Transaction
 
         $query = parent::newQuery();
 
-        $query->whereTransactionableType('App\Models\Employee');
+        $query->whereTransactionableType('App\Models\OrderService');
 
         return $query;
     }
-    public function employee()
+    public function orderService()
     {
-        return $this->belongsTo(Employee::class, 'transactionable_id');
+        return $this->belongsTo(OrderService::class, 'transactionable_id');
     }
 }
 
