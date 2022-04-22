@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
         $services = [];
         for($i = 0 ; $i<=1; $i++){
             $services[$i]['name'] = $names[$i];
-            $services[$i]['crafting_price'] = $this->faker->numberBetween(200,400);
+            $services[$i]['crafting_price'] = rand(200,400);
             $services[$i]['created_at'] = now();
             $services[$i]['updated_at'] = now();
         }
