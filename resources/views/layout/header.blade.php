@@ -11,6 +11,9 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{route('orders.index')}}" class="nav-link">Orders</a>
       </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{route('sales.index')}}" class="nav-link">Sales</a>
+      </li>
 
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{route('productions.index')}}" class="nav-link">Productions</a>

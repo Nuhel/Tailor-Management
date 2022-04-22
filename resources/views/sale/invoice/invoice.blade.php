@@ -72,64 +72,59 @@
                 </div>
 
                 <div style="margin-top: {{$spacer}}"></div>
-
-
                 <div class="table-responsive-sm">
-
-                    @if ($order->services->count())
-                        <div class="mt-5">
-                            <p><strong>Services</strong></p>
-                            <table class="table table-sm w-100">
-                                <thead>
-                                    <tr>
-                                        <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="center">#</th>
-                                        <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Item</th>
-                                        <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Description</th>
-                                        <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="right">Price</th>
-                                        <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:center" class="center">Qty</th>
-                                        <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:right" class="right">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                    <div class="mt-5">
+                        <p><strong>Services</strong></p>
+                        <table class="table table-sm w-100">
+                            <thead>
+                                <tr>
+                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="center">#</th>
+                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Item</th>
+                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Description</th>
+                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="right">Price</th>
+                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:center" class="center">Qty</th>
+                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:right" class="right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $serviceSubTotal = 0;
+                                @endphp
+                                @foreach ($order->services as $service)
                                     @php
-                                        $serviceSubTotal = 0;
+                                        $serviceSubTotal += $service->quantity * $service->price;
                                     @endphp
-                                    @foreach ($order->services as $service)
-                                        @php
-                                            $serviceSubTotal += $service->quantity * $service->price;
-                                        @endphp
-                                        <tr>
-                                            <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="center"><small>{{$loop->iteration}}</small></td>
-                                            <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left strong"><small>{{$service->service->name}}</small></td>
-                                            <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left">
-                                                <small style="text-decoration: underline;">Measurments:</small><small>&nbsp;</small>
-                                                @foreach ($service->serviceMeasurements as $measurement)
-                                                    <small class="">
-                                                        {{Str::of($measurement->measurement->name)->headLine()}} : {{$measurement->size}}
-                                                    </small>
-                                                @endforeach
-                                                <br/>
-                                                <small style="text-decoration: underline;">Designs:</small><small>&nbsp;</small>
-                                                @foreach ($service->serviceDesigns as $design)
-                                                    <small class="">
-                                                        {{Str::of($design->design!=null ? $design->design->name: $design->design_name)->headLine()}} : {{$design->style!=null?$design->style->name:$design->style_name}}
-                                                    </small>
-                                                @endforeach
-                                            </td>
-                                            <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="right"><small>{{$service->price}}</small></td>
-                                            <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:center" class="center"><small>{{$service->quantity}}</small></td>
-                                            <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:right" class="right"><small>{{$service->quantity * $service->price}}</small></td>
-                                        </tr>
-                                    @endforeach
-
                                     <tr>
-                                        <td colspan="6" style="text-align: right"><small><strong>Total: {{$serviceSubTotal}}</strong></small></td>
+                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="center"><small>{{$loop->iteration}}</small></td>
+                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left strong"><small>{{$service->service->name}}</small></td>
+                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left">
+                                            <small style="text-decoration: underline;">Measurments:</small><small>&nbsp;</small>
+                                            @foreach ($service->serviceMeasurements as $measurement)
+                                                <small class="">
+                                                    {{Str::of($measurement->measurement->name)->headLine()}} : {{$measurement->size}}
+                                                </small>
+                                            @endforeach
+                                            <br/>
+                                            <small style="text-decoration: underline;">Designs:</small><small>&nbsp;</small>
+                                            @foreach ($service->serviceDesigns as $design)
+                                                <small class="">
+                                                    {{Str::of($design->design!=null ? $design->design->name: $design->design_name)->headLine()}} : {{$design->style!=null?$design->style->name:$design->style_name}}
+                                                </small>
+                                            @endforeach
+                                        </td>
+                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="right"><small>{{$service->price}}</small></td>
+                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:center" class="center"><small>{{$service->quantity}}</small></td>
+                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:right" class="right"><small>{{$service->quantity * $service->price}}</small></td>
                                     </tr>
+                                @endforeach
 
-                                </tbody>
-                            </table>
-                        </div>
-                    @endif
+                                <tr>
+                                    <td colspan="6" style="text-align: right"><small><strong>Total: {{$serviceSubTotal}}</strong></small></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
                     @if ($order->products->count())
                         <div class="mt-5">
                             <p><strong>Products</strong></p>

@@ -1,21 +1,15 @@
 <?php
 
 namespace App\DataTables;
-
 use App\Models\Order;
 use App\Constant\ServiceStatus;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
-
-class OrderDataTable extends DataTable
+class SaleDataTable extends DataTable
 {
+    protected $tableId = 'sale-table';
 
-    protected $tableId = 'order-table';
-
-    public function dataTable(Request $request,$query)
-    {
+    public function dataTable(Request $request,$query){
 
         return datatables()
             ->eloquent($query)
@@ -27,46 +21,38 @@ class OrderDataTable extends DataTable
                     $query->where('name', 'like', '%'.$keyword.'%');
                 });
             })
-            ->addColumn('customer_name', function(Order $order) {
-
-                return $order->customer->name;
-            })->addColumn('status', function(Order $order) {
-
-                $return =  "Pending : ".($order->service_pending).
-                "<br>Processing: ".($order->service_processing).
-                "<br>Ready: ".($order->service_ready);
-
+            ->addColumn('customer_name', function(Order $sale) {
+                return $sale->customer->name;
+            })
+            ->addColumn('transaction', function(Order $sale) {
+                $return =  "Net Payable: ".($sale->netpayable).
+                "<br>Paid: ".($sale->paid);
+                if($sale->netpayable - $sale->paid)
+                $return.="<br>Due: ".($sale->netpayable - $sale->paid);
                 return $return;
             })
-            ->addColumn('transaction', function(Order $order) {
-                $return =  "Net Payable: ".($order->netpayable).
-                "<br>Paid: ".($order->paid);
-                if($order->netpayable - $order->paid)
-                $return.="<br>Due: ".($order->netpayable - $order->paid);
-                return $return;
-            })
-            ->addColumn('actions', function(Order $order) {
+            ->addColumn('actions', function(Order $sale) {
                 $extraButton = "";
-                if($order->paid < $order->netpayable)
+                if($sale->paid < $sale->netpayable)
                     $extraButton = '
-                    <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'" data-due="'.($order->netpayable - $order->paid).'">
+                    <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$sale->id.'" data-due="'.($sale->netpayable - $sale->paid).'">
                         <i class="fa fa-edit" aria-hidden="true">
                         Take
                         </i>
                     </a>';
-                return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','orders')->with('param','order')->with('value',$order)
+                return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','sales')->with('param','sale')->with('value',$sale)
                 ->with('enableBottomMargin', true)->render();
             })
-            ->addColumn('print', function(Order $order) {
+            ->addColumn('print', function(Order $sale) {
                 return '
-                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm mr-2 mb-2" href="'.route('makeInvoice',['order'=>$order]).'">
+                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm mr-2 mb-2" href="'.route('makeInvoice',['order'=>$sale]).'">
                         <i class="fa fa-edit" aria-hidden="true">
                         Print Invoice
                         </i>
                     </a>';
             })
             ->addIndexColumn()
-            ->rawColumns(['actions','status','transaction','print']);
+            ->rawColumns(['actions','transaction','print']);
     }
 
     public function query(Order $model)
@@ -77,7 +63,7 @@ class OrderDataTable extends DataTable
             'services as service_pending' => function($query){ $query->where('status', ServiceStatus::PENDING);}
         ])->withCount([
             'services as service_ready' => function($query){ $query->where('status', ServiceStatus::READY);}
-        ])->whereIsSale(0)->paidRaw();
+        ])->whereIsSale(1)->paidRaw();
     }
 
     public function getColumns():array
@@ -86,7 +72,6 @@ class OrderDataTable extends DataTable
             Column::computed('index','SL')->width(20),
             Column::make('invoice_no'),
             Column::make('customer_name'),
-            Column::computed('status'),
             Column::computed('transaction')->addClass('due'),
             Column::computed('print'),
             Column::computed('actions')
@@ -100,7 +85,7 @@ class OrderDataTable extends DataTable
 
     protected function filename()
     {
-        return 'Order_' . date('YmdHis');
+        return 'Sale_' . date('YmdHis');
     }
 
     public function getFilters()

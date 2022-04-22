@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\ProductController;
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function(){
     Route::resource('/bank_accounts',BankAccountController::class);
     Route::resource('/services',ServiceController::class);
     Route::resource('/orders',OrderController::class);
+    Route::resource('/sales',SaleController::class);
     Route::post('orders/{order}/take-payment',[OrderController::class,'takePayment']);
     Route::get('orders/{order}/invoice',[OrderController::class,'makeInvoice'])->name('makeInvoice');
 
