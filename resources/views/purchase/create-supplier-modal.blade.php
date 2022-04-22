@@ -1,27 +1,27 @@
-<div class="modal" tabindex="-1" role="dialog" id="create-customer-modal">
+<div class="modal" tabindex="-1" role="dialog" id="create-supplier-modal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Add Customer</h5>
+          <h5 class="modal-title">Add Supplier</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
             <div class="c">
-                <form method="POST" action="{{route('customers.store')}}" id="customer-create-form">
+                <form method="POST" action="{{route('suppliers.store')}}" id="supplier-create-form">
                     <div class="form-group" id="name">
-                        <label class="form-inline">Customer Name</label>
-                        <input type="text" name="name" id="empName" class="form-control" placeholder="Enter Customer Name">
+                        <label class="form-inline">Supplier Name</label>
+                        <input type="text" name="name" id="empName" class="form-control" placeholder="Enter Supplier Name">
                     </div>
                     <div class="form-group" id="mobile">
-                        <label class="form-inline">Customer Mobile</label>
-                        <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Enter Customer Mobile">
+                        <label class="form-inline">Supplier Mobile</label>
+                        <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Enter Supplier Mobile">
                     </div>
 
                     <div class="form-group" id="address">
-                        <label class="form-inline">Customer Address</label>
-                        <textarea name="address" id="address" class="form-control" placeholder="Enter Customer Address"></textarea>
+                        <label class="form-inline">Supplier Address</label>
+                        <textarea name="address" id="address" class="form-control" placeholder="Enter Supplier Address"></textarea>
                     </div>
 
 
@@ -41,14 +41,14 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
 
-        var modalView =  $('#create-customer-modal');
+        var modalView =  $('#create-supplier-modal');
         modalView.on('hidden.bs.modal', function (e) {
             $(this).find('.error').remove();
             $(this).find("input").val('')
             $(this).find("textarea").val('')
         })
 
-        $('#customer-create-form').on('submit', function(event){
+        $('#supplier-create-form').on('submit', function(event){
             event.preventDefault();
 
             var url = $(this).attr('action');

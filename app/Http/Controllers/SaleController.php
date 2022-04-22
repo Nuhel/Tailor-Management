@@ -45,7 +45,7 @@ class SaleController extends Controller
     }
 
     public function update(SaleRequest $request, Order $sale){
-        return $this->redirectWithAlert((new SaleService($sale,$request))->handelOrder());
+        return $this->redirectWithAlert((new SaleService($sale,$request))->handelOrder()?true:false);
     }
 
     public function destroy(Order $sale){

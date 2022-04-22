@@ -29,6 +29,7 @@
                                 ->render()
                             !!}
                             {!!Form::input()->setName('price')->setValue(old('price',$product->price))->setLabel('Product Price')->setPlaceholder('Product Price')->setType('number')->render()!!}
+                            {!!Form::input()->setName('price')->setValue(old('supplier_price',$product->supplier_price))->setLabel('Supplier Price')->setPlaceholder('Supplier Price')->setType('number')->render()!!}
                             {!!Form::input()->setName('stock')->setValue(old('stock',$product->stock))->setLabel('Product Stock')->setPlaceholder('Product Stock')->setType('number')->render()!!}
 
 

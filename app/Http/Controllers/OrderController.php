@@ -66,7 +66,7 @@ class OrderController extends Controller
     }
 
     public function update(OrderRequest $request, Order $order){
-        return $this->redirectWithAlert((new ServicesOrderService($order,$request))->handelOrder());
+        return $this->redirectWithAlert((new ServicesOrderService($order,$request))->handelOrder()?true:false);
     }
 
     public function destroy(Order $order){

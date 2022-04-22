@@ -55,6 +55,7 @@ class ProductController extends Controller
             "name" => "required|string|max:100",
             "category_id" => "required|numeric|exists:App\Models\Category,id",
             "price" => "required|numeric",
+            "supplier_price" => "nullable|numeric",
             'stock' => 'required|numeric'
         ]);
 
@@ -69,6 +70,7 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->category_id = $request->category_id;
         $product->price = $request->price;
+        $product->supplier_price = $request->supplier_price;
         $product->stock = $request->stock;
         return $this->redirectWithAlert($product->save());
 
@@ -105,6 +107,7 @@ class ProductController extends Controller
             "name" => "required|string|max:100",
             "category_id" => "required|numeric|exists:App\Models\Category,id",
             "price" => "required|numeric",
+            "supplier_price" => "nullable|numeric",
             'stock' => 'required|numeric'
         ]);
 
@@ -117,6 +120,7 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->category_id = $request->category_id;
         $product->price = $request->price;
+        $product->supplier_price = $request->supplier_price;
         $product->stock = $request->stock;
         return $this->redirectWithAlert($product->update());
     }

@@ -13,7 +13,7 @@ class SupplierController extends Controller
     use BasicPersonTrait;
 
     public function index(SupplierDataTable $dataTable){
-        return $dataTable->render('components.datatable.index',['heading'=>'Employees']);
+        return $dataTable->render('components.datatable.index',['heading'=>'Suppliers']);
     }
 
     public function create(){
@@ -24,9 +24,19 @@ class SupplierController extends Controller
     }
 
 
-    public function store(BasicPersonRequest $request){
+
+
+    public function store(BasicPersonRequest $request)
+    {
         $supplier = new Supplier();
-        return $this->redirectWithAlert($this->storePerson($request,$supplier));
+        $this->storePerson($request,$supplier);
+
+        if($request->wantsJson()){
+            return response($supplier->toJson());
+        }else{
+            return $this->redirectWithAlert();
+        }
+        return redirect(route('suppliers.index'));
     }
 
 

@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Requests;
-use App\Rules\EnsureStock;
 use Illuminate\Validation\Rule;
 use App\Services\SaleService;
 
-class SaleRequest extends BaseRequest
+class PurchaseRequest extends BaseRequest
 {
 
     public function authorize()
@@ -22,23 +21,6 @@ class SaleRequest extends BaseRequest
 
     public function rules()
     {
-
-        $order  = $this->route('sale');
-        if($order != null){
-            $order  = SaleService::attachRelationalData($order, true)->find($order->id);
-        }
-
-
-        $accountIdRule = [
-            Rule::requiredIf(function(){
-                return $this->bank_type!="Cash Payment";
-            })
-        ];
-
-        if($this->bank_type!="Cash Payment"){
-            $accountIdRule[] = 'exists:bank_accounts,id';
-        }
-
         $aditionalRule = [
             'products'                          =>  'nullable|array',
             'products.*.id'                     =>  [Rule::requiredIf(function(){
@@ -46,21 +28,20 @@ class SaleRequest extends BaseRequest
             }),'numeric','exists:products,id'],
             'products.*.quantity'               =>  [Rule::requiredIf(function(){
                 return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
-            }),'numeric','max:99999','min:1', new EnsureStock($this->products,$this->route(),$order) ],
+            }),'numeric','max:99999','min:1'],
             'products.*.price'                  =>  [Rule::requiredIf(function(){
                 return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
             }),'numeric','max:99999','min:1'],
         ];
 
         $basicRule =  [
-            'customer_id'                       =>  'required|numeric|exists:customers,id',
-            'account_id'                        =>  $accountIdRule,
+            'supplier_id'                       =>  'required|numeric|exists:customers,id',
             'total'                             =>  'required|numeric|min:0',
             'discount'                          =>  'nullable|numeric|min:0',
             'netpayable'                        =>  'required|numeric|gte:paid|gte:due',
             'paid'                              =>  'required|numeric|min:0',
             'due'                               =>  'required|numeric|min:0',
-            'order_date'                        =>  'required|date',
+            'purchase_date'                     =>  'required|date',
         ];
 
         return array_merge($basicRule,$aditionalRule);

@@ -3,6 +3,7 @@
         'employees',
         'employee-payments',
         'masters',
+        'suppliers',
         'customers',
         'categories',
         'products',
@@ -10,6 +11,8 @@
         'bank_accounts',
         'services',
         'orders',
+        'sales',
+        'purchases'
     ];
 
     $resourceRoutes = [
