@@ -28,7 +28,7 @@ class ReadyDataTable extends DataTable
                 $table = "<table class='table table-sm m-0'>
                             <thead>
                                 <tr>
-                                    <th> Name</th>
+                                    <th>Name - Qty</th>
                                     <th class='text-right'>CraftsMan</th>
                                 </tr>
                             </thead>
@@ -36,15 +36,11 @@ class ReadyDataTable extends DataTable
                         ";
                 foreach($order->services as $service){
                     $hasEmployee = $service->employee != null?true:false;
-                    // $button = "<a href='' class='btn-clipboard' data-toggle='modal' data-target='#asign-craftsman-modal' data-id='".$service->id."'> "
-                    //     .($hasEmployee? $service->employee->name :"Send To Production")
-                    //     .($hasEmployee?"<i class='fa fa-edit ml-2' aria-hidden='true'></i>":"").
-                    //     "</a>";
 
                     $button = "Prepared By ".$service->employee->name;
 
                     $table .= "<tr>
-                                    <td><small>".$service->service->name."</small></td>
+                                    <td><small>{$service->service->name} - {$service->quantity}</small></td>
                                     <td class='text-right'><small>".
                                         ($button)."</small></td>
                                 </tr>";
@@ -103,7 +99,7 @@ class ReadyDataTable extends DataTable
         return $this->addVerticalAlignmentToColumns( [
             Column::computed('index','SL')->width(20),
             Column::make('invoice_no'),
-            Column::make('customer_name'),
+            Column::make('customer_name')->width(300),
             Column::computed('services'),
             Column::computed('transaction')->addClass('due'),
             Column::computed('print'),

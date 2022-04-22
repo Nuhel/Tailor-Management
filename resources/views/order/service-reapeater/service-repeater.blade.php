@@ -105,7 +105,7 @@
 
                         var styles = value['styles'];
                         var options = `
-                            <option>Select `+value['name']+`</option>
+                            <option value=''>Select `+value['name']+`</option>
                         `;
                         $.each(styles, function(index,value){
                             options+='<option value="'+value['id']+'">'+value['name']+'</option>'

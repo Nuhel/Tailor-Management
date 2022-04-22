@@ -19,16 +19,12 @@ class OrderDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
-            ->filterColumn('invoice_no', function($query, $keyword) {
-                $query->where('invoice_no', 'like', '%'.$keyword.'%');
-            })
             ->filterColumn('customer_name', function($query, $keyword) {
                 $query->whereHas('customer', function ($query) use($keyword){
                     $query->where('name', 'like', '%'.$keyword.'%');
                 });
             })
             ->addColumn('customer_name', function(Order $order) {
-
                 return $order->customer->name;
             })->addColumn('status', function(Order $order) {
 
@@ -49,22 +45,17 @@ class OrderDataTable extends DataTable
                 $extraButton = "";
                 if($order->paid < $order->netpayable)
                     $extraButton = '
-                    <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'" data-due="'.($order->netpayable - $order->paid).'">
-                        <i class="fa fa-edit" aria-hidden="true">
-                        Take
-                        </i>
+                    <a type="button" class="btn btn-outline-primary btn-sm " data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'" data-due="'.($order->netpayable - $order->paid).'">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </a>
+
+                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm" href="'.route('makeInvoice',['order'=>$order]).'">
+                        <i class="fas fa-print"></i>
                     </a>';
                 return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','orders')->with('param','order')->with('value',$order)
                 ->with('enableBottomMargin', true)->render();
             })
-            ->addColumn('print', function(Order $order) {
-                return '
-                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm mr-2 mb-2" href="'.route('makeInvoice',['order'=>$order]).'">
-                        <i class="fa fa-edit" aria-hidden="true">
-                        Print Invoice
-                        </i>
-                    </a>';
-            })
+
             ->addIndexColumn()
             ->rawColumns(['actions','status','transaction','print']);
     }
@@ -85,11 +76,12 @@ class OrderDataTable extends DataTable
         return $this->addVerticalAlignmentToColumns( [
             Column::computed('index','SL')->width(20),
             Column::make('invoice_no'),
-            Column::make('customer_name'),
+            Column::make('order_date'),
+            Column::computed('customer_name'),
             Column::computed('status'),
             Column::computed('transaction')->addClass('due'),
-            Column::computed('print'),
-            Column::computed('actions')
+            //Column::computed('print'),
+            Column::computed('actions')->addClass('align-middle')
                   ->exportable(false)
                   ->printable(false)
                   ->width(160)
@@ -107,7 +99,12 @@ class OrderDataTable extends DataTable
     {
         return [
             '1'=>'Invoice',
-            '2'=>'Customer Name',
+            '2'=> [
+                'name' => 'Order Date',
+                'type' => 'date'
+            ],
+            '3'=>'Customer Name',
+
         ];
     }
 

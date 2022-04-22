@@ -31,7 +31,7 @@ class ProcessingDataTable extends DataTable
                 $table = "<table class='table table-sm m-0'>
                             <thead>
                                 <tr>
-                                    <th> Name</th>
+                                    <th>Name - Qty</th>
                                     <th class='text-right'>CraftsMan</th>
                                     <th class='text-right'>Ready</th>
                                 </tr>
@@ -46,7 +46,7 @@ class ProcessingDataTable extends DataTable
                         "</a>";
 
                         $table .= "<tr>
-                            <td><small>".$service->service->name."</small></td>
+                            <td><small>{$service->service->name} - {$service->quantity}</small></td>
                             <td class='text-right'>
                                     <small>".($button)."</small>
 

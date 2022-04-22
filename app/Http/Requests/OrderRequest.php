@@ -23,7 +23,7 @@ class OrderRequest extends BaseRequest
 
     public function rules()
     {
-
+        dd($this->toArray());
         $order  = $this->route('order');
         if($order != null){
             $order  = ServiceOrderService::attachRelationalData($order, true)->find($order->id);
@@ -68,8 +68,8 @@ class OrderRequest extends BaseRequest
             'services.*.measurements.*.id'      =>  'required|numeric|exists:service_measurements,id',
 
             'services.*.designs'                =>  'required|array',
-            'services.*.designs.*.id'           =>  'required|numeric|exists:service_designs,id',
-            'services.*.designs.*.style_id'     =>  'required|numeric|exists:service_design_styles,id',
+            'services.*.designs.*.id'           =>  'nullable|numeric|exists:service_designs,id',
+            'services.*.designs.*.style_id'     =>  'nullable|numeric|exists:service_design_styles,id',
 
             'account_id'                        =>  $accountIdRule,
             'total'                             =>  'required|numeric|min:0',

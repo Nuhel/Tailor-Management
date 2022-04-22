@@ -43,15 +43,23 @@
             var columns = $('#{{$datatableId}}').dataTable().api().columns();
             columns.every(function () {
                 var column = this;
-                if(filters[column.index()] !== undefined){
-                    var input = $('<input/>', {
-                        class: 'w-100 form-control form-control-sm rounded',
-                        placeholder: filters[column.index()]
-                    }).on('change', function () {
-                        column.search($(this).val(), false, false, true).draw();
-                    }).wrap('<div>').parent().addClass('form-group')
-                    .wrap('<div>').parent().addClass('col-sm-12 col-md')
-                    .appendTo($('#{{$datatableId}}-search'));
+                var filter = filters[column.index()]
+                if(filter !== undefined){
+                    //console.log(typeof filter);
+                    if(typeof filter === 'string' ){
+                        var input = $('<input/>', {
+                            class: 'w-100 form-control form-control-sm rounded',
+                            placeholder: filter
+                        }).on('change', function () {
+                            column.search($(this).val(), false, false, true).draw();
+                        }).wrap('<div>').parent().addClass('form-group')
+                        .wrap('<div>').parent().addClass('col-sm-12 col-md')
+                        .appendTo($('#{{$datatableId}}-search'));
+                    }else if(typeof filter === 'object'){
+                        console.log(filter.name);
+                        console.log(filter.type);
+                    }
+
                 }
 
             });

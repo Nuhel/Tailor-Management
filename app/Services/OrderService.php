@@ -151,20 +151,30 @@ class OrderService{
     public function attachDesignToService(OrderServiceModel $service, Collection $designs){
         $designs = $designs->map(function($value){
 
-            $fallbackDesign = $this->designs->where('id',$value['id'])->first();
-            $fallbackDesignName = $fallbackDesign!=null?$fallbackDesign->name:"";
+            if($value['style_id'] != null){
+                $fallbackDesign = $this->designs->where('id',$value['id'])->first();
+                $fallbackDesignName = $fallbackDesign!=null?$fallbackDesign->name:"";
 
-            $fallbackStyle = $this->styles->where('id',$value['style_id'])->first();
-            $fallbackStyleName = $fallbackStyle!=null?$fallbackStyle->name:"";
+                $fallbackStyle = $this->styles->where('id',$value['style_id'])->first();
+                $fallbackStyleName = $fallbackStyle!=null?$fallbackStyle->name:"";
 
-            $design                             = new OrderServicDesign();
-            $design->service_design_id          = $value['id'];
-            $design->design_name                = $fallbackDesignName;
-            $design->service_design_style_id    = $value['style_id'];
-            $design->style_name                 = $fallbackStyleName;
-            return $design;
+                $design                             = new OrderServicDesign();
+                $design->service_design_id          = $value['id'];
+                $design->design_name                = $fallbackDesignName;
+                $design->service_design_style_id    = $value['style_id'];
+                $design->style_name                 = $fallbackStyleName;
+                return $design;
+            }
+
+
+        })->filter(function ($designs, $key) {
+            return $designs != null;
         });
-        $service->serviceDesigns()->saveMany($designs);
+
+        if($designs->count()){
+            $service->serviceDesigns()->saveMany($designs);
+        }
+
     }
 
     public function deleteRelatedData(){

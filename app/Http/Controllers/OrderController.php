@@ -35,6 +35,7 @@ class OrderController extends Controller
 
 
     public function store(OrderRequest $request){
+        //dd($request->toArray());
         $order = (new ServicesOrderService(null,$request))->handelOrder();
         if($order && ($request->print == 'true')){
             return redirect(route('makeInvoice',['order'=>$order]));
