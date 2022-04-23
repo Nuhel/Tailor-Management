@@ -2,10 +2,11 @@
 namespace App\DataTables\Productions;
 
 
+use Carbon\Carbon;
 use App\Models\Order;
-use App\Constant\ServiceStatus;
 use Illuminate\Http\Request;
 use App\DataTables\DataTable;
+use App\Constant\ServiceStatus;
 use Yajra\DataTables\Html\Column;
 
 class ProcessingDataTable extends DataTable
@@ -17,6 +18,22 @@ class ProcessingDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
+            ->filter(function ($query) use ($request) {
+                if($request->has('from') && strlen($request->from)){
+                    try{
+                        return $query->whereDate('order_date', '>=', Carbon::parse($request->from));
+                    }catch(\Exception $e){
+                        return $query;
+                    }
+                }
+                if($request->has('to') && strlen($request->to)){
+                    try{
+                        return $query->whereDate('order_date', '<=', Carbon::parse($request->to));
+                    }catch(\Exception $e){
+                        return $query;
+                    }
+                }
+            })
             ->filterColumn('invoice_no', function($query, $keyword) {
                 $query->where('invoice_no', 'like', '%'.$keyword.'%');
             })
@@ -94,9 +111,27 @@ class ProcessingDataTable extends DataTable
     }
 
     public function html(){
-        $htmlBuilder = parent::html();
-        return $htmlBuilder->minifiedAjax( route('productions.processing') );
+        return parent::html()->initComplete('function(settings, json){
+            var dtTable = $(this).dataTable().api();
+            $("#'.$this->tableId.'-search .from").on("keyup change",function() {
+                dtTable.draw();
+            });
+
+            $("#'.$this->tableId.'-search .to").on("keyup change",function() {
+                dtTable.draw();
+            });
+
+        }')
+        ->ajax([
+            'url' => route('productions.processing'),
+            'data' => 'function(data){
+                data.from = $("#'.$this->tableId.'-search .from").val();
+                data.to = $("#'.$this->tableId.'-search .to").val();
+            }'
+        ]);
     }
+
+
 
     public function query(Order $model)
     {
@@ -114,6 +149,8 @@ class ProcessingDataTable extends DataTable
         return $this->addVerticalAlignmentToColumns( [
             Column::computed('index','SL')->width(20),
             Column::make('invoice_no')->width(100),
+            Column::make('order_date'),
+            Column::make('delivery_date'),
             Column::make('customer_name'),
             Column::computed('services')->width(300),
             Column::computed('transaction')->addClass('due'),

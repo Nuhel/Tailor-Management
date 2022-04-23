@@ -90,7 +90,20 @@ class OrderDataTable extends DataTable
     }
 
     public function html(){
-        return parent::html()->ajax([
+        return parent::html()
+        //->parameters()
+        ->initComplete('function(settings, json){
+            var dtTable = $(this).dataTable().api();
+            $(".from").on("keyup change",function() {
+                dtTable.draw();
+            });
+
+            $(".to").on("keyup change",function() {
+                dtTable.draw();
+            });
+
+        }')
+        ->ajax([
             'data' => 'function(data){
                 data.from = $(".from").val();
                 data.to = $(".to").val();

@@ -6,6 +6,18 @@
         <div  class="only-bottom-border mb-3">
             <p>Filters</p>
             <div id="{{$datatableId}}-search" class="row">
+                <div class="col-sm-12 col-md">
+                    <div class="form-group">
+                        <input type="date" class="w-100 form-control form-control-sm rounded from"
+                            placeholder="From Date">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md">
+                    <div class="form-group">
+                        <input type="date" class="w-100 form-control form-control-sm rounded to"
+                            placeholder="To Date">
+                    </div>
+                </div>
             </div>
         </div>
         {!! $dataTable->table() !!}
