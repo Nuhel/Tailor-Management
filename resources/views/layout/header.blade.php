@@ -18,6 +18,10 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{route('productions.index')}}" class="nav-link">Productions</a>
       </li>
+
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{route('profit-report')}}" class="nav-link">Profit Report</a>
+      </li>
     </ul>
 
     <!-- Right navbar links -->

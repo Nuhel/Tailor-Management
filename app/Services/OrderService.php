@@ -96,9 +96,10 @@ class OrderService{
                 if($value == null)
                     return null;
                 $product = new OrderProduct();
-                $product->product_id    = $value['id'];
-                $product->price         = $value['price'];
-                $product->quantity      = $value['quantity'];
+                $product->product_id        = $value['id'];
+                $product->price             = $value['price'];
+                $product->supplier_price    = $value['supplier_price'];
+                $product->quantity          = $value['quantity'];
 
                 $productStockUpdate[] = [
                     'id' => $value['id'],

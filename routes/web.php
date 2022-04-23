@@ -16,6 +16,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\EmployeePaymentController;
+use App\Http\Controllers\ReportController;
 
 Auth::routes();
 
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function(){
         Route::post('productions/sent-to-production/{orderService}','sentToProduction')->name('productions.sentToProduction');
         Route::post('productions/make-ready/{orderService}','makeReady')->name('productions.makeReady');
     });
+
+    Route::get('profit-report',[ReportController::class,'profit'])->name('profit-report');
 
 });
 

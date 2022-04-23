@@ -42,6 +42,7 @@
                             ->setEnableLabel(false)->setPlaceHolder('price')
                             ->setValue(old('products.'.$loop->index.'.price',$item['price']))
                             ->setType('number')->setError('products.'.$loop->index.'.price')!!}
+                            <input type="hidden" name={{'products['.$loop->index.'][supplier_price]'}} value="{{old('products.'.$loop->index.'.supplier_price',$item['supplier_price'])}}">
 
                         </td>
                         <td >

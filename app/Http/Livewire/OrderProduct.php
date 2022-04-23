@@ -26,6 +26,7 @@ class OrderProduct extends Component
                 $this->addProductToSelected(
                     Arr::get($oldItem,'product_id', $oldItem['id']),
                     $oldItem['price'],
+                    $oldItem['supplier_price'],
                     $oldItem['quantity']
             );
         }
@@ -39,6 +40,7 @@ class OrderProduct extends Component
                 [
                     'product'   => $product,
                     'price'     => $price??$product['price'],
+                    'supplier_price' =>$product['supplier_price'],
                     'quantity'  => $quantity,
                     'stock'       => $product['stock']
                 ]
