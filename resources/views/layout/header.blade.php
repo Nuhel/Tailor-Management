@@ -20,7 +20,7 @@
       </li>
 
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{route('profit-report')}}" class="nav-link">Profit Report</a>
+        <a href="{{route('order-report')}}" class="nav-link">Order Report</a>
       </li>
     </ul>
 

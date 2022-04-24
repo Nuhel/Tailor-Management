@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function(){
         Route::post('productions/make-ready/{orderService}','makeReady')->name('productions.makeReady');
     });
 
-    Route::get('profit-report',[ReportController::class,'profit'])->name('profit-report');
+    Route::get('order-report',[ReportController::class,'orderReport'])->name('order-report');
 
 });
 
