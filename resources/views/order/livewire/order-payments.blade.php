@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-4">
-        <div class="form-group">
+        <div class="form-group" id="">
             <small>Transaction Type</small>
             <select wire:model="bankType" name="bank_type" id="" class="form-control form-control-sm">
                 @foreach ($bankTypes as $bankType)
@@ -11,7 +11,7 @@
     </div>
 
     <div class="col-md-4">
-        <div class="form-group">
+        <div class="form-group" id="">
             <small>Select Bank</small>
             <select wire:model="bankId" name="bank_id" id="" class="form-control form-control-sm">
                 <option value="">Select Bank</option>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="col-md-4">
-        <div class="form-group">
+        <div class="form-group" id="account_id">
             <small>Select Account</small>
             <select name="account_id" id="" class="form-control form-control-sm" >
                 <option value="">Select Account</option>

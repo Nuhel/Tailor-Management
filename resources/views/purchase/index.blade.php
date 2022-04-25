@@ -14,9 +14,11 @@
 
 
 @section('css')
+    @livewireStyles
     @stack('inner-css')
 @endsection
 
 @section('script')
     @stack('inner-script')
+    @livewireScripts
 @endsection

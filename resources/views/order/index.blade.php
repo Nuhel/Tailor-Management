@@ -1,6 +1,7 @@
 @extends('layout.layout')
 
 @section('css')
+    @stack('inner-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/datatables/css/datatable.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/datatables/css/datatable-extended.css') }}" />
 @endsection
@@ -46,9 +47,8 @@
 
 
 
-
-
 @section('script')
+    @livewireScripts
     <script src="{{ asset('/vendor/datatables/datatable.js') }}"></script>
     <script src="{{ asset('/vendor/datatables/buttons.js') }}"></script>
     <script src="{{ asset('/vendor/datatables/buttons.server-side.js') }}"></script>

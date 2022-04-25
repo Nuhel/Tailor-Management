@@ -66,7 +66,7 @@ class SaleService{
             }
             $amountToAttach = $this->getPaymentAmount();
             if($amountToAttach){
-                $this->attachPayment($amountToAttach);
+                $this->attachPayment($amountToAttach,$this->request->account_id);
             }
 
 
@@ -77,6 +77,7 @@ class SaleService{
                 $product = new OrderProduct();
                 $product->product_id    = $value['id'];
                 $product->price         = $value['price'];
+                $product->supplier_price    = $value['supplier_price'];
                 $product->quantity      = $value['quantity'];
 
                 $productStockUpdate[] = [
@@ -161,8 +162,8 @@ class SaleService{
         }
     }
 
-    public function attachPayment($amount){
-        return self::attachPaymentToOrder($this->order, $amount);
+    public function attachPayment($amount,$account_id){
+        return self::attachPaymentToOrder($this->order, $amount,null, $account_id);
     }
 
     /**
@@ -174,12 +175,16 @@ class SaleService{
      * @return bool
      */
 
-    static function attachPaymentToOrder(Order $order, $amount,$date = null){
+    static function attachPaymentToOrder(Order $order, $amount,$date = null, $account_id){
         $payment = new Transaction();
         $payment->transaction_date  = $date??$order->order_date;
         $payment->amount            = $amount;
         $payment->type              = "Debit";
         $payment->description       = "Paid To Order";
+        if($order->account_id != null){
+            $payment->sourceable_type = 'App\Models\BankAccount';
+            $payment->sourceable_id = $order->account_id;
+        }
         return $order->payments()->save($payment);
     }
 

@@ -21,6 +21,16 @@ class PurchaseRequest extends BaseRequest
 
     public function rules()
     {
+
+        $accountIdRule = [
+            Rule::requiredIf(function(){
+                return $this->bank_type!="Cash Payment";
+            })
+        ];
+
+        if($this->bank_type!="Cash Payment"){
+            $accountIdRule[] = 'exists:bank_accounts,id';
+        }
         $aditionalRule = [
             'products'                          =>  'nullable|array',
             'products.*.id'                     =>  [Rule::requiredIf(function(){
@@ -32,6 +42,7 @@ class PurchaseRequest extends BaseRequest
             'products.*.price'                  =>  [Rule::requiredIf(function(){
                 return (is_array($this->products) && count($this->products) && $this->products[0]!= null);
             }),'numeric','max:99999','min:1'],
+            'account_id'                        =>  $accountIdRule,
         ];
 
         $basicRule =  [

@@ -70,7 +70,7 @@ class OrderService{
             }
             $amountToAttach = $this->getPaymentAmount();
             if($amountToAttach){
-                $this->attachPayment($amountToAttach);
+                $this->attachPayment($amountToAttach,$this->request->account_id);
             }
 
 
@@ -118,7 +118,7 @@ class OrderService{
             DB::commit();
             return $this->order;
         }catch(\Exception $e){
-            dd($e);
+
             DB::rollBack();
         }
         return false;
@@ -227,8 +227,8 @@ class OrderService{
         }
     }
 
-    public function attachPayment($amount){
-        return self::attachPaymentToOrder($this->order, $amount);
+    public function attachPayment($amount, $account_id){
+        return self::attachPaymentToOrder($this->order, $amount,null, $account_id);
     }
 
     /**
@@ -240,12 +240,17 @@ class OrderService{
      * @return bool
      */
 
-    static function attachPaymentToOrder(Order $order, $amount,$date = null){
+    static function attachPaymentToOrder(Order $order, $amount,$date = null, $account_id){
         $payment = new Transaction();
         $payment->transaction_date  = $date??$order->order_date;
         $payment->amount            = $amount;
         $payment->type              = "Debit";
         $payment->description       = "Paid To Order";
+
+        if($account_id != null){
+            $payment->sourceable_type = 'App\Models\BankAccount';
+            $payment->sourceable_id = $account_id;
+        }
         return $order->payments()->save($payment);
     }
 

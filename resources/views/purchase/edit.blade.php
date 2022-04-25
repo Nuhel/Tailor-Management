@@ -61,6 +61,16 @@
 
                             <div class="card">
                                 <div class="card-body">
+                                    @livewire('order-payments',[
+                                        "bankType"=>old('bank_type'),
+                                        "bankId"=>old('bank_id'),
+                                        "accountId"=>old('account_id'),
+                                    ])
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
                                     <p>Payments</p>
                                     <table class="table table-sm ">
                                         <tbody>

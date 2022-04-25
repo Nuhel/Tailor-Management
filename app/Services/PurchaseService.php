@@ -45,8 +45,6 @@ class PurchaseService{
             $this->purchase->netpayable      = $this->request->netpayable;
             $this->purchase->initially_paid  = $this->request->paid;
             $this->purchase->initial_due     = $this->request->due;
-
-
             if($this->onEdit){
                 $this->purchase->update();
             }else{
@@ -54,7 +52,7 @@ class PurchaseService{
             }
             $amountToAttach = $this->getPaymentAmount();
             if($amountToAttach){
-                $this->attachPayment($amountToAttach);
+                $this->attachPayment($amountToAttach,$this->request->account_id);
             }
 
 
@@ -147,17 +145,21 @@ class PurchaseService{
         }
     }
 
-    public function attachPayment($amount){
-        return self::attachPaymentToPurchase($this->purchase, $amount);
+    public function attachPayment($amount,$account_id){
+        return self::attachPaymentToPurchase($this->purchase, $amount,null,$account_id);
     }
 
 
-    static function attachPaymentToPurchase(Purchase $purchase, $amount,$date = null){
+    static function attachPaymentToPurchase(Purchase $purchase, $amount,$date = null, $account_id){
         $payment = new Transaction();
         $payment->transaction_date  = $date??$purchase->purchase_date;
         $payment->amount            = $amount;
         $payment->type              = "Credit";
         $payment->description       = "Paid To Purchase";
+        if($account_id != null){
+            $payment->sourceable_type = 'App\Models\BankAccount';
+            $payment->sourceable_id = $account_id;
+        }
         return $purchase->payments()->save($payment);
     }
 

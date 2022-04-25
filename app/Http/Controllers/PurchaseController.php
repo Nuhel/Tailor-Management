@@ -54,7 +54,7 @@ class PurchaseController extends Controller
     }
 
     public function takePayment(PurchasePaymentRequest $request,Purchase $purchase){
-        PurchaseService::attachPaymentToPurchase($purchase,$request->amount,$request->date);
+        PurchaseService::attachPaymentToPurchase($purchase,$request->amount,$request->date,$request->account_id);
         echo "Success";
     }
 

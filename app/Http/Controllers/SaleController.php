@@ -53,7 +53,7 @@ class SaleController extends Controller
     }
 
     public function takePayment(OrderPaymentRequest $request,Order $sale){
-        SaleService::attachPaymentToOrder($sale,$request->amount,$request->date);
+        SaleService::attachPaymentToOrder($sale,$request->amount,$request->date, $request->account_id);
         echo "Success";
     }
 

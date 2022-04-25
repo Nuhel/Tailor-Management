@@ -80,7 +80,7 @@ class OrderController extends Controller
     }
 
     public function takePayment(OrderPaymentRequest $request,Order $order){
-        ServicesOrderService::attachPaymentToOrder($order,$request->amount,$request->date);
+        ServicesOrderService::attachPaymentToOrder($order,$request->amount,$request->date, $request->account_id);
         echo "Success";
     }
 
