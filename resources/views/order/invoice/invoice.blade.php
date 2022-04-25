@@ -223,9 +223,12 @@
 
 
     </div>
-    <div class="mt-2 text-right">
+
+    <div class="my-2 text-center">
+        <a class="btn btn-sm btn-success me-2" href="{{url()->previous()}}">Back To List</a>
         <button class="btn btn-sm btn-primary" id="print">Print</button>
     </div>
+
 
         <!-- jQuery -->
     <script src="{{asset('plugins/jquery/jquery.js')}}"></script>

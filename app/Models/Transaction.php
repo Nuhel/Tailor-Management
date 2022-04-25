@@ -70,4 +70,9 @@ class Transaction extends Model
         $this->type = "Debit";
         return $this->save();
     }
+
+    public function sourceable()
+    {
+        return $this->morphTo();
+    }
 }

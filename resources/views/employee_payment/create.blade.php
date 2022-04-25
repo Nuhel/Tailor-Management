@@ -1,4 +1,7 @@
 @extends('layout.layout')
+@section('css')
+    @livewireStyles
+@endsection
 @section('content')
     <div class="content-wrapper">
         <div class="content pt-5">
@@ -9,6 +12,17 @@
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{route('employee-payments.store')}}">
+
+
+                            <div class="card">
+                                <div class="card-body">
+                                    @livewire('order-payments',[
+                                        "bankType"=>old('bank_type'),
+                                        "bankId"=>old('bank_id'),
+                                        "accountId"=>old('account_id'),
+                                    ])
+                                </div>
+                            </div>
                             @csrf
 
                             {!!
@@ -41,4 +55,7 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    @livewireScripts
 @endsection

@@ -1,4 +1,7 @@
 @extends('layout.layout')
+@section('css')
+    @livewireStyles
+@endsection
 @section('content')
     <div class="content-wrapper">
         <div class="content pt-5">
@@ -11,6 +14,17 @@
                         <form method="POST" action="{{route('employee-payments.update',['employee_payment'=>$employee_payment])}}">
                             @csrf
                             @method('PUT ')
+
+                            <div class="card">
+                                <div class="card-body">
+                                    @livewire('order-payments',[
+                                        "bankType"=>old('bank_type', $bankType),
+                                        "bankId"=>old('bank_id',$bankId),
+                                        "accountId"=>old('account_id',$employee_payment->sourceable_id),
+                                    ])
+                                </div>
+                            </div>
+
                             {!!
                                 Form::select()
                                 ->setLabel('Service')
@@ -41,4 +55,7 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    @livewireScripts
 @endsection

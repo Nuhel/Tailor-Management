@@ -181,9 +181,9 @@ class SaleService{
         $payment->amount            = $amount;
         $payment->type              = "Debit";
         $payment->description       = "Paid To Order";
-        if($order->account_id != null){
+        if($account_id != null){
             $payment->sourceable_type = 'App\Models\BankAccount';
-            $payment->sourceable_id = $order->account_id;
+            $payment->sourceable_id = $account_id;
         }
         return $order->payments()->save($payment);
     }

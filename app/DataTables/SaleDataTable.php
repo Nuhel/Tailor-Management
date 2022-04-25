@@ -37,18 +37,15 @@ class SaleDataTable extends DataTable
                     $extraButton = '
                     <a type="button" class="btn btn-outline-primary btn-sm " data-toggle="modal" data-target="#take-payment-modal" data-id="'.$sale->id.'" data-due="'.($sale->netpayable - $sale->paid).'">
                         <i class="fas fa-hand-holding-usd"></i>
+                    </a>
+
+                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm" href="'.route('makeInvoice',['order'=>$sale]).'">
+                        <i class="fas fa-print"></i>
                     </a>';
                 return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','sales')->with('param','sale')->with('value',$sale)
                 ->with('enableBottomMargin', true)->render();
             })
-            ->addColumn('print', function(Order $sale) {
-                return '
-                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm mr-2 mb-2" href="'.route('makeInvoice',['order'=>$sale]).'">
-                        <i class="fa fa-edit" aria-hidden="true">
-                        Print Invoice
-                        </i>
-                    </a>';
-            })
+
             ->addIndexColumn()
             ->rawColumns(['actions','transaction','print']);
     }
@@ -71,7 +68,6 @@ class SaleDataTable extends DataTable
             Column::make('invoice_no'),
             Column::make('customer_name'),
             Column::computed('transaction')->addClass('due'),
-            Column::computed('print'),
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)

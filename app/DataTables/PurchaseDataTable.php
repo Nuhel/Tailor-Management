@@ -37,6 +37,9 @@ class PurchaseDataTable extends DataTable
                     $extraButton = '
                     <a type="button" class="btn btn-outline-primary btn-sm " data-toggle="modal" data-target="#give-payment-modal" data-id="'.$purchase->id.'" data-due="'.($purchase->netpayable - $purchase->paid).'">
                         <i class="fa-solid fa-dollar-sign"></i>
+                    </a>
+                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm" href="'.route('purchase-invoice',['purchase'=>$purchase]).'">
+                        <i class="fas fa-print"></i>
                     </a>';
                 return view('components.actionbuttons.table_actions')->with('route','purchases')->with('param','purchase')->with('value',$purchase)
                 ->with('extraButton',trim($extraButton))

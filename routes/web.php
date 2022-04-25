@@ -22,7 +22,7 @@ use App\Http\Controllers\ReportController;
 Auth::routes();
 
 Route::middleware('auth')->group(function(){
-    Route::get('/', [OrderController::class,'create'])->name('dashboard');
+    Route::get('/', [OrderController::class,'create']);
     Route::resource('/employees',EmployeeController::class);
     Route::resource('/employee-payments',EmployeePaymentController::class);
     Route::resource('/masters',MasterController::class);
@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function(){
     Route::resource('/sales',SaleController::class);
     Route::resource('/purchases',PurchaseController::class);
     Route::post('purchases/{purchase}/take-payment',[PurchaseController::class,'takePayment']);
+    Route::get('purchases/{purchase}/invoice',[PurchaseController::class,'makeInvoice'])->name('purchase-invoice');
+
 
     Route::controller(ProductionController::class)->group(function(){
         Route::get('productions','index')->name('productions.index');

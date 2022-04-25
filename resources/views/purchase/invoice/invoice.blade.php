@@ -13,7 +13,7 @@
     </style>
 
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
-    <title>Topman {{$order->invoice_no}}</title>
+    <title>Topman {{$purchase->invoice_no}}</title>
 
 
   </head>
@@ -46,9 +46,9 @@
                     </td>
                     <td style="width: 40%; text-align:right">
                         <span>Invoice No:</span><br>
-                        <span>{{$order->invoice_no}}</span><br>
+                        <span>{{$purchase->invoice_no}}</span><br>
                         <span>Date:</span><br>
-                        <span>{{$order->order_date}}</span><br>
+                        <span>{{$purchase->purchase_date}}</span><br>
                     </td>
                 </tr>
             </table>
@@ -56,76 +56,25 @@
             <div class="card-body pt-0" >
                 <div class="row mb-4">
                     <div class="col-sm-6">
-                        <h3 class="text-dark mb-1">Customer Info</h3>
-                        <h5 class="text-dark mb-1">{{$order->customer->name}}</h5>
-                        @if ($order->customer->address)
-                            <div>Address: {{$order->customer->address}}</div>
+                        <h3 class="text-dark mb-1">Supplier Info</h3>
+                        <h5 class="text-dark mb-1">{{$purchase->supplier->name}}</h5>
+                        @if ($purchase->supplier->address)
+                            <div>Address: {{$purchase->supplier->address}}</div>
                         @endif
-                        @if ($order->customer->email)
-                            <div>Email: {{$order->customer->email}}</div>
+                        @if ($purchase->supplier->email)
+                            <div>Email: {{$purchase->supplier->email}}</div>
                         @endif
 
-                        @if ($order->customer->mobile)
-                            <div>Phone: {{$order->customer->mobile}}</div>
+                        @if ($purchase->supplier->mobile)
+                            <div>Phone: {{$purchase->supplier->mobile}}</div>
                         @endif
                     </div>
                 </div>
 
                 <div style="margin-top: {{$spacer}}"></div>
                 <div class="table-responsive-sm">
-                    <div class="mt-5">
-                        <p><strong>Services</strong></p>
-                        <table class="table table-sm w-100">
-                            <thead>
-                                <tr>
-                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="center">#</th>
-                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Item</th>
-                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Description</th>
-                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="right">Price</th>
-                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:center" class="center">Qty</th>
-                                    <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:right" class="right">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $serviceSubTotal = 0;
-                                @endphp
-                                @foreach ($order->services as $service)
-                                    @php
-                                        $serviceSubTotal += $service->quantity * $service->price;
-                                    @endphp
-                                    <tr>
-                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="center"><small>{{$loop->iteration}}</small></td>
-                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left strong"><small>{{$service->service->name}}</small></td>
-                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left">
-                                            <small style="text-decoration: underline;">Measurments:</small><small>&nbsp;</small>
-                                            @foreach ($service->serviceMeasurements as $measurement)
-                                                <small class="">
-                                                    {{Str::of($measurement->measurement->name)->headLine()}} : {{$measurement->size}}
-                                                </small>
-                                            @endforeach
-                                            <br/>
-                                            <small style="text-decoration: underline;">Designs:</small><small>&nbsp;</small>
-                                            @foreach ($service->serviceDesigns as $design)
-                                                <small class="">
-                                                    {{Str::of($design->design!=null ? $design->design->name: $design->design_name)->headLine()}} : {{$design->style!=null?$design->style->name:$design->style_name}}
-                                                </small>
-                                            @endforeach
-                                        </td>
-                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="right"><small>{{$service->price}}</small></td>
-                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:center" class="center"><small>{{$service->quantity}}</small></td>
-                                        <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:right" class="right"><small>{{$service->quantity * $service->price}}</small></td>
-                                    </tr>
-                                @endforeach
 
-                                <tr>
-                                    <td colspan="6" style="text-align: right"><small><strong>Total: {{$serviceSubTotal}}</strong></small></td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                    @if ($order->products->count())
+                    @if ($purchase->products->count())
                         <div class="mt-5">
                             <p><strong>Products</strong></p>
                             <table class="table table-sm">
@@ -142,7 +91,7 @@
                                     @php
                                         $productSubTotal = 0;
                                     @endphp
-                                    @foreach ($order->products as $product)
+                                    @foreach ($purchase->products as $product)
                                         @php
                                             $productSubTotal += $product->quantity * $product->price;
                                         @endphp
@@ -171,39 +120,39 @@
                         <table class="table table-clear">
                             <tbody>
 
-                                @if ($order->discount > 0 )
+                                @if ($purchase->discount > 0 )
                                     <tr>
                                         <td style="border-top: none;">Sub Total</td>
-                                        <td style="border-top: none; text-align:right">{{$order->total}}</td>
+                                        <td style="border-top: none; text-align:right">{{$purchase->total}}</td>
                                     </tr>
 
                                     <tr>
                                         <td>Discount</td>
-                                        <td style="text-align:right">{{$order->discount}}</td>
+                                        <td style="text-align:right">{{$purchase->discount}}</td>
                                     </tr>
 
                                     <tr>
                                         <td>Net Total</td>
-                                        <td style="text-align:right">{{$order->netpayable}}</td>
+                                        <td style="text-align:right">{{$purchase->netpayable}}</td>
                                     </tr>
 
                                 @else
                                     <tr>
                                         <td style="border-top: none;">Net Total</td>
-                                        <td style="border-top: none; text-align:right">{{$order->netpayable}}</td>
+                                        <td style="border-top: none; text-align:right">{{$purchase->netpayable}}</td>
                                     </tr>
 
                                 @endif
 
                                 <tr>
                                     <td>Paid</td>
-                                    <td style="text-align:right">{{$order->paid}}</td>
+                                    <td style="text-align:right">{{$purchase->paid}}</td>
                                 </tr>
 
-                                @if ($order->netpayable - $order->paid > 0 )
+                                @if ($purchase->netpayable - $purchase->paid > 0 )
                                     <tr>
                                         <td>Due</td>
-                                        <td style="text-align:right">{{$order->netpayable - $order->paid}}</td>
+                                        <td style="text-align:right">{{$purchase->netpayable - $purchase->paid}}</td>
                                     </tr>
                                 @endif
 
@@ -218,7 +167,8 @@
 
 
     </div>
-    <div class="mt-2 text-right">
+    <div class="my-2 text-center">
+        <a class="btn btn-sm btn-success me-2" href="{{route('purchases.index')}}">Back To List</a>
         <button class="btn btn-sm btn-primary" id="print">Print</button>
     </div>
 
