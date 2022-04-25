@@ -22,6 +22,10 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{route('order-report')}}" class="nav-link">Order Report</a>
       </li>
+
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{route('transactions.index')}}" class="nav-link">Transactions</a>
+      </li>
     </ul>
 
     <!-- Right navbar links -->

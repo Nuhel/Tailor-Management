@@ -18,6 +18,7 @@ use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeePaymentController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\TransactionController;
 
 Auth::routes();
 
@@ -57,6 +58,7 @@ Route::middleware('auth')->group(function(){
 
     Route::get('order-report',[ReportController::class,'orderReport'])->name('order-report');
     Route::get('dashboard',[DashboardController::class,'dashboard'])->name('dashboard');
+    Route::get('/transactions',[TransactionController::class,'index'])->name('transactions.index');
 
 });
 

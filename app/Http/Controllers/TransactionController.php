@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\TransactionDataTable;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
 
-    public function index()
+    public function index(TransactionDataTable $dataTable)
     {
-
+        return $dataTable->render('components.datatable.index',['heading'=>'Transactions']);
     }
 
 
