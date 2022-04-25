@@ -32,7 +32,14 @@ class PurchaseDataTable extends DataTable
                 return $return;
             })
             ->addColumn('actions', function(Purchase $purchase) {
+                $extraButton = "";
+                if($purchase->paid < $purchase->netpayable)
+                    $extraButton = '
+                    <a type="button" class="btn btn-outline-primary btn-sm " data-toggle="modal" data-target="#give-payment-modal" data-id="'.$purchase->id.'" data-due="'.($purchase->netpayable - $purchase->paid).'">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                    </a>';
                 return view('components.actionbuttons.table_actions')->with('route','purchases')->with('param','purchase')->with('value',$purchase)
+                ->with('extraButton',trim($extraButton))
                 ->with('enableBottomMargin', true)->render();
             })
 

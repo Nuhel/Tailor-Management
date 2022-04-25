@@ -1,8 +1,8 @@
-<div class="modal fade" tabindex="-1" role="dialog" id="take-payment-modal">
+<div class="modal fade" tabindex="-1" role="dialog" id="give-payment-modal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Take Payment (Due amount: <span class="text-danger" id="due-amount"></span>)</h5>
+          <h5 class="modal-title">Give Payment (Due amount: <span class="text-danger" id="due-amount"></span>)</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -52,7 +52,7 @@
 
         $('#take-payment-form').on('submit', function(event){
             event.preventDefault();
-            var baseUrl = "{{URL::to('/orders/')}}";
+            var baseUrl = "{{URL::to('/purchases/')}}";
             var id = $("input[name='id']").val();
             var url = baseUrl+'/'+id+'/take-payment'
             var bodyFormData = new FormData();
@@ -72,7 +72,7 @@
 
                 Swal.fire(
                     'Success!',
-                    'Amount: '+amount+' Taken Successfully',
+                    'Amount: '+amount+' Given Successfully',
                     'success'
                 )
 

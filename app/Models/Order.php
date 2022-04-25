@@ -55,6 +55,13 @@ class Order extends Model
         );
     }
 
+    public function scopeSale($query){
+        $query->whereIsSale(1);
+    }
+    public function scopeService($query){
+        $query->whereIsSale(0);
+    }
+
     public function scopePaidRaw($query){
         return $query->selectRaw("
         (

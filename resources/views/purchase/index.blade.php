@@ -3,11 +3,11 @@
     <div class="content-wrapper">
         <div class="content pt-5">
             <div class="container">
-                @include('components.datatable.base',['heading' => 'Sales'])
+                @include('components.datatable.base',['heading' => 'Purchases'])
             </div>
         </div>
     </div>
-    @include('order.take-payment-modal',['datatableId'=> $datatableId])
+    @include('purchase.give-payment-modal',['datatableId'=> $datatableId])
 @endsection
 
 

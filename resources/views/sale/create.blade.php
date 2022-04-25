@@ -136,7 +136,7 @@
             </div>
         </div>
     </div>
-    @include('order.create-customer-modal')
+    @include('sale.create-customer-modal')
 
 @endsection
 

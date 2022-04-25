@@ -148,11 +148,11 @@ class PurchaseService{
     }
 
     public function attachPayment($amount){
-        return self::attachPaymentToOrder($this->purchase, $amount);
+        return self::attachPaymentToPurchase($this->purchase, $amount);
     }
 
 
-    static function attachPaymentToOrder(Purchase $purchase, $amount,$date = null){
+    static function attachPaymentToPurchase(Purchase $purchase, $amount,$date = null){
         $payment = new Transaction();
         $payment->transaction_date  = $date??$purchase->purchase_date;
         $payment->amount            = $amount;

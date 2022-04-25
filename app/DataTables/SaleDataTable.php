@@ -35,10 +35,8 @@ class SaleDataTable extends DataTable
                 $extraButton = "";
                 if($sale->paid < $sale->netpayable)
                     $extraButton = '
-                    <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$sale->id.'" data-due="'.($sale->netpayable - $sale->paid).'">
-                        <i class="fa fa-edit" aria-hidden="true">
-                        Take
-                        </i>
+                    <a type="button" class="btn btn-outline-primary btn-sm " data-toggle="modal" data-target="#take-payment-modal" data-id="'.$sale->id.'" data-due="'.($sale->netpayable - $sale->paid).'">
+                        <i class="fas fa-hand-holding-usd"></i>
                     </a>';
                 return view('components.actionbuttons.table_actions')->with('extraButton',trim($extraButton))->with('route','sales')->with('param','sale')->with('value',$sale)
                 ->with('enableBottomMargin', true)->render();

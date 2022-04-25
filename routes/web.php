@@ -15,6 +15,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeePaymentController;
 use App\Http\Controllers\ReportController;
 
@@ -41,6 +42,7 @@ Route::middleware('auth')->group(function(){
 
     Route::resource('/sales',SaleController::class);
     Route::resource('/purchases',PurchaseController::class);
+    Route::post('purchases/{purchase}/take-payment',[PurchaseController::class,'takePayment']);
 
     Route::controller(ProductionController::class)->group(function(){
         Route::get('productions','index')->name('productions.index');
@@ -52,6 +54,7 @@ Route::middleware('auth')->group(function(){
     });
 
     Route::get('order-report',[ReportController::class,'orderReport'])->name('order-report');
+    Route::get('dashboard',[DashboardController::class,'dashboard'])->name('dashboard');
 
 });
 

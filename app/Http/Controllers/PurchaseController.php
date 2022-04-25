@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Purchase;
 use App\Models\Supplier;
+use App\Services\PurchaseService;
 use App\DataTables\PurchaseDataTable;
 use App\Http\Requests\PurchaseRequest;
-use App\Http\Requests\OrderPaymentRequest;
-use App\Services\PurchaseService;
+use App\Http\Requests\PurchasePaymentRequest;
 
 class PurchaseController extends Controller
 {
@@ -23,12 +23,12 @@ class PurchaseController extends Controller
     public function store(PurchaseRequest $request){
 
 
-        $order = (new PurchaseService(null,$request))->handelPurchase();
+        $purchase = (new PurchaseService(null,$request))->handelPurchase();
 
-        if($order && ($request->print == 'true')){
-            //return redirect(route('makeInvoice',['order'=>$order]));
+        if($purchase && ($request->print == 'true')){
+            //return redirect(route('makeInvoice',['purchase'=>$purchase]));
         }else{
-            return $this->redirectWithAlert($order?true:false);
+            return $this->redirectWithAlert($purchase?true:false);
         }
     }
 
@@ -53,13 +53,13 @@ class PurchaseController extends Controller
         return $this->redirectWithAlert((new PurchaseService($purchase,null))->delete());
     }
 
-    public function takePayment(OrderPaymentRequest $request,Purchase $purchase){
-        PurchaseService::attachPaymentToOrder($purchase,$request->amount,$request->date);
+    public function takePayment(PurchasePaymentRequest $request,Purchase $purchase){
+        PurchaseService::attachPaymentToPurchase($purchase,$request->amount,$request->date);
         echo "Success";
     }
 
     public function makeInvoice(Purchase $purchase){
         $purchase = PurchaseService::attachRelationalData($purchase, true)->find($purchase->id);
-        return view('order.invoice.invoice')->with('order',$purchase);
+        return view('purchase.invoice.invoice')->with('purchase',$purchase);
     }
 }

@@ -20,7 +20,7 @@ class Purchase extends Model
     }
 
     public function payments(){
-        return $this->morphMany(Transaction::class,'transactionable')->income();
+        return $this->morphMany(Transaction::class,'transactionable')->expense();
     }
 
     public function scopePaid($query){
@@ -32,7 +32,6 @@ class Purchase extends Model
                        DB::raw('SUM(amount) AS paid'),
                     )
                    ->where('transactionable_type', "App\Models\\".class_basename($this))
-
                    ->groupBy('transactionable_id');
 
         return $query->leftJoinSub(
