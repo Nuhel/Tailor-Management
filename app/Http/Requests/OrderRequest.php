@@ -17,7 +17,8 @@ class OrderRequest extends BaseRequest
     public function messages()
     {
         return [
-            'services.*.designs.*.id.numeric' => "Design Must Be Selected"
+            'services.*.designs.*.id.numeric' => "Design Must Be Selected",
+            'services.*.deadline.required_with' => "Deadline Is Needed To Assign Craftsman",
         ];
     }
 
@@ -62,6 +63,7 @@ class OrderRequest extends BaseRequest
             'services.*.quantity'               =>  'required|numeric|min:1',
             'services.*.price'                  =>  'required|numeric',
             'services.*.employee_id'            =>  'nullable|numeric||exists:employees,id',
+            'services.*.deadline'               =>  ['required_with:services.*.employee_id','date','nullable'],
 
             'services.*.measurements'           =>  'required|array',
             'services.*.measurements.*.size'    =>  'required|string|max:15',

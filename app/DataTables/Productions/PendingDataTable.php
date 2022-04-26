@@ -7,12 +7,25 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\DataTables\DataTable;
 use App\Constant\ServiceStatus;
+use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 
 class PendingDataTable extends DataTable
 {
 
     protected $tableId = 'pending-table';
+
+    public function getButtons(){
+
+        return [
+            Button::make('pageLength')->addClass($this->buttonClass.' rounded'),
+            Button::make('spacer')->raw('<p></p>')->className('btn-link bg-transparent spacer')->attr(['disabled'=>'disabled']),
+            $this->getButton('export'),
+            $this->getButton('print'),
+            $this->getButton('reset'),
+            $this->getButton('reload'),
+        ];
+    }
 
     public function dataTable(Request $request,$query){
 
@@ -77,27 +90,22 @@ class PendingDataTable extends DataTable
                 $return.="<div><span>Due: ".($order->netpayable - $order->paid). '</span> </div>';
                 return $return;
             })
-            ->addColumn('print', function(Order $order) {
+            ->addColumn('action', function(Order $order) {
 
-                $extraButton = "";
+                $takePaymentButton = "";
                 if($order->paid < $order->netpayable)
-                    $extraButton = '
+                $takePaymentButton = '
                     <a type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#take-payment-modal" data-id="'.$order->id.'" data-due="'.($order->netpayable - $order->paid).'">
-                        <i class="fa fa-edit" aria-hidden="true">
-                        Take
-                        </i>
+                        <i class="fas fa-hand-holding-usd"></i>
                     </a>';
 
-                return '
-                    <a type="button" target="_blank" class="btn btn-outline-primary btn-sm mr-2 mb-2" href="'.route('makeInvoice',['order'=>$order]).'">
-                        <i class="fa fa-edit" aria-hidden="true">
-                        Print Invoice
-                        </i>
-                    </a>'.$extraButton;
+                    return '<a type="button" target="_blank" class="btn btn-outline-primary btn-sm mr-2 mb-2" href="'.route('makeInvoice',['order'=>$order]).'">
+                        <i class="fas fa-print"></i>
+                    </a>'.$takePaymentButton;
             })
 
             ->addIndexColumn()
-            ->rawColumns(['transaction','services','print']);
+            ->rawColumns(['transaction','services','action']);
     }
 
     public function html(){
@@ -139,10 +147,10 @@ class PendingDataTable extends DataTable
             Column::make('invoice_no')->width(100),
             Column::make('order_date'),
             Column::make('delivery_date'),
-            Column::make('customer_name'),
+            Column::make('customer_name')->width(100),
             Column::computed('services'),
-            Column::computed('transaction')->addClass('due'),
-            Column::computed('print'),
+            Column::computed('transaction')->addClass('due')->width(130),
+            Column::computed('action')->width(90),
         ]);
     }
 

@@ -39,11 +39,16 @@ class ProductionController extends Controller
     }
 
     public function sentToProduction(SendToProductionRequest $request, OrderService $orderService){
+
+
         $orderService->employee_id = $request->employee_id;
         if($request->employee_id == null)
             $orderService->status = ServiceStatus::PENDING;
-        else
+        else{
             $orderService->status = ServiceStatus::PROCESSING;
+            $orderService->deadline = $request->deadline;
+
+        }
 
         $orderService->update();
         return response()->json(['success',"Sent To Production"], 200);

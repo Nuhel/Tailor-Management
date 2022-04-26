@@ -7,7 +7,7 @@ use Yajra\DataTables\Services\DataTable as BaseDataTable;
 
 class DataTable extends BaseDataTable{
     private $defaultButton;
-    private $buttonClass = 'btn btn-sm btn-info';
+    public $buttonClass = 'btn btn-sm btn-info';
     public function __construct()
     {
         $this->defaultButton = [
@@ -74,7 +74,7 @@ class DataTable extends BaseDataTable{
 
 
 
-    private function getButton($buttonname){
+    public function getButton($buttonname){
         $button =  Arr::get($this->overrideButtons(),$buttonname,null);
         return $button instanceof Button?$button->addClass($this->buttonClass):Arr::get($this->defaultButton,$buttonname);
     }

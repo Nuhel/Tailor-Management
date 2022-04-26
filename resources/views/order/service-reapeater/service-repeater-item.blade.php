@@ -73,6 +73,17 @@
                 })
             !!}
         </div>
+
+        <div class="col-sm-12 col-md">
+            <div class="form-group">
+                <small >Deadline</small>
+                <input name="deadline" class="form-control form-control-sm  @error($baseErrorName.'.deadline') is-invalid @enderror" type="date" value="{{Arr::get($oldService,'deadline','')}}"/>
+                @error($baseErrorName.'.deadline')
+                    <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
+                @enderror
+            </div>
+        </div>
+
     </div>
 
     <a class="btn btn-link  measurement-show-btn px-0" data-toggle="collapse" href="#" role="button" aria-expanded="false" aria-controls="collapseExample">

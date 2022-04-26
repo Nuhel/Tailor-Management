@@ -13,9 +13,10 @@ class SendToProductionRequest extends BaseRequest
 
 
     public function rules()
-    {
+    {   //dd($this->toArray());
         return [
             'employee_id'=>'nullable|numeric|exists:employees,id',
+            'deadline'  => ($this->employee_id == null?'nullable':'required').'|date'
         ];
     }
 }

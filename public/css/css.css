@@ -167,3 +167,8 @@ a.nav-link[data-toggle="dropdown"] .dropdown-icon{
 a.nav-link[data-toggle="dropdown"][aria-expanded="true"] .dropdown-icon{
     transform: rotate(180deg);
 }
+.btn.btn-secondary.btn-link.bg-transparent.spacer + .btn,
+.btn.btn-secondary.btn-link.bg-transparent.spacer + div .btn{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}

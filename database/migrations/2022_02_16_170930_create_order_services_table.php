@@ -21,6 +21,7 @@ class CreateOrderServicesTable extends Migration
             $table->double('quantity');
             $table->double('price');
             $table->double('crafting_price');
+            $table->date('deadline')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
         });

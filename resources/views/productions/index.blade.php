@@ -101,6 +101,7 @@
     <script src="{{ asset('/vendor/datatables/datatable.js') }}"></script>
     <script src="{{ asset('/vendor/datatables/buttons.js') }}"></script>
     <script src="{{ asset('/vendor/datatables/buttons.server-side.js') }}"></script>
+    <script src="{{asset('js/axios.js')}}"></script>
     @stack('inner-script')
 
     <script>

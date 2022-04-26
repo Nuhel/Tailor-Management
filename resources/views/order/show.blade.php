@@ -13,6 +13,10 @@
                                 <table class="table table-sm">
                                     <tbody>
                                         <tr>
+                                            <td>Invoice</td>
+                                            <td>{{$order->invoice_no}}</td>
+                                        </tr>
+                                        <tr>
                                             <td>Customer Name</td>
                                             <td>{{$order->customer->name}}</td>
                                         </tr>

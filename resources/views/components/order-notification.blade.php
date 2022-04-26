@@ -9,7 +9,7 @@
       <div class="dropdown-divider"></div>
         @foreach ($notifications as $order)
         <a href="{{route('orders.show', ['order' => $order])}}" class="dropdown-item">
-            <small><i class="fas fa-clock mr-2"></i> {{$order->delivery_date}}</small>
+            <small><i class="fas fa-clock mr-2"></i>({{$order->invoice_no}}) {{$order->delivery_date}}</small>
         </a>
         <div class="dropdown-divider"></div>
       @endforeach
