@@ -2,23 +2,18 @@
 
 namespace App\DataTables;
 
-use App\Models\Category;
+use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 
-class CategoryDataTable extends DataTable
+class ExpenseCategoryDataTable extends DataTable
 {
 
-    protected $tableId = 'category-table';
+    protected $tableId = 'expensecategory-table';
 
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
+
     public function dataTable(Request $request,$query)
     {
 
@@ -27,38 +22,28 @@ class CategoryDataTable extends DataTable
             ->filterColumn('name', function($query, $keyword) {
                 $query->where('name', "like", "%".$keyword."%");
             })
-            ->addColumn('actions', function(Category $category) {
-                return view('components.actionbuttons.table_actions')->with('route','categories')->with('param','category')->with('value',$category)->render();
+            ->addColumn('actions', function(ExpenseCategory $category) {
+                return view('components.actionbuttons.table_actions')->with('route','expense-categories')->with('param','expense_category')->with('value',$category)->render();
             })
             ->addIndexColumn()
             ->rawColumns(['actions']);
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Category $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(Category $model)
+    public function query(ExpenseCategory $model)
     {
         return $model->newQuery();
     }
 
-    /**
-     * Get columns.
-     *
-     * @return array
-     */
     public function getColumns()
     {
         return [
             Column::computed('index','SL')->width(20),
             Column::make('name'),
             Column::computed('actions')
+            ->width(90)
                   ->exportable(false)
                   ->printable(false)
-                  ->width(90)
+
                   ->addClass('text-center')
 
         ];
@@ -71,7 +56,7 @@ class CategoryDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Category_' . date('YmdHis');
+        return 'Expense Category_' . date('YmdHis');
     }
 
     public function getFilters()

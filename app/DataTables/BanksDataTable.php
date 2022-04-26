@@ -39,7 +39,7 @@ class BanksDataTable extends DataTable
             Column::computed('actions')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(240)
+                  ->width(90)
                   ->addClass('text-center')
         ];
     }

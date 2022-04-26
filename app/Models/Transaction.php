@@ -11,6 +11,9 @@ class Transaction extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'transaction_date' => 'datetime:Y-m-d',
+    ];
     protected $filters = ['sort','like','transactionable_id','transactionable_type', 'from_date','to_date','amount'];
 
 
@@ -67,8 +70,7 @@ class Transaction extends Model
     }
 
     public function saveAsInvest(){
-        $this->type = "Debit";
-        return $this->save();
+        return $this->saveAsIncome();
     }
 
     public function sourceable()

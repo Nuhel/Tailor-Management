@@ -17,8 +17,11 @@ use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeePaymentController;
+use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionController;
+
 
 Auth::routes();
 
@@ -37,6 +40,8 @@ Route::middleware('auth')->group(function(){
     Route::resource('/bank_accounts',BankAccountController::class);
     Route::resource('/services',ServiceController::class);
     Route::resource('/orders',OrderController::class);
+    Route::resource('/expense-categories',ExpenseCategoryController::class);
+    Route::resource('/expenses',ExpenseController::class);
 
     Route::post('orders/{order}/take-payment',[OrderController::class,'takePayment']);
     Route::get('orders/{order}/invoice',[OrderController::class,'makeInvoice'])->name('makeInvoice');
