@@ -150,3 +150,20 @@ body{
 .table-action-wrapper > *{
     width: 39px;
 }
+
+
+a.nav-link[data-toggle="dropdown"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a.nav-link[data-toggle="dropdown"] .dropdown-icon{
+    margin-top: 5px;
+    margin-left: 5px;
+    transition: transform .1s;
+}
+
+a.nav-link[data-toggle="dropdown"][aria-expanded="true"] .dropdown-icon{
+    transform: rotate(180deg);
+}

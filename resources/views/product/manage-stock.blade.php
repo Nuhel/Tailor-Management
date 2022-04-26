@@ -24,10 +24,7 @@
 
 
 @section('script')
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-
-
+        <script src="{{asset('js/axios.js')}}"></script>
         <script>
 
             var submittedFromSearch = false;

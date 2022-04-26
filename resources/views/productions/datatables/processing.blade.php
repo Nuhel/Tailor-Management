@@ -31,7 +31,7 @@
 @push('inner-script')
 
     {!! $dataTable->scripts() !!}
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{{asset('js/axios.js')}}"></script>
     <script>
         var datatableIds = {!!collect($tableIds)->toJson()!!};
         $(document).ready(function() {

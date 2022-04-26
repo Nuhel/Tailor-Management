@@ -57,6 +57,10 @@ Route::middleware('auth')->group(function(){
     });
 
     Route::get('order-report',[ReportController::class,'orderReport'])->name('order-report');
+    Route::get('purchase-report',[ReportController::class,'purchaseReport'])->name('purchase-report');
+    Route::get('sale-report',[ReportController::class,'saleReport'])->name('sale-report');
+    Route::get('profit-report',[ReportController::class,'profitReport'])->name('profit-report');
+
     Route::get('dashboard',[DashboardController::class,'dashboard'])->name('dashboard');
     Route::get('/transactions',[TransactionController::class,'index'])->name('transactions.index');
 

@@ -10,10 +10,10 @@ use App\DataTables\DataTable;
 use App\Constant\ServiceStatus;
 use Yajra\DataTables\Html\Column;
 
-class OrderDataTable extends DataTable
+class SaleDataTable extends DataTable
 {
 
-    protected $tableId = 'order-report-table';
+    protected $tableId = 'sale-report-table';
 
     public function dataTable(Request $request, $query)
     {
@@ -60,17 +60,14 @@ class OrderDataTable extends DataTable
             ->addColumn('customer_name', function (Order $order) {
                 return $order->customer->name;
             })->addColumn('profit', function (Order $order) {
-                $serviceTotalProfit = 0;
+
                 $productTotalProfit = 0;
-                foreach ($order->services as $service) {
-                    $profit = ($service->price - $service->crafting_price) * $service->quantity;
-                    $serviceTotalProfit += $profit;
-                }
+
                 foreach ($order->products as $product) {
                     $profit = ($product->price - $product->supplier_price) * $product->quantity;
                     $productTotalProfit += $profit;
                 }
-                return $serviceTotalProfit + $productTotalProfit;
+                return $productTotalProfit;
             })->addColumn('transaction', function (Order $order) {
                 $return =  "<div>Net Payable: " . ($order->netpayable) . "</div>" .
                     "<div>Paid: " . ($order->paid) . "</div>";
@@ -112,8 +109,7 @@ class OrderDataTable extends DataTable
     public function query(Order $model)
     {
         return $model->newQuery()->with('customer')->paid()
-            ->with('services')
-            ->with('products')->whereIsSale(0);
+            ->with('products')->whereIsSale(1);
     }
 
     public function getColumns(): array

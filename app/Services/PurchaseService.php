@@ -53,6 +53,8 @@ class PurchaseService{
             $amountToAttach = $this->getPaymentAmount();
             if($amountToAttach){
                 $this->attachPayment($amountToAttach,$this->request->account_id);
+            }else if(!$this->onEdit){
+                $this->attachPayment(0,$this->request->account_id);
             }
 
 

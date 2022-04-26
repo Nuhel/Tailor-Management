@@ -57,5 +57,19 @@ class Purchase extends Model
                 `purchases`.`id` = `transactions`.`transactionable_id`
                 AND `transactionable_type` = 'App\\\Models\\\purchase') AS `paid`
         ");
+
+
     }
+
+    public function scopePaidRaw2($query){
+        return $query->selectRaw('(SELECT Sum(amount)
+        FROM   `transactions`
+        WHERE  `transactionable_type` = "app\\\models\\\purchase" and
+          `transactions`.`transactionable_id` = `purchases`.`id`) AS
+       `paid`');
+
+
+    }
+
+
 }

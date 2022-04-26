@@ -45,9 +45,10 @@
     </div>
 </div>
 @push('inner-script')
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{{asset('js/axios.js')}}"></script>
     <script>
         var modalView = $('#take-payment-modal');
+        console.log(modalView);
         modalView.on('hidden.bs.modal', function(e) {
             $(this).find('.error').remove();
             $(this).find(`input`).val('');
@@ -56,6 +57,7 @@
         })
 
         modalView.on('show.bs.modal', function(e) {
+            console.log(e);
             var target = $(e.relatedTarget);
             var id = target.data('id');
             $(this).find(`input[name='id']`).val(id);

@@ -3,7 +3,7 @@
     <div class="content-wrapper">
         <div class="content pt-5">
             <div class="container">
-                <div class="row">
+                <div class="row justify-content-center">
                     <div class="col-md-3">
                         <div class="card bg-success">
                             <div class="card-body">

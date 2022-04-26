@@ -32,7 +32,7 @@
     </div>
   </div>
   @push('inner-script')
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="{{asset('js/axios.js')}}"></script>
   <script>
         var datatableIds = {!!collect($tableIds)->toJson()!!};
         var takePaymentModalView =  $('#take-payment-modal');

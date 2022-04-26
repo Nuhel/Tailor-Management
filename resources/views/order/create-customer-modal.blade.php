@@ -38,7 +38,7 @@
     </div>
   </div>
   @push('inner-script')
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="{{asset('js/axios.js')}}"></script>
   <script>
 
         var modalView =  $('#create-customer-modal');
@@ -57,12 +57,14 @@
             bodyFormData.append('name', $("input[name='name']").val());
             bodyFormData.append('mobile', $("input[name='mobile']").val());
             bodyFormData.append('address', $("textarea[name='address']").val());
+
             axios({
                 method: "post",
                 url: url,
                 data: bodyFormData,
                 })
                 .then(function (response) {
+                    console.log(response);
                     var name = response.data.name;
                     var mobile = response.data.mobile;
                     var id = response.data.id;

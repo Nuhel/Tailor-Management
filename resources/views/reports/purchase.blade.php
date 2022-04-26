@@ -1,7 +1,6 @@
 @extends('layout.layout')
 
 @section('css')
-    @stack('inner-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/datatables/css/datatable.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/datatables/css/datatable-extended.css') }}" />
 @endsection
@@ -12,7 +11,7 @@
             <div class="container">
                 <div class="card mt-3">
                     <div class="card-header">
-                        <h2><strong>Orders</strong></h2>
+                        <h2><strong>{{$heading}}</strong></h2>
                     </div>
                     <div class="card-body">
                         <div class="only-bottom-border mb-3">
@@ -28,6 +27,16 @@
                                     <div class="form-group">
                                         <input type="date" class="w-100 form-control form-control-sm rounded to"
                                             placeholder="To Date">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md">
+                                    <div class="form-group">
+                                        <select class="form-control form-control-sm status" aria-label="Default select example">
+                                            <option selected>Status</option>
+                                            <option value="paid">Paid</option>
+                                            <option value="due">Due</option>
+                                          </select>
                                     </div>
                                 </div>
                             </div>
@@ -47,9 +56,9 @@
 
 
 
+
+
 @section('script')
-    @livewireScripts
-    @stack('inner-script')
     <script src="{{ asset('/vendor/datatables/datatable.js') }}"></script>
     <script src="{{ asset('/vendor/datatables/buttons.js') }}"></script>
     <script src="{{ asset('/vendor/datatables/buttons.server-side.js') }}"></script>

@@ -12,11 +12,6 @@ class BankAccountDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->filter(function ($query) use ($request) {
-                //dd($request->toArray());
-                //$query;
-            },true)
-
             ->filterColumn('card', function($query, $keyword) {
                 $query->where('card', 'like', '%'.$keyword.'%');
             })
