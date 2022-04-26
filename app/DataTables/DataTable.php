@@ -2,7 +2,10 @@
 namespace App\DataTables;
 
 use Illuminate\Support\Arr;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Html\Button;
+use Illuminate\Support\Facades\App;
+use Yajra\DataTables\Services\DataTablesExportHandler;
 use Yajra\DataTables\Services\DataTable as BaseDataTable;
 
 class DataTable extends BaseDataTable{
@@ -36,7 +39,26 @@ class DataTable extends BaseDataTable{
         })->toArray();
     }
 
-
+    public function pdf(){
+        $collection = $this->getAjaxResponseData();
+        if(count($collection)){
+            $exportObject = null;
+            if (! new $this->exportClass(collect()) instanceof DataTablesExportHandler) {
+                $exportObject = new $this->exportClass($this->convertToLazyCollection($collection));
+                $keys =  $exportObject->headings();
+            }else{
+                $keys = array_keys($collection[0]);
+            }
+            $view = view('components.datatable.export.pdf')
+            ->with('headings',$keys)
+            ->with('data',$collection)
+            ->with('exportObject',$exportObject)
+            ->render();
+            return App::make('dompdf.wrapper')->loadHTML($view)->setPaper('a4', 'landscape')->download($this->getFilename() .'.pdf');
+        }else{
+            echo "No Data To Download";
+        }
+    }
 
     public function html()
     {
@@ -44,7 +66,7 @@ class DataTable extends BaseDataTable{
                     ->setTableId($this->getId())
                     ->addTableClass('table-sm table-striped')
                     ->columns($this->getColumns())
-                    ->lengthMenu([ 10, 25, 50, -1 ])
+                    ->lengthMenu([[ 10, 25, 50, -1 ], [10, 25, 50, "All"]])
                     ->searching(true)
                     ->dom('Bfrtip')
                     ->orderBy(1)

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Constant\ServiceStatus;
+use App\Exports\OrderExport;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
@@ -14,6 +15,7 @@ class OrderDataTable extends DataTable
 {
 
     protected $tableId = 'order-table';
+    protected $exportClass = OrderExport::class;
 
     public function dataTable(Request $request,$query)
     {

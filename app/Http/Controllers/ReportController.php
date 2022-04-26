@@ -33,10 +33,12 @@ class ReportController extends Controller
     public function profitReport(SaleDataTable $dataTable)
     {
         $orders = Order::with(['products' => function($query){
-            //$query->select('','order_id','');
+            $query->select('id','order_id')->selectRaw('(price - supplier_price) * quantity as profit');
         },'services' => function($query){
-            $query->select();
-        }])->select('id','invoice_no','order_date')->get();
+            $query->select('id','order_id')->selectRaw('(price - crafting_price) * quantity as profit');
+        }])->select('id','invoice_no','order_date','is_sale')
+        ->get()
+        ->groupBy('order_date');
         dd($orders->toArray());
         die();
         return $dataTable->render('reports.purchase',['heading'=>'Sale Report']);

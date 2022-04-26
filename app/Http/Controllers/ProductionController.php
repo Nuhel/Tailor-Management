@@ -42,8 +42,10 @@ class ProductionController extends Controller
 
 
         $orderService->employee_id = $request->employee_id;
-        if($request->employee_id == null)
+        if($request->employee_id == null){
             $orderService->status = ServiceStatus::PENDING;
+            $orderService->deadline = null;
+            }
         else{
             $orderService->status = ServiceStatus::PROCESSING;
             $orderService->deadline = $request->deadline;
