@@ -84,7 +84,7 @@
                                     <tr>
                                         <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="center">#</th>
                                         <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Item</th>
-                                        <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Description</th>
+                                        {{-- <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;">Description</th> --}}
                                         <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="right">Price</th>
                                         <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:center" class="center">Qty</th>
                                         <th style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:right" class="right">Total</th>
@@ -101,7 +101,7 @@
                                         <tr>
                                             <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="center"><small>{{$loop->iteration}}</small></td>
                                             <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left strong"><small>{{$service->service->name}}</small></td>
-                                            <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left">
+                                            {{--<td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="left">
                                                 <small style="text-decoration: underline;">Measurments:</small><small>&nbsp;</small>
                                                 @foreach ($service->serviceMeasurements as $measurement)
                                                     <small class="">
@@ -116,6 +116,7 @@
                                                     </small>
                                                 @endforeach
                                             </td>
+                                            --}}
                                             <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6;" class="right"><small>{{$service->price}}</small></td>
                                             <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:center" class="center"><small>{{$service->quantity}}</small></td>
                                             <td style="vertical-align: middle;border-bottom-width: 1px;border-bottom-style: solid;border-color: #dee2e6; text-align:right" class="right"><small>{{$service->quantity * $service->price}}</small></td>

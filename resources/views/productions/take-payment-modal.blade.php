@@ -11,6 +11,17 @@
             <div class="c">
                 <form method="POST" id="take-payment-form">
                     <input type="hidden" name="id">
+
+                    <div class="card">
+                        <div class="card-body">
+                            @livewire('order-payments',[
+                            "bankType"=>old('bank_type'),
+                            "bankId"=>old('bank_id'),
+                            "accountId"=>old('account_id'),
+                            ])
+                        </div>
+                    </div>
+
                     <div class="form-group" id="amount">
                         <label class="form-inline">Amount</label>
                         <input type="text" name="amount" class="form-control form-control-sm" placeholder="Enter Amount">
@@ -61,6 +72,8 @@
             bodyFormData.append('_token', '{{ csrf_token() }}');
             bodyFormData.append('amount', amount);
             bodyFormData.append('date', $("input[name='date']").val());
+            bodyFormData.append('bank_type', $("select[name='bank_type']").val());
+            bodyFormData.append('account_id', $("select[name='account_id']").val());
             axios({
                 method: "post",
                 url: url,
