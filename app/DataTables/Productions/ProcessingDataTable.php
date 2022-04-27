@@ -69,6 +69,7 @@ class ProcessingDataTable extends DataTable
                             </thead>
                             <tbody>
                         ";
+                        //dd($order->services->toArray());
                 foreach($order->services as $service){
                     $hasEmployee = $service->employee != null?true:false;
                     $button = "<a href='' class='btn-clipboard' data-toggle='modal' data-target='#asign-craftsman-modal' data-id='".$service->id."'> "

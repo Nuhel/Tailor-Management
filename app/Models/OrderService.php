@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OrderService extends Model
 {
+    //protected $with = ['order'];
     use HasFactory;
     public function service(){
         return $this->belongsTo(Service::class);

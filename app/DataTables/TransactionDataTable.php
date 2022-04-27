@@ -1,13 +1,21 @@
 <?php
 
 namespace App\DataTables;
+
+use App\Models\Order;
+use App\Models\Service;
 use App\Models\Transaction;
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Collection;
 
 class TransactionDataTable extends DataTable
 {
     protected $tableId = "transaction-table";
+
+
+
     public function dataTable($query)
     {
         return datatables()
@@ -17,6 +25,21 @@ class TransactionDataTable extends DataTable
                 $transaction->sourceable->bank->name . "<br>Number: {$transaction->sourceable->number}".(
                     $transaction->sourceable->card? "<br>Card: ".$transaction->sourceable->card:""
                 );
+            })
+            ->addColumn('transactionable_method', function(Transaction $transaction){
+                $data = $transaction->transactionable;
+                if($data == null){
+                    return "---";
+                }
+                if($transaction->transactionable->name){
+                    return $transaction->transactionable->name;
+                }
+                if($transaction->transactionable->invoice_no){
+                    return $transaction->transactionable->invoice_no;
+                }if($transaction->transactionable_type == "App\\Models\\OrderService"){
+                    return "---";
+                }
+                return $transaction->toJson();
             })
             ->addIndexColumn()
             ->rawColumns(['actions','transaction_method']);
@@ -28,8 +51,66 @@ class TransactionDataTable extends DataTable
             $query->select('id','bank_id','number','card')->with(['bank' => function($query){
                 $query->select('id','type','name');
             }]);
-        }]);
+        }])
+        ->with('transactionable');
     }
+
+
+    public function ajax()
+    {
+        $query = null;
+        if (method_exists($this, 'query')) {
+            $query = app()->call([$this, 'query']);
+            $query = $this->applyScopes($query);
+        }
+
+        /** @var \Yajra\DataTables\DataTableAbstract $dataTable */
+        $dataTable = app()->call([$this, 'dataTable'], compact('query'));
+
+        $data = $this->makeData($dataTable->toArray());
+
+
+
+        if ($callback = $this->beforeCallback) {
+            $callback($dataTable);
+        }
+
+        if ($callback = $this->responseCallback) {
+            $data = new Collection($data);
+
+            return new JsonResponse($callback($data));
+        }
+        return new JsonResponse($data);
+    }
+
+    public function makeData($data){
+        $oldData = $data;
+        $orderService  = collect($oldData['data'])->filter(function ($value, $key) {
+            return $value['transactionable_type'] == 'App\Models\OrderService';
+        });
+        $orders = Order::select('id','invoice_no')->find($orderService->pluck('transactionable.order_id'));
+        $service = Service::select('id','name')->find($orderService->pluck('transactionable.service_id'));
+
+        $newData = $oldData['data'];
+        foreach($newData as $key => $dt){
+            if($dt['transactionable_type'] == 'App\Models\OrderService'){
+                if($dt['transactionable'] != null){
+                    $orderId = $dt['transactionable']['order_id'];
+                    $serviceId = $dt['transactionable']['service_id'];
+                    $oldData['data'][$key]['transactionable']['order'] = $orders->find($orderId)->toArray();
+                    $oldData['data'][$key]['transactionable_method'] = "Invoice No: ".$orders->find($orderId)->toArray()['invoice_no']."<br>Service: ".$service->find($serviceId)->toArray()['name'];
+                }else{
+                    $oldData['data'][$key]['transactionable_method'] = "Service Deleted";
+                }
+
+            }
+
+        }
+
+        return $oldData;
+    }
+
+
 
 
 
@@ -46,6 +127,7 @@ class TransactionDataTable extends DataTable
             Column::make('transaction_date'),
             Column::make('type'),
             Column::make('description'),
+            Column::make('transactionable_method'),
             Column::computed('transaction_method'),
 
         ];

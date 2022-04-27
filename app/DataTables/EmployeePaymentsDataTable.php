@@ -36,12 +36,14 @@ class EmployeePaymentsDataTable extends DataTable
                 return $employeepayment->crafting_price - $employeepayment->paid;
             })
             ->addColumn('payments', function(OrderService $employeepayment){
+                if($employeepayment->payments->count() == 0)
+                return "No Transaction";
                 $data = "<table class='table table-sm'>
                             <thead>
                                 <tr>
                                     <td>Amount</td>
                                     <td>Date</td>
-                                    <td>Action</td>
+                                    <td width='90'>Action</td>
                                 </tr>
                             </thead>
                             <tbody>";
@@ -90,7 +92,7 @@ class EmployeePaymentsDataTable extends DataTable
             Column::make('employee'),
             Column::make('paid'),
             Column::computed('due'),
-            Column::computed('payments'),
+            Column::computed('payments')->width(300),
 
         ];
     }

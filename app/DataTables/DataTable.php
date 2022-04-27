@@ -107,6 +107,7 @@ class DataTable extends BaseDataTable{
 
     public function render($view, $data = [], $mergeData = [])
     {
+
         if ($this->request()->ajax() && $this->request()->wantsJson()) {
             return app()->call([$this, 'ajax']);
         }
@@ -118,6 +119,7 @@ class DataTable extends BaseDataTable{
 
             return app()->call([$this, $action]);
         }
+
         $data['datatableFilters'] = collect($this->getFilters())->toJson();
         $data['datatableId'] = $this->tableId;
         return view($view, $data, $mergeData)->with($this->dataTableVariable, $this->getHtmlBuilder());

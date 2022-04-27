@@ -119,6 +119,7 @@ class OrderDataTable extends DataTable
             Column::computed('index','SL')->width(20),
             Column::make('invoice_no'),
             Column::make('order_date'),
+            Column::make('delivery_date'),
             Column::computed('customer_name'),
             Column::computed('status'),
             Column::computed('transaction')->addClass('due'),
