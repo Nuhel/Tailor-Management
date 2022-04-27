@@ -34,7 +34,6 @@
                     newService.slideDown()
                     newService.addClass('mt-5')
                     manageNewServiceSelectBox(newService)
-
                 },
 
                 hide: function(deleteElement) {
@@ -70,6 +69,9 @@
         $(document).on('change', '.service_id', function($event) {
             var id = $(this).val();
             var row = $($(this).parents('.row')[0]);
+            var option = $($(this).find(":selected"));
+            var craftingPrice = option.data('crafting_price')??"";
+            row.find('.crafting_price').val(craftingPrice);
             var repeaterItem = $(row.parents('.repeater-item')[0]);
             var measurementInput = $(repeaterItem.find('.measurement-inputs')[0]);
             var designInput = $(repeaterItem.find('.design-inputs')[0]);

@@ -108,20 +108,21 @@ class DataTable extends BaseDataTable{
     public function render($view, $data = [], $mergeData = [])
     {
 
-        if ($this->request()->ajax() && $this->request()->wantsJson()) {
-            return app()->call([$this, 'ajax']);
-        }
+        // if ($this->request()->ajax() && $this->request()->wantsJson()) {
+        //     return app()->call([$this, 'ajax']);
+        // }
 
-        if ($action = $this->request()->get('action') and in_array($action, $this->actions)) {
-            if ($action == 'print') {
-                return app()->call([$this, 'printPreview']);
-            }
+        // if ($action = $this->request()->get('action') and in_array($action, $this->actions)) {
+        //     if ($action == 'print') {
+        //         return app()->call([$this, 'printPreview']);
+        //     }
 
-            return app()->call([$this, $action]);
-        }
+        //     return app()->call([$this, $action]);
+        // }
 
         $data['datatableFilters'] = collect($this->getFilters())->toJson();
         $data['datatableId'] = $this->tableId;
-        return view($view, $data, $mergeData)->with($this->dataTableVariable, $this->getHtmlBuilder());
+        return parent::render($view,$data,$mergeData);
+        //return view($view, $data, $mergeData)->with($this->dataTableVariable, $this->getHtmlBuilder());
     }
 }

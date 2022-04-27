@@ -19,6 +19,7 @@ class OrderRequest extends BaseRequest
         return [
             'services.*.designs.*.id.numeric' => "Design Must Be Selected",
             'services.*.deadline.required_with' => "Deadline Is Needed To Assign Craftsman",
+            'services.*.crafting_price.lt'     => "Crafting Price Is Greater Than Price"
         ];
     }
 
@@ -61,8 +62,9 @@ class OrderRequest extends BaseRequest
             'services'                          =>  'required|array',
             'services.*.service_id'             =>  'required|numeric|exists:services,id',
             'services.*.quantity'               =>  'required|numeric|min:1',
-            'services.*.price'                  =>  'required|numeric',
-            'services.*.employee_id'            =>  'nullable|numeric||exists:employees,id',
+            'services.*.price'                  =>  'required|numeric|gt:services.*.crafting_price',
+            'services.*.crafting_price'         =>  'required|numeric',
+            'services.*.employee_id'            =>  'nullable|numeric|exists:employees,id',
             'services.*.deadline'               =>  ['required_with:services.*.employee_id','date','nullable'],
 
             'services.*.measurements'           =>  'required|array',

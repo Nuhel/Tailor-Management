@@ -29,7 +29,7 @@
                 <select name="service_id" class="form-control form-control-sm service_id @error($baseErrorName.'.service_id') is-invalid @enderror" data-index='0'>
                     <option value="" selected>Select Service</option>
                     @foreach ($services as $service)
-                        <option value="{{ $service->id }}" {{Arr::get($oldService,'service_id',0)==$service->id?"selected":""}}>{{ $service->name }}</option>
+                        <option data-crafting_price="{{$service->crafting_price}}" value="{{ $service->id }}" {{Arr::get($oldService,'service_id',0)==$service->id?"selected":""}}>{{ $service->name }}</option>
                     @endforeach
                 </select>
                 @error($baseErrorName.'.service_id')
@@ -53,6 +53,16 @@
                 <small >Price</small>
                 <input name="price" class="form-control form-control-sm price @error($baseErrorName.'.price') is-invalid @enderror" type="number" value="{{Arr::get($oldService,'price','')}}"/>
                 @error($baseErrorName.'.price')
+                    <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
+                @enderror
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md">
+            <div class="form-group">
+                <small >Crafting Price</small>
+                <input name="crafting_price" class="form-control form-control-sm crafting_price @error($baseErrorName.'.crafting_price') is-invalid @enderror" type="number" value="{{Arr::get($oldService,'crafting_price','')}}"/>
+                @error($baseErrorName.'.crafting_price')
                     <span class="text-danger error validation-error d-block mb-2 invalid-feedback" role="alert">{{$message}}</span>
                 @enderror
             </div>

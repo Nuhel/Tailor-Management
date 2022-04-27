@@ -16,6 +16,7 @@ class TransactionDataTable extends DataTable
 
 
 
+
     public function dataTable($query)
     {
         return datatables()
@@ -55,35 +56,15 @@ class TransactionDataTable extends DataTable
         ->with('transactionable');
     }
 
-
-    public function ajax()
+    public function render($view, $data = [], $mergeData = [])
     {
-        $query = null;
-        if (method_exists($this, 'query')) {
-            $query = app()->call([$this, 'query']);
-            $query = $this->applyScopes($query);
-        }
-
-        /** @var \Yajra\DataTables\DataTableAbstract $dataTable */
-        $dataTable = app()->call([$this, 'dataTable'], compact('query'));
-
-        $data = $this->makeData($dataTable->toArray());
-
-
-
-        if ($callback = $this->beforeCallback) {
-            $callback($dataTable);
-        }
-
-        if ($callback = $this->responseCallback) {
-            $data = new Collection($data);
-
-            return new JsonResponse($callback($data));
-        }
-        return new JsonResponse($data);
+        $this->response(function($data){
+            return ($this->makeResponse($data->toArray()));
+        });
+        return parent::render($view,$data,$mergeData);
     }
 
-    public function makeData($data){
+    public function makeResponse($data){
         $oldData = $data;
         $orderService  = collect($oldData['data'])->filter(function ($value, $key) {
             return $value['transactionable_type'] == 'App\Models\OrderService';
@@ -109,10 +90,6 @@ class TransactionDataTable extends DataTable
 
         return $oldData;
     }
-
-
-
-
 
     /**
      * Get columns.
