@@ -223,6 +223,7 @@
                     //var price = $(this).find('.price').val();
                     var price = parseFloat($(this).find('.price').val())||0;
                     var quantity = parseFloat($(this).find('.quantity').val())||0;
+                    $(this).find('.totalprice').text(price*quantity);
                     cartProductPrice += price*quantity;
 
                 });

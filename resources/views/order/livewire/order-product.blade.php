@@ -23,6 +23,7 @@
                 <tr>
                     <th>Name</th>
                     <th class="w-25">Price</th>
+                    <th class="w-25">Supplier Price</th>
                     <th class="w-25">Qty</th>
                     <th class="text-center">Total</th>
                     <th class="text-center w-10">Action</th>
@@ -42,8 +43,15 @@
                             ->setEnableLabel(false)->setPlaceHolder('price')
                             ->setValue(old('products.'.$loop->index.'.price',$item['price']))
                             ->setType('number')->setError('products.'.$loop->index.'.price')!!}
-                            <input type="hidden" name={{'products['.$loop->index.'][supplier_price]'}} value="{{old('products.'.$loop->index.'.supplier_price',$item['supplier_price'])}}">
 
+                        </td>
+
+                        <td >
+                            {!!Form::input()
+                            ->setName('products['.$loop->index.'][supplier_price]' )
+                            ->setEnableLabel(false)->setPlaceHolder('supplier_price')
+                            ->setValue(old('products.'.$loop->index.'.supplier_price',$item['supplier_price']))
+                            ->setType('number')->setError('products.'.$loop->index.'.supplier_price')!!}
                         </td>
                         <td >
                             {!!Form::input()
@@ -58,7 +66,7 @@
 
                         </td>
                         <td>
-                            <small class="d-block text-center mt-2">
+                            <small class="d-block text-center mt-2 totalprice">
                                 {{
                                     old('products.'.$loop->index.'.price',$item['price'])??0 *
                                     old('products.'.$loop->index.'.quantity',$item['quantity'])??0
