@@ -30,8 +30,10 @@ class EmployeePaymentController extends Controller
             $query->select('name','id');
         }])->with(['order' => function($query){
             $query->select('invoice_no','id');
-        }])->paid()->where('crafting_price','>=','paid')->get();
-
+        }])
+        ->withSum('payments as paid', 'amount')
+        ->havingRaw('paid < order_services.crafting_price')
+        ->get();
         return view('employee_payment.create')->with('orderServices', $orderServices);
     }
 
@@ -67,15 +69,26 @@ class EmployeePaymentController extends Controller
             $query->select('name','id');
         }])->with(['order' => function($query){
             $query->select('invoice_no','id');
-        }])->paid()->where('crafting_price','>=','paid')->get();
+        }])
+        ->withSum('payments as paid', 'amount')
+        ->havingRaw('paid < order_services.crafting_price')
+        ->get();
+
 
         $employee_payment->load(['sourceable' => function($query){
             $query->select('id','bank_id')->with(['bank' => function($query){
                 $query->select('id','type');
             }]);
         }]);
-        $bankType = $employee_payment->has('sourceable')?$employee_payment->sourceable->bank->type:"Cash Payment";
-        $bankId = $employee_payment->has('sourceable')?$employee_payment->sourceable->bank->id:"";
+        $bankType = "Cash Payment";
+        $bankId = "";
+
+        if( $employee_payment->has('sourceable') && ($employee_payment->sourceable != null) && ($employee_payment->sourceable->bank != null)){
+            $bankType = $employee_payment->has('sourceable')?$employee_payment->sourceable->bank->type:"Cash Payment";
+            $bankId = $employee_payment->has('sourceable')?$employee_payment->sourceable->bank->id:"";
+        }
+
+
 
        //sourceable_id
 
