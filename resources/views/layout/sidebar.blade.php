@@ -29,7 +29,8 @@ $resourceMenus = [
         'routes' => [
             ['name' => 'Products', 'route' => 'products.index'],
             ['name' => 'Add Products', 'route' => 'products.create'],
-            ['name' => 'categories', 'route' => 'categories.index']
+            ['name' => 'categories', 'route' => 'categories.index'],
+            ['name' => 'add categories', 'route' => 'categories.create']
         ],
     ],
     'banks',
