@@ -17,8 +17,21 @@ $resourceMenus = [
     'masters',
     'suppliers',
     'customers',
-    'categories',
-    'products',
+    //'categories',
+    //'products',
+    'products' => [
+        'name' => 'products',
+        'isActive' => function ($routeName) {
+            //expense-categories.index
+            return in_array($routeName, ['products.index', 'products.create', 'categories.index','categories.create']);
+            // $routeName == 'expenses.create' || $routeName == 'expenses.index';
+        },
+        'routes' => [
+            ['name' => 'Products', 'route' => 'products.index'],
+            ['name' => 'Add Products', 'route' => 'products.create'],
+            ['name' => 'categories', 'route' => 'categories.index']
+        ],
+    ],
     'banks',
     'bank_accounts',
     'services',
