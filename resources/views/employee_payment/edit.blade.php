@@ -1,7 +1,9 @@
 @extends('layout.layout')
 @section('css')
+    <link href="{{ asset('css/select2.css')}}" rel="stylesheet" />
     @livewireStyles
 @endsection
+
 @section('content')
     <div class="content-wrapper">
         <div class="content pt-5">
@@ -29,13 +31,24 @@
                                 Form::select()
                                 ->setLabel('Service')
                                 ->setName('order_service_id')
+                                ->appendInputClass('service-select')
                                 ->setPlaceHolder('Select Payable Service')
                                 ->setValue($employee_payment->transactionable_id)
                                 ->setOptions($orderServices)
                                 ->setOptionBuilder(
                                     function($value) {
                                         $employeeName = $value->employee!=null?$value->employee->name:'Not Assigned';
-                                        return [ $value->id,"(".$value->order->invoice_no.")".$value->service->name."(".$employeeName.")"."(Due".($value->crafting_price-($value->paid??0)).")"];
+                                        return [
+                                            $value->id,
+                                           json_encode(
+                                               [
+                                                'name' => $employeeName,
+                                                'inv' => $value->order->invoice_no,
+                                                'service' => $value->service->name,
+                                                'due' => ( $value->crafting_price-($value->paid??0))
+                                               ]
+                                           )
+                                        ];
                                     }
                                 )
                                 ->render()
@@ -57,5 +70,21 @@
     </div>
 @endsection
 @section('script')
+    <script src="{{ asset('js/select2.js')}}"></script>
     @livewireScripts
+    <script>
+                function formatService(serviceOption){
+                    try {
+                        data = JSON.parse(serviceOption.text);
+                        return $(`<span>${data.name} Inv: ${data.inv} Service: ${data.service} Due: <span class='text-${data.due >0 ?'danger':''}'>${data.due}</span></span>`)
+                    }
+                    catch (e) {
+                        return serviceOption.text;
+                    };
+                }
+        $('.service-select').select2({
+            templateResult: formatService,
+            templateSelection: formatService
+        });
+    </script>
 @endsection

@@ -86,7 +86,7 @@
 </div>
 
 @push('inner-script')
-<script src="{{ asset('js/select2.js')}}"></script>
+
 <script>
     $(document).ready(function() {
         $('.product-select').select2();
@@ -111,7 +111,4 @@
 </script>
 @endpush
 
-@push('inner-style')
-<link href="{{ asset('css/select2.css')}}" rel="stylesheet" />
-@endpush
 

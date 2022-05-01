@@ -180,6 +180,7 @@
 
 
 @section('css')
+<link href="{{ asset('css/select2.css')}}" rel="stylesheet" />
 @stack('inner-style')
     @livewireStyles
     <style>
@@ -193,6 +194,7 @@
 @endsection
 
 @section('script')
+    <script src="{{ asset('js/select2.js')}}"></script>
     @livewireScripts
     @stack('inner-script')
     <script>
