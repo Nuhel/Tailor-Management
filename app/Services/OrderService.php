@@ -88,7 +88,9 @@ class OrderService{
                 $orderService->quantity         = $service['quantity'];
                 $orderService->price            = $service['price'];
                 $orderService->deadline         = $service['deadline'];
-                $orderService->crafting_price   = $service['crafting_price'] * $service['quantity'];
+                $orderService->crafting_price   = $service['crafting_price'];
+                $orderService->total_crafting_price   = $service['crafting_price'] * $service['quantity'];
+
                 $orderService->status           = $service['employee_id'] != null?ServiceStatus::PROCESSING :ServiceStatus::PENDING;
                 $orderService->save();
                 $this->attachMeasurementsToService($orderService,collect($service['measurements']));

@@ -37,7 +37,7 @@
                                                 'name' => $employeeName,
                                                 'inv' => $value->order->invoice_no,
                                                 'service' => $value->service->name,
-                                                'due' => ( $value->crafting_price-($value->paid??0))
+                                                'due' => ( $value->total_crafting_price-($value->paid??0))
                                                ]
                                            )
                                         ];

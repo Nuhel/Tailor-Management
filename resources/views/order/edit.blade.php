@@ -8,11 +8,7 @@
                     @csrf
                     <div class="card">
 
-                        @if($errors->any())
-                            @php
-                                dump( $errors->all())
-                            @endphp
-                        @endif
+
 
 
                         <div class="card-body">

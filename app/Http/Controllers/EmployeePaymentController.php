@@ -32,7 +32,7 @@ class EmployeePaymentController extends Controller
             $query->select('invoice_no','id');
         }])
         ->withSum('payments as paid', 'amount')
-        ->havingRaw('paid < order_services.crafting_price')
+        ->havingRaw('paid < order_services.total_crafting_price')
         ->get();
         return view('employee_payment.create')->with('orderServices', $orderServices);
     }
@@ -71,7 +71,7 @@ class EmployeePaymentController extends Controller
             $query->select('invoice_no','id');
         }])
         ->withSum('payments as paid', 'amount')
-        ->havingRaw('paid < order_services.crafting_price or order_services.id = '. $employee_payment->transactionable_id)
+        ->havingRaw('paid < order_services.total_crafting_price or order_services.id = '. $employee_payment->transactionable_id)
         ->get();
 
 

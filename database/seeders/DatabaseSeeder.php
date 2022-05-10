@@ -25,16 +25,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::factory(1)->create();
-        Customer::factory(50)->create();
-        Supplier::factory(30)->create();
-        Employee::factory(12)->create();
-        Master::factory(12)->create();
-        $this->createServices();
-        $this->createMeasurements();
-        $this->createDesign();
-        $this->createStyle();
-        Category::factory(15)->create();
-        Product::factory(100)->create();
+        //Customer::factory(50)->create();
+        //Supplier::factory(30)->create();
+        //Employee::factory(12)->create();
+        //Master::factory(12)->create();
+        //$this->createServices();
+        //$this->createMeasurements();
+        //$this->createDesign();
+        //$this->createStyle();
+        //Category::factory(15)->create();
+        //Product::factory(100)->create();
 
 
     }
