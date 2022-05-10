@@ -31,9 +31,14 @@ class EmployeePaymentController extends Controller
         }])->with(['order' => function($query){
             $query->select('invoice_no','id');
         }])
-        ->withSum('payments as paid', 'amount')
+        //->withSum('payments as paid', 'amount')
+        ->withSum([
+            'payments as paid' => fn ($query) => $query->select(DB::raw('COALESCE(SUM(amount), 0)')),
+        ], 'amount')
         ->havingRaw('paid < order_services.total_crafting_price')
         ->get();
+
+        //dd($orderServices->toArray());
         return view('employee_payment.create')->with('orderServices', $orderServices);
     }
 

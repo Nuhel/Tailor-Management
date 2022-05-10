@@ -33,7 +33,7 @@ class EmployeePaymentsDataTable extends DataTable
             })->addColumn('order', function(OrderService $employeepayment) {
                 return $employeepayment->order->invoice_no;
             })->addColumn('due', function(OrderService $employeepayment) {
-                return $employeepayment->crafting_price - $employeepayment->paid;
+                return $employeepayment->total_crafting_price - $employeepayment->paid;
             })
             ->addColumn('payments', function(OrderService $employeepayment){
                 if($employeepayment->payments->count() == 0)
