@@ -29,7 +29,7 @@
     </div>
 
     <footer class="main-footer ml-0">
-        <strong>Copyright &copy; 2014-2021 <a href="https://top-man.com">top-man.com</a>.</strong>
+        <strong>Copyright &copy; 2020-{{date('Y')}} <a href="https://syed-nuhel.com/">Syed Nuhel</a>.</strong>
         All rights reserved.
         <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> 3.2.0-rc

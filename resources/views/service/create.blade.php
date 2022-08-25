@@ -8,18 +8,36 @@
                         <h2><strong>Add Service</strong></h2>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('services.store') }}" class="">
+                        <form method="POST" action="{{ route('services.store') }}" class="" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    {!!Form::input()->setName('name')->setValue()->setLabel('Service Name')->setPlaceholder('Service Name')->render()!!}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {!!Form::input()->setName('name')->setValue()->setLabel('Service Name')->setPlaceholder('Service Name')->render()!!}
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            {!!Form::input()->setName('crafting_price')->setValue()->setLabel('Crafting Cost')->setPlaceholder('Crafting Cost')->render()!!}
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    {!!Form::input()->setName('crafting_price')->setValue()->setLabel('Crafting Cost')->setPlaceholder('Crafting Cost')->render()!!}
+                                    <div class="">
+                                        <div class="row align-items-end">
+                                            <div class="col-md-12">
+                                                <div class="col"><label for="">Image</label></div>
+                                                <div class="row" id="coba">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+
 
 
 
@@ -184,8 +202,17 @@
 @endsection
 @section('script')
     <script src="{{ asset('js/repeater.js') }}"></script>
+    <script src="{{ asset('js/picker.js') }}"></script>
     <script>
         $(document).ready(function() {
+
+            $("#coba").spartanMultiImagePicker({
+                fieldName: 'image',
+                rowHeight: '150px',
+                groupClassName: 'col',
+                maxCount: '1',
+            });
+
             $('.repeater-nested').repeater({
                 initEmpty: false,
                 show: function() {

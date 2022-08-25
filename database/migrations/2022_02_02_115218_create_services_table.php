@@ -16,6 +16,8 @@ class CreateServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('image')->nullable();
+            $table->boolean('is_assian')->default(false);
             $table->double('crafting_price');
             $table->timestamps();
         });

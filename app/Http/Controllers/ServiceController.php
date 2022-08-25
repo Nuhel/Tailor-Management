@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\ServiceDataTable;
 use App\Models\Service;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\ServiceDesign;
 use App\Models\ServiceDesignStyle;
 use App\Models\ServiceMeasurement;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use App\DataTables\ServiceDataTable;
+use Illuminate\Support\Facades\Storage;
 use Mavinoo\Batch\BatchFacade as Batch;
+use Illuminate\Support\Facades\Validator;
 
 class ServiceController extends Controller
 {
@@ -34,6 +36,7 @@ class ServiceController extends Controller
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
             "crafting_price" => "required|numeric",
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             "measurement" => "required|array",
             "measurement.*.name" => "required|string",
             "design" => "required|array",
@@ -57,6 +60,11 @@ class ServiceController extends Controller
             $service = new Service();
             $service->name = $request->name;
             $service->crafting_price = $request->crafting_price;
+            $filePath = '';
+            if($request->hasFile('image')){
+                $filePath = $request->image->store('public/service');
+                $service->image     = Str::of($filePath)->replaceFirst('public','storage');
+            }
             $service->save();
             $measurementNames = Arr::pluck($request->measurement, 'name');
 
@@ -110,6 +118,7 @@ class ServiceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             "crafting_price" => "required|numeric",
             "measurement" => "required|array",
             "measurement.*.name" => "required|string",
@@ -133,6 +142,21 @@ class ServiceController extends Controller
         try {
             $service->name = $request->name;
             $service->crafting_price = $request->crafting_price;
+
+            if($request->delete_old){
+                $this->deleteAttachedImage($service);
+                $service->image = "";
+            }
+
+            $filePath = '';
+            if($request->hasFile('image')){
+                $filePath = $request->image->store('public/service');
+                if(!$request->delete_old){
+                    $this->deleteAttachedImage($service);
+                }
+                $service->image     = Str::of($filePath)->replaceFirst('public','storage');
+            }
+
             $service->update();
             $this->handelMeasurementUpdate($request,$service);
             $this->handelDesignUpdate($request,$service);
@@ -144,6 +168,11 @@ class ServiceController extends Controller
             return redirect()->back()->withInput();
         }
         return $this->redirectWithAlert(true, 'services');
+    }
+
+    public function deleteAttachedImage($service){
+        $filePath = $service->image?Str::of($service->image)->replaceFirst('storage','public'):"";
+        Storage::delete($filePath);
     }
 
     public function handelMeasurementUpdate(Request $request,Service $service){
@@ -316,6 +345,7 @@ class ServiceController extends Controller
                 $design->styles()->delete();
             }
             $service->designs()->delete();
+            $this->deleteAttachedImage($service);
             $service->delete();
             DB::commit();
             return $this->redirectWithAlert(true, 'services');

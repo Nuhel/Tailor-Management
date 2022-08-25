@@ -46,7 +46,7 @@ class PurchaseRequest extends BaseRequest
         ];
 
         $basicRule =  [
-            'supplier_id'                       =>  'required|numeric|exists:customers,id',
+            'supplier_id'                       =>  'required|numeric|exists:suppliers,id',
             'total'                             =>  'required|numeric|min:0',
             'discount'                          =>  'nullable|numeric|min:0',
             'netpayable'                        =>  'required|numeric|gte:paid|gte:due',
