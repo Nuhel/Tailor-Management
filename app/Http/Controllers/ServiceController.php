@@ -36,6 +36,7 @@ class ServiceController extends Controller
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
             "crafting_price" => "required|numeric",
+            'is_assian' => "required|boolean",
             'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             "measurement" => "required|array",
             "measurement.*.name" => "required|string",
@@ -60,6 +61,7 @@ class ServiceController extends Controller
             $service = new Service();
             $service->name = $request->name;
             $service->crafting_price = $request->crafting_price;
+            $service->is_assian = $request->is_assian;
             $filePath = '';
             if($request->hasFile('image')){
                 $filePath = $request->image->store('public/service');
@@ -118,6 +120,7 @@ class ServiceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:100",
+            'is_assian' => "required|boolean",
             'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             "crafting_price" => "required|numeric",
             "measurement" => "required|array",
@@ -141,6 +144,7 @@ class ServiceController extends Controller
 
         try {
             $service->name = $request->name;
+            $service->is_assian = $request->is_assian;
             $service->crafting_price = $request->crafting_price;
 
             if($request->delete_old){

@@ -27,6 +27,10 @@ Route::get('db', function(){
     Artisan::call('migrate:fresh --seed');
 });
 
+Route::get('storage', function(){
+    Artisan::call('storage:link');
+});
+
 
 Auth::routes();
 
